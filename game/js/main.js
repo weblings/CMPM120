@@ -1,18 +1,25 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-var cursors;
+
+
 
 //Ooh look at me I'm different gittttt
 
-function preload() {
+//set up states NH
+var mainState = {
+	preload: function(){
+		var cursors;
 
-}
+	},
 
-function create() {
-    //controls
-    cursors = game.input.keyboard.createCursorKeys();    
-}
+	create: function(){
+		cursors = game.input.keyboard.createCursorKeys();   
 
-function update() {
-    
-}
+	},
+
+	update: function(){
+
+	}
+
+};
+
+
   

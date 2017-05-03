@@ -1,6 +1,4 @@
 
-
-
 //Ooh look at me I'm different gittttt
 
 //set up states NH

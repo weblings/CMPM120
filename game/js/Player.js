@@ -16,7 +16,7 @@ function Player(game, key, x, y, playerNum){
     game.physics.enable(this);
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
-    cursors = game.input.keyboard.createCursorKeys();
+    
     
     //this.body.velocity.x += this.speed;
     //this.animations.play('left');
@@ -33,7 +33,7 @@ Player.prototype.update = function(){
 Player.prototype.input = function(){
     //if(this.playerNum == 2){ //if Player 2 (Right side of screen)
         //fixed your shit NH
-        if(cursors.left.isDown){
+        if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
             }
@@ -44,10 +44,12 @@ Player.prototype.input = function(){
             }
             this.animations.play('left');
             //stop that animation shit  NH
-            
+            if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
+                this.body.velocity.x = 0;
+            }
 
             
-        }else if(cursors.right.isDown){
+        }else if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
             if (this.body.velocity.x < 0){
                 this.body.velocity.x = 0;
             }

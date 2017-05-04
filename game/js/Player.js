@@ -61,11 +61,26 @@ function Player(game, key, x, y, playerNum){
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
+Player.prototype.preload = function(){
+    game.load.image('fist', 'assets/img/fist.jpg');
+
+}
+
+Player.prototype.create = function(){
+    this.fists = game.add.group();
+
+}
 
 Player.prototype.update = function(){
     this.input();
     
     this.debugText.text = this.initY; //AG: this.body.touching.down should probably be what we use once collision works;
+
+}
+
+Player.prototype.fisting = function(x,y){
+    var fist = game.add.sprite(x,y,'fist');
+    this.fists.add(fist);
 
 }
 

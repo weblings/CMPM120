@@ -54,9 +54,24 @@ function Player(game, key, x, y, playerNum){
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
+Player.prototype.preload = function(){
+    game.load.image('fist', 'assets/img/fist.jpg');
+
+}
+
+Player.prototype.create = function(){
+    this.fists = game.add.group();
+
+}
 
 Player.prototype.update = function(){
     this.input();
+}
+
+Player.prototype.fisting = function(x,y){
+    var fist = game.add.sprite(x,y,'fist');
+    this.fists.add(fist);
+
 }
 
 //Handles player input

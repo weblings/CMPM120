@@ -40,6 +40,7 @@ function Player(game, key, x, y, playerNum){
         this.keyDown = Phaser.Keyboard.S;
         this.keyA = Phaser.Keyboard.R;
         this.keyB = Phaser.Keyboard.T;
+        this.prev_anim =1;
     }else if(this.playerNum == 2){ 
         this.keyLeft = Phaser.Keyboard.K;
         this.keyRight = Phaser.Keyboard.COLON;
@@ -47,6 +48,7 @@ function Player(game, key, x, y, playerNum){
         this.keyDown = Phaser.Keyboard.L;
         this.keyA = Phaser.Keyboard.OPEN_BRACKET;
         this.keyB = Phaser.Keyboard.CLOSED_BRACKET;
+        this.prev_anim =0;
     }
 }
 

@@ -4,25 +4,31 @@ function Player(game, key, x, y, playerNum){
     
     //Vars
     this.playerNum = playerNum; //Player number
-    this.speed = 5; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
-    this.maxSpeed = 10;
+    this.speed = 20; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.maxSpeed = 30;
     
     //Animations
     this.animations.add('left', [0,1,2,3], 10, true);
     this.animations.add('right', [5,6,7,8], 10, true);
-
     
     //Physics
     game.physics.enable(this);
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
+    this.body.gravity.y = 300;
+    
+    //AG: Scale to find character sizing
+    this.scale.setTo(4,4);
 
     //animation stuff NH
     this.prev_anim = 0;
     this.anim_lock = false;
     this.faceRIGHT = false;
 
-    this.debugText = game.add.text(16,16,'test', {fontSize: '32px', fill: '#FFFFFF'});
+    //Debug text
+    //AG: Made it so the debugText for each player is on their side of the screen
+    if(playerNum == 1) this.debugText = game.add.text(16,16,'test', {fontSize: '32px', fill: '#FFFFFF'});
+    if(playerNum == 2) this.debugText = game.add.text(game.width - 100,16,'test', {fontSize: '32px', fill: '#FFFFFF'});
 
     //AG: Player input
     this.keyLeft;
@@ -57,12 +63,19 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
     this.input();
+    
+    //AG: Trying to determine what triggers this. I think it has to be on top of an object. Made ungodly ground in main to test
+    this.debugText.text = this.body.touching.down;
+
 }
 
 //Handles player input
 Player.prototype.input = function(){
-
-    //if(this.playerNum == 2){ //if Player 2 (Right side of screen)
+    
+        //AG: if touching ground can jump (Altered code from tutorial)
+        if(game.input.keyboard.isDown(this.keyUp)){// && this.body.touching.down){
+            this.body.velocity.y = -350;
+        }
 
         //test combat inputs
 
@@ -146,6 +159,4 @@ Player.prototype.input = function(){
             this.body.velocity.x = 0;
         }
 
-
 }
-

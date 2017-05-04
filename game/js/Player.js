@@ -16,7 +16,11 @@ function Player(game, key, x, y, playerNum){
     game.physics.enable(this);
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
-    
+
+    //animation stuff NH
+    this.prev_anim = 0;
+    this.anim_lock = false;
+
     
     //this.body.velocity.x += this.speed;
     //this.animations.play('left');
@@ -33,6 +37,8 @@ Player.prototype.update = function(){
 Player.prototype.input = function(){
     //if(this.playerNum == 2){ //if Player 2 (Right side of screen)
         //fixed your shit NH
+        
+
         if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
@@ -43,10 +49,27 @@ Player.prototype.input = function(){
                 this.body.velocity.x = -200;
             }
             this.animations.play('left');
+            
+            
             //stop that animation shit  NH
             if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
+                
+                if (this.prev_anim == 0){
+                    this.frame = 0;
+                }else{
+                    this.frame = 5;
+                    this.anim_lock = true;
+                }
                 this.body.velocity.x = 0;
             }
+
+            //for frame changes NH
+            if (!this.anim_lock){
+                this.prev_anim = 0;
+            }
+            this.anim_lock = false;
+            
+            
 
             
         }else if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
@@ -59,10 +82,25 @@ Player.prototype.input = function(){
                 this.body.velocity.x = 200;
             }
             this.animations.play('right');
+            this.prev_anim = 1;
+
         }else{
             this.body.velocity.x = 0;
 
+            
+            if (this.prev_anim == 0){
+                this.frame = 0;
+            }else{
+                this.frame = 5;
+            }
+            
+            
         }
+
+        
+
+
+
     //}
 }
 

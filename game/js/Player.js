@@ -20,6 +20,9 @@ function Player(game, key, x, y, playerNum){
     //animation stuff NH
     this.prev_anim = 0;
     this.anim_lock = false;
+    this.faceRIGHT = false;
+
+    this.debugText = game.add.text(16,16,'test', {fontSize: '32px', fill: '#FFFFFF'});
 
     //AG: Player input
     this.keyLeft;
@@ -56,9 +59,31 @@ Player.prototype.update = function(){
 
 //Handles player input
 Player.prototype.input = function(){
+
+    //if(this.playerNum == 2){ //if Player 2 (Right side of screen)
+
+        //test combat inputs
+
+        if (game.input.keyboard.isDown(this.keyA)){
+            this.body.velocity.x = 0
+            if (this.faceRIGHT ){
+                this.debugText.text = 'attack facing right';
+            } else {
+                this.debugText.text = 'attack facing left';
+            }
+            
+        }
+
+
+
+
+        //fixed your shit NH
+        
+
     
         //AG: Left controls
         if(game.input.keyboard.isDown(this.keyLeft)){
+
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
             }
@@ -85,6 +110,7 @@ Player.prototype.input = function(){
             //for frame changes NH
             if (!this.anim_lock){
                 this.prev_anim = 0;
+                this.faceRIGHT = false;
             }
             this.anim_lock = false;
             
@@ -102,6 +128,7 @@ Player.prototype.input = function(){
             }
             this.animations.play('right');
             this.prev_anim = 1;
+            this.faceRIGHT = true;
 
         }else{
             this.body.velocity.x = 0;
@@ -109,8 +136,10 @@ Player.prototype.input = function(){
             
             if (this.prev_anim == 0){
                 this.frame = 0;
+                this.faceRIGHT = false;
             }else{
                 this.frame = 5;
+                this.faceRIGHT = true;
             }
             
             

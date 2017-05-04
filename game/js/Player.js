@@ -15,7 +15,8 @@ function Player(game, key, x, y, playerNum){
     game.physics.enable(this);
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
-    this.body.gravity.y = 300;
+    this.body.gravity.y = 600;
+    this.initY = y - 92; //AG: Can use this to hard code jump while collision is broken
     
     //AG: Scale to find character sizing
     this.scale.setTo(4,4);
@@ -64,8 +65,7 @@ Player.prototype.constructor = Player;
 Player.prototype.update = function(){
     this.input();
     
-    //AG: Trying to determine what triggers this. I think it has to be on top of an object. Made ungodly ground in main to test
-    this.debugText.text = this.body.touching.down;
+    this.debugText.text = this.initY; //AG: this.body.touching.down should probably be what we use once collision works;
 
 }
 
@@ -73,7 +73,8 @@ Player.prototype.update = function(){
 Player.prototype.input = function(){
     
         //AG: if touching ground can jump (Altered code from tutorial)
-        if(game.input.keyboard.isDown(this.keyUp)){// && this.body.touching.down){
+        //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
+        if(game.input.keyboard.isDown(this.keyUp) && this.body.y == this.initY){// && this.body.touching.down){
             this.body.velocity.y = -350;
         }
 

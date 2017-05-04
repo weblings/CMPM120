@@ -143,9 +143,9 @@ Player.prototype.input = function(){
                 this.frame = 5;
                 this.faceRIGHT = true;
             }
-            
-            
+            this.body.velocity.x = 0;
         }
+
 
 }
 

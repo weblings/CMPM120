@@ -10,7 +10,7 @@ function preload() {
 function create() {
     //controls
     //cursors = game.input.keyboard.createCursorKeys();
-    var player2 = new Player(game, 'player', Player2SpawnX, Player2SpawnY, 2);
+    var player2 = new Player(game, 'player', Player2SpawnX, Player2SpawnY, 1);
     game.add.existing(player2);
 }
 

@@ -21,9 +21,30 @@ function Player(game, key, x, y, playerNum){
     this.prev_anim = 0;
     this.anim_lock = false;
 
+    //AG: Player input
+    this.keyLeft;
+    this.keyRight;
+    this.keyUp;
+    this.keyDown;
+    this.keyA; //AG: standard attack button 
+    this.keyB; //AG: special attack button
     
-    //this.body.velocity.x += this.speed;
-    //this.animations.play('left');
+    //AG: set keys based on player number
+    if(this.playerNum == 1){
+        this.keyLeft = Phaser.Keyboard.A;
+        this.keyRight = Phaser.Keyboard.D;
+        this.keyUp = Phaser.Keyboard.W;
+        this.keyDown = Phaser.Keyboard.S;
+        this.keyA = Phaser.Keyboard.R;
+        this.keyB = Phaser.Keyboard.T;
+    }else if(this.playerNum == 2){ 
+        this.keyLeft = Phaser.Keyboard.K;
+        this.keyRight = Phaser.Keyboard.COLON;
+        this.keyUp = Phaser.Keyboard.O;
+        this.keyDown = Phaser.Keyboard.L;
+        this.keyA = Phaser.Keyboard.OPEN_BRACKET;
+        this.keyB = Phaser.Keyboard.CLOSED_BRACKET;
+    }
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -35,11 +56,9 @@ Player.prototype.update = function(){
 
 //Handles player input
 Player.prototype.input = function(){
-    //if(this.playerNum == 2){ //if Player 2 (Right side of screen)
-        //fixed your shit NH
-        
-
-        if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
+    
+        //AG: Left controls
+        if(game.input.keyboard.isDown(this.keyLeft)){
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
             }
@@ -52,7 +71,7 @@ Player.prototype.input = function(){
             
             
             //stop that animation shit  NH
-            if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
+            if(game.input.keyboard.isDown(this.keyRight)){
                 
                 if (this.prev_anim == 0){
                     this.frame = 0;
@@ -71,8 +90,8 @@ Player.prototype.input = function(){
             
             
 
-            
-        }else if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
+        //AG: Right controls
+        }else if(game.input.keyboard.isDown(this.keyRight)){
             if (this.body.velocity.x < 0){
                 this.body.velocity.x = 0;
             }
@@ -97,29 +116,5 @@ Player.prototype.input = function(){
             
         }
 
-        
-
-
-
-    //}
 }
 
-//Overly complicated method I was thinking to use to cap velocity or something (WIP)
-/*Player.prototype.setVelocity = function(coord,op){
-    var sign;
-    if(op == "+") 
-    
-    if(coord = "x"){
-        if(this.body.velocity.x + this.speed > this.maxSpeed){
-            this.body.velocity.x = this.maxSpeed;
-        }else{
-            this.body.velocity.x + this.speed;
-        }
-    }else if(coord = "y"){
-        if(this.body.velocity.y + this.speed > this.maxSpeed){
-            this.body.velocity.y = this.maxSpeed;
-        }else{
-            this.body.velocity.y + this.speed;
-        }
-    }
-}*/

@@ -5,12 +5,12 @@ var mainState = {
 	preload: function() {
 	 	
 	 	var player1;
-		var Player1SpawnX = 325;
-		var Player1SpawnY = 200; 
+		var Player1SpawnX;
+		var Player1SpawnY; 
 
 		var player2;
-		var Player2SpawnX = 475;
-		var Player2SpawnY = 200;
+		var Player2SpawnX;
+		var Player2SpawnY;
 
 		//AG: Collider group vars
 		var players;
@@ -18,6 +18,14 @@ var mainState = {
 	},
 
 	create: function() {
+		Player1SpawnX = 325;
+		Player1SpawnY = 200; 
+
+
+		Player2SpawnX = 475;
+		Player2SpawnY = 200;
+
+
 	    var player1 = new Player(game, 'player', Player1SpawnX, Player1SpawnY, 1);
 	    game.add.existing(player1);
 	    

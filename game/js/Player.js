@@ -4,8 +4,8 @@ function Player(game, key, x, y, playerNum){
     
     //Vars
     this.playerNum = playerNum; //Player number
-    this.speed = 20; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
-    this.maxSpeed = 30;
+    this.speed = 5; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.maxSpeed = 25;
     
     //Animations
     this.animations.add('left', [0,1,2,3], 10, true);

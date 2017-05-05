@@ -17,9 +17,14 @@ function create() {
     
     var player2 = new Player(game, 'player', Player2SpawnX, Player2SpawnY, 2);
     game.add.existing(player2);
+    
+    //AG: Attempt to get physics working
+    var ground = game.add.sprite(0, game.height-32, 'player');
+    ground.scale.setTo(25,1);
 }
 
 function update() {
-    
+    //AG: Should make player collide with other player
+    //game.physics.arcade.collide(player1,player2); //AG: Crashes because player1 and player2 still treated as undefined
 }
   

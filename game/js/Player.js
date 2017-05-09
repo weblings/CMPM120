@@ -181,7 +181,7 @@ Player.prototype.lightAttack = function(){
         this.action.attacking = false;
     }
     
-        this.takeDamage(1,100);
+    this.takeDamage(1,100);
     
 }
 
@@ -244,7 +244,8 @@ Player.prototype.heavyAttack = function(){
         }
         
     }
-
+    
+    this.takeDamage(10,1000);
 }
 
 //Should make player take Damage

@@ -64,7 +64,7 @@ Player = function(game, key, x, y, playerNum){
     }
 
     //hitbox stuff
-    this.fists = game.add.group();
+    this.fists = game.add.physicsGroup();
     this.fist = fist = game.add.sprite(this.position.x,this.position.y,'fist');
     this.fist.scale.setTo(0.25,0.25);
     this.fist.anchor.x = 0;
@@ -180,9 +180,7 @@ Player.prototype.lightAttack = function(){
         this.changeState(this.input);
         this.action.attacking = false;
     }
-    
-    this.takeDamage(1,100);
-    
+        
 }
 
 Player.prototype.heavyAttack = function(){
@@ -245,7 +243,6 @@ Player.prototype.heavyAttack = function(){
         
     }
     
-    this.takeDamage(10,1000);
 }
 
 //Should make player take Damage

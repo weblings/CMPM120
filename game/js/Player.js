@@ -24,6 +24,11 @@ Player = function(game, key, x, y, playerNum){
     this.prev_anim = 0;
     this.anim_lock = false;
     this.faceRIGHT = false;
+    
+    //Health stuff
+    this.setHealth(100);
+    this.shamed = false; //keeps Phaser from triggering damage more than we want
+    this.staggered = false; //immobilizes player;
 
     //Debug text
     //AG: Made it so the debugText for each player is on their side of the screen
@@ -165,9 +170,9 @@ Player.prototype.lightAttack = function(){
         this.changeState(this.input);
         this.action.attacking = false;
     }
-
-
-
+    
+        this.takeDamage(1,100);
+    
 }
 
 Player.prototype.heavyAttack = function(){
@@ -193,14 +198,35 @@ Player.prototype.heavyAttack = function(){
         this.changeState(this.input);
     }
 
-
 }
 
-
+//Should make player take Damage
+Player.prototype.takeDamage = function(damage,staggerLength){
+    if(!this.shamed){
+        this.damage(damage);
+        this.shamed = true;
+        this.staggered = true;
+    }
+    this.debugText.text = this.health;
+    this.timer.startTimer('shamed',50);
+    this.timer.startTimer('staggered',staggerLength);
+}
 
 //Handles player input
 Player.prototype.input = function(){
         //this.fists.removeAll(true);
+
+        //AG: Turn off shamed
+        if(this.timer.timerDone('shamed')){
+            this.shamed = false;
+        }
+    
+        //AG: If staggered on: player can't move, else: turn staggered off
+        if(this.staggered == true && !this.timer.timerDone('staggered')){
+            return;
+        }else{
+            this.staggered = false;
+        }
     
         //AG: if touching ground can jump (Altered code from tutorial)
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms

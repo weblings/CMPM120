@@ -50,8 +50,17 @@ var mainState = {
 
 	update: function() {
 	    game.physics.arcade.collide(players,ground); 
-	    game.physics.arcade.collide(players,players); 
+	    game.physics.arcade.collide(players,players);
+        //game.physics.arcade.overlap(players,players.fists,standardAttack, null, this);
 	}
   
 
 };
+
+/*mainState.prototype.standardAttack(player,hitbox){
+    player.damage(2);
+}
+
+mainState.prototype.heavyAttack(player,hitbox){
+    player.damage(10);
+}*/

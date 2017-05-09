@@ -4,8 +4,8 @@ Player = function(game, key, x, y, playerNum){
     
     //Vars
     this.playerNum = playerNum; //Player number
-    this.speed = 5; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
-    this.maxSpeed = 25;
+    this.speed = 8; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.maxSpeed = 32;
     
     //Animations
     this.animations.add('left', [0,1,2,3], 10, true);
@@ -63,19 +63,22 @@ Player = function(game, key, x, y, playerNum){
     this.fist.scale.setTo(0.25,0.25);
     this.fists.add(this.fist);
 
+
+    //set timer
     this.timer = new setTime();
 
-    this.attacking =false;
+    
 
     //state change stuff
     //an experiment NH
-    //this.state = this.input();
     this.changeState(this.input);
 
     //action
+    //booleans to use later
     this.action = {}
     this.action.jump = false;
     this.action.block = false;
+    this.action.attacking = false;
 
 }
 
@@ -85,15 +88,19 @@ Player.prototype.constructor = Player;
 //state to clear state stuff NH
 //basically reset stuff every frame
 Player.prototype.preState =function (){
-    if (this.state != this.input || this.state != this.heavyAttack){
+
+    //cancel velocity when not in input
+    if (this.state != this.input){
         this.body.velocity.x = 0;
     }
     if (this.state != this.lightAttack){
+        //light attack reset
         this.fist.position.x = this.position.x;
         this.fist.position.y = this.position.y;
         this.body.gravity.y = 600;
     }
 
+    //check if in air
     if (!this.body.touching.down){
         this.action.jump = true;
     }else{
@@ -103,16 +110,22 @@ Player.prototype.preState =function (){
     
 }
 
+
+// function to change states e.g. this.changeState(this.otherState)
 Player.prototype.changeState = function(currentState){
     this.state = currentState;
 }
 
 
 Player.prototype.update = function(){
+    //reset some stuff
     this.preState();
+    //current state NH
     this.state();
 }
 
+
+//unneeded probably safe to delete NH
 Player.prototype.fisting = function(x,y){
     var fist = game.add.sprite(x,y,'fist');
     fist.scale.setTo(0.25,0.25);
@@ -123,6 +136,7 @@ Player.prototype.fisting = function(x,y){
 //states
 Player.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
+    //insert attack animation here
 
     if (this.action.jump){
         this.body.gravity.y = 0;
@@ -130,7 +144,7 @@ Player.prototype.lightAttack = function(){
     }
     
 
-    if (!this.attacking){
+    if (!this.action.attacking){
         if (dir){
             //var fist = game.add.sprite(this.position.x+50,this.position.y,'fist');
             //fist.scale.setTo(0.25,0.25);
@@ -142,14 +156,14 @@ Player.prototype.lightAttack = function(){
             //this.fists.add(fist);
             this.fist.position.x -= 50;
         }
-        this.attacking = true;
+        this.action.attacking = true;
     }
     //this.debugText.text = this.position.x;
     
     if (this.timer.timerDone('light')){
         this.debugText.text = 'done';
         this.changeState(this.input);
-        this.attacking = false;
+        this.action.attacking = false;
     }
 
 
@@ -157,20 +171,28 @@ Player.prototype.lightAttack = function(){
 }
 
 Player.prototype.heavyAttack = function(){
+
     if (this.action.jump){
         //dive kick
-        while(this.action.jump){
-            this.body.velocity.y = 20;
-            if (this.faceRIGHT){
-                this.body.velocity.x = 5;
-            }else{
-                this.body.velocity.x = -5;
-            }
+        
+        this.body.velocity.y = 550;
+        if (this.faceRIGHT){
+            this.body.velocity.x = 250;
+        }else{
+            this.body.velocity.x = -250;
         }
+        this.action.attacking = true;
+        
+    }else{
+        //reset velocity
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
+        //if (!this.action.attacking){do normal heavy}
+        //else{}
+        this.action.attacking = false;
         this.changeState(this.input);
     }
+
 
 }
 
@@ -182,7 +204,7 @@ Player.prototype.input = function(){
     
         //AG: if touching ground can jump (Altered code from tutorial)
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
-        if(game.input.keyboard.isDown(this.keyUp) && this.body.touching.down && !this.action.block ){
+        if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
             this.body.velocity.y = -350;
         }
 
@@ -199,27 +221,26 @@ Player.prototype.input = function(){
 
         //light attack NH
         if (game.input.keyboard.isDown(this.keyA) && !this.action.block){
-            this.timer.startTimer('light',500);
-            this.body.velocity.x = 0
-            if (this.faceRIGHT ){
-                this.debugText.text = 'attack facing right';
-                this.changeState(this.lightAttack);
-            //this can be deleted
-            } else {
-                this.debugText.text = 'attack facing left';
+            //set timer for half a second
+            this.timer.startTimer('light',300);
 
-                this.changeState(this.lightAttack);
-            }
+            //this line might be redundant NH
+            this.body.velocity.x = 0
+            this.debugText.text = 'attack facing right';
+            this.changeState(this.lightAttack);
+
             
         }
 
         //heavy attack NH
+        
         if (game.input.keyboard.isDown(this.keyB) && !this.action.block){
             //this.timer.startTimer('heavy',1000);
             this.changeState(this.heavyAttack);
 
 
         }
+        
 
 
 

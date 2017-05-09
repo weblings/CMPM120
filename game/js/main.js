@@ -57,16 +57,58 @@ var mainState = {
 	    game.physics.arcade.collide(players,ground);
         game.physics.arcade.collide(player1,player2);
         
+        //Light and heavy attacks
         game.physics.arcade.overlap(player1,fist2,mainState.lightAttack, null, this);
         game.physics.arcade.overlap(player2,fist1,mainState.heavyAttack, null, this);
+        
+        //Dive kicks
+        if(game.physics.arcade.collide(player1,player2) && player1.action.dive){
+            game.physics.arcade.overlap(player2,player1,mainState.heavyAttack, null, this);
+        }
+        if(game.physics.arcade.collide(player2,player1) && player2.action.dive){
+            game.physics.arcade.overlap(player1,player2,mainState.heavyAttack, null, this);
+        }
     },
     
     lightAttack: function(player,hitbox){
         player.takeDamage(3,100);
+        //mainState.calcKnockBack(50,30);
+        mainState.calcKnockBack(50,30,player.playerNum);
     },
   
     heavyAttack: function(player,hitbox){
         player.takeDamage(10,1000);
+        //player.applyKnockBack(100,70);
+        mainState.calcKnockBack(100,70,player.playerNum);
+    },
+    
+    calcKnockBack: function(x,y,numOfHitPlayer){
+        
+        if(numOfHitPlayer == 1){
+            var hitPlayer = player1;
+        }else if(numOfHitPlayer == 2){
+            var hitPlayer = player2;
+        }  
+        
+        //Calc if x should be negative
+        if(player1.x > player2.x && numOfHitPlayer == 2){
+            x = -x;
+        }else if(player1.x < player2.x && numOfHitPlayer == 1){
+            x = -x;
+        }
+        
+        //Calc if y should be negative
+        if(player1.y < player2.y && numOfHitPlayer == 1){
+            if(!hitPlayer.body.touching.down) y = y;
+        }else if(player1.y > player2.y && numOfHitPlayer == 2){
+            if(!hitPlayer.body.touching.down) y = y;
+        }else{ //sends player up
+            y = -y;
+        }
+        
+        //Apply knockback to hit player
+        hitPlayer.applyKnockBack(x,y);
+
     }
 }
 

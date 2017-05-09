@@ -6,6 +6,7 @@ Player = function(game, key, x, y, playerNum){
     this.playerNum = playerNum; //Player number
     this.speed = 8; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 32;
+    this.jumpHeight = -350;
     
     //Animations
     this.animations.add('left', [0,1,2,3], 10, true);
@@ -66,6 +67,8 @@ Player = function(game, key, x, y, playerNum){
     this.fists = game.add.group();
     this.fist = fist = game.add.sprite(this.position.x,this.position.y,'fist');
     this.fist.scale.setTo(0.25,0.25);
+    this.fist.anchor.x = 0;
+    this.fist.anchor.y = -0.5;
     this.fists.add(this.fist);
 
 
@@ -84,6 +87,8 @@ Player = function(game, key, x, y, playerNum){
     this.action.jump = false;
     this.action.block = false;
     this.action.attacking = false;
+    this.action.dive = false;
+    this.action.cancel = false;
 
 }
 
@@ -103,6 +108,10 @@ Player.prototype.preState =function (){
         this.fist.position.x = this.position.x;
         this.fist.position.y = this.position.y;
         this.body.gravity.y = 600;
+    }
+
+    if (this.state != this.heavyAttack){
+        this.fist.scale.x = 0.25;
     }
 
     //check if in air
@@ -162,6 +171,7 @@ Player.prototype.lightAttack = function(){
             this.fist.position.x -= 50;
         }
         this.action.attacking = true;
+
     }
     //this.debugText.text = this.position.x;
     
@@ -187,15 +197,52 @@ Player.prototype.heavyAttack = function(){
             this.body.velocity.x = -250;
         }
         this.action.attacking = true;
+        this.action.dive = true;
         
     }else{
         //reset velocity
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
-        //if (!this.action.attacking){do normal heavy}
-        //else{}
-        this.action.attacking = false;
-        this.changeState(this.input);
+
+        if (!this.action.attacking && !this.action.dive){
+            this.action.cancel = true;
+            this.action.attacking = true;
+        }
+
+        if (this.action.cancel == true && game.input.keyboard.isDown(this.keyUp)){
+            this.action.attacking = false;
+            this.action.dive = false;
+            this.action.cancel = false;
+            this.body.velocity.y = this.jumpHeight;
+            this.changeState(this.input);
+        }
+
+        if (this.timer.timerDone('heavy_cast') && !this.action.dive){
+            //can cancel out of attack NH
+            //this.action.cancel = false;
+            if (this.faceRIGHT){
+                this.fist.scale.x = 1;
+            }else{
+                this.fist.scale.x = -1;
+            }
+            
+        }
+
+
+
+        if (this.timer.timerDone('heavy') && !this.action.dive){
+            this.action.dive = true;
+        }
+
+
+            
+        if (this.action.attacking && this.action.dive){
+            this.action.attacking = false;
+            this.action.dive = false;
+            this.action.cancel = false;
+            this.changeState(this.input);
+        }
+        
     }
 
 }
@@ -212,7 +259,7 @@ Player.prototype.takeDamage = function(damage,staggerLength){
     this.timer.startTimer('staggered',staggerLength);
 }
 
-//Handles player input
+//Handles player input and change state accordingly NH
 Player.prototype.input = function(){
         //this.fists.removeAll(true);
 
@@ -231,7 +278,7 @@ Player.prototype.input = function(){
         //AG: if touching ground can jump (Altered code from tutorial)
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
         if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
-            this.body.velocity.y = -350;
+            this.body.velocity.y = this.jumpHeight;
         }
 
         //blocking NH
@@ -260,7 +307,9 @@ Player.prototype.input = function(){
 
         //heavy attack NH
         
-        if (game.input.keyboard.isDown(this.keyB) && !this.action.block){
+        if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
+            this.timer.startTimer('heavy_cast',1000);
+            this.timer.startTimer('heavy',1500);
             //this.timer.startTimer('heavy',1000);
             this.changeState(this.heavyAttack);
 

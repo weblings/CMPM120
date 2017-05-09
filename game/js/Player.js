@@ -1,5 +1,5 @@
 //AG: This is pretty much just Nathan's code from the slides
-function Player(game, key, x, y, playerNum){
+Player = function(game, key, x, y, playerNum){
     Phaser.Sprite.call(this, game, x, y, key, playerNum);
     
     //Vars
@@ -56,49 +56,169 @@ function Player(game, key, x, y, playerNum){
         this.keyB = Phaser.Keyboard.CLOSED_BRACKET;
         this.prev_anim =0;
     }
+
+    //hitbox stuff
+    this.fists = game.add.group();
+    this.fist = fist = game.add.sprite(this.position.x,this.position.y,'fist');
+    this.fist.scale.setTo(0.25,0.25);
+    this.fists.add(this.fist);
+
+    this.timer = new setTime();
+
+    this.attacking =false;
+
+    //state change stuff
+    //an experiment NH
+    //this.state = this.input();
+    this.changeState(this.input);
+
+    //action
+    this.action = {}
+    this.action.jump = false;
+    this.action.block = false;
+
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
-Player.prototype.preload = function(){
-    game.load.image('fist', 'assets/img/fist.jpg');
 
+//state to clear state stuff NH
+//basically reset stuff every frame
+Player.prototype.preState =function (){
+    if (this.state != this.input || this.state != this.heavyAttack){
+        this.body.velocity.x = 0;
+    }
+    if (this.state != this.lightAttack){
+        this.fist.position.x = this.position.x;
+        this.fist.position.y = this.position.y;
+        this.body.gravity.y = 600;
+    }
+
+    if (!this.body.touching.down){
+        this.action.jump = true;
+    }else{
+        this.action.jump = false;
+    }
+    
+    
 }
 
-Player.prototype.create = function(){
-    this.fists = game.add.group();
-
+Player.prototype.changeState = function(currentState){
+    this.state = currentState;
 }
+
 
 Player.prototype.update = function(){
-    this.input();
+    this.preState();
+    this.state();
 }
 
 Player.prototype.fisting = function(x,y){
     var fist = game.add.sprite(x,y,'fist');
+    fist.scale.setTo(0.25,0.25);
     this.fists.add(fist);
 
 }
 
+//states
+Player.prototype.lightAttack = function(){
+    dir = this.faceRIGHT;
+
+    if (this.action.jump){
+        this.body.gravity.y = 0;
+        this.body.velocity.y =0 ;
+    }
+    
+
+    if (!this.attacking){
+        if (dir){
+            //var fist = game.add.sprite(this.position.x+50,this.position.y,'fist');
+            //fist.scale.setTo(0.25,0.25);
+            //this.fists.add(fist);
+            this.fist.position.x += 50;
+        } else{
+            //var fist = game.add.sprite(this.position.x-50,this.position.y,'fist');
+            //fist.scale.setTo(0.25,0.25);
+            //this.fists.add(fist);
+            this.fist.position.x -= 50;
+        }
+        this.attacking = true;
+    }
+    //this.debugText.text = this.position.x;
+    
+    if (this.timer.timerDone('light')){
+        this.debugText.text = 'done';
+        this.changeState(this.input);
+        this.attacking = false;
+    }
+
+
+
+}
+
+Player.prototype.heavyAttack = function(){
+    if (this.action.jump){
+        //dive kick
+        while(this.action.jump){
+            this.body.velocity.y = 20;
+            if (this.faceRIGHT){
+                this.body.velocity.x = 5;
+            }else{
+                this.body.velocity.x = -5;
+            }
+        }
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+        this.changeState(this.input);
+    }
+
+}
+
+
+
 //Handles player input
 Player.prototype.input = function(){
+        //this.fists.removeAll(true);
     
         //AG: if touching ground can jump (Altered code from tutorial)
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
-        if(game.input.keyboard.isDown(this.keyUp) && this.body.touching.down){
+        if(game.input.keyboard.isDown(this.keyUp) && this.body.touching.down && !this.action.block ){
             this.body.velocity.y = -350;
+        }
+
+        //blocking NH
+        if (game.input.keyboard.isDown(this.keyDown)){
+            this.action.block = true;
+        }else{
+            //possibly have a millisecond of un guarding? NH
+            this.action.block = false;
         }
 
         //test combat inputs
 
-        if (game.input.keyboard.isDown(this.keyA)){
+
+        //light attack NH
+        if (game.input.keyboard.isDown(this.keyA) && !this.action.block){
+            this.timer.startTimer('light',500);
             this.body.velocity.x = 0
             if (this.faceRIGHT ){
                 this.debugText.text = 'attack facing right';
+                this.changeState(this.lightAttack);
+            //this can be deleted
             } else {
                 this.debugText.text = 'attack facing left';
+
+                this.changeState(this.lightAttack);
             }
             
+        }
+
+        //heavy attack NH
+        if (game.input.keyboard.isDown(this.keyB) && !this.action.block){
+            //this.timer.startTimer('heavy',1000);
+            this.changeState(this.heavyAttack);
+
+
         }
 
 
@@ -109,7 +229,7 @@ Player.prototype.input = function(){
 
     
         //AG: Left controls
-        if(game.input.keyboard.isDown(this.keyLeft)){
+        if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
 
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
@@ -123,7 +243,7 @@ Player.prototype.input = function(){
             
             
             //stop that animation shit  NH
-            if(game.input.keyboard.isDown(this.keyRight)){
+            if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
                 
                 if (this.prev_anim == 0){
                     this.frame = 0;
@@ -144,7 +264,7 @@ Player.prototype.input = function(){
             
 
         //AG: Right controls
-        }else if(game.input.keyboard.isDown(this.keyRight)){
+        }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
             if (this.body.velocity.x < 0){
                 this.body.velocity.x = 0;
             }

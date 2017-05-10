@@ -117,6 +117,7 @@ var mainState = {
         mainState.calcKnockBack(100,70,player.playerNum);
     },
     
+    //AG: Should figure out which direction to apply knockback
     calcKnockBack: function(x,y,numOfHitPlayer){
         
         if(numOfHitPlayer == 1){
@@ -133,23 +134,27 @@ var mainState = {
         }
         
         //Calc if y should be negative
-        if(mainState.acceptableYValue() && numOfHitPlayer == 1){
+        if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 1){
             if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
-        }else if(mainState.acceptableYValue() && numOfHitPlayer == 2){
+        }else if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 2){
             if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
         }else{ //sends player up
             y = -y;
         }
-        //y=-4000;
-        //y=-y;
         
         //Apply knockback to hit player
         hitPlayer.applyKnockBack(x,y);
 
     },
     
-    acceptableYValue(){
-        Boolean(Math.abs(player1.x - player2.x < 0.5));
+    //AG: Phaser doesn't keep characters at whole numbers during calculation
+    yValueinMarginOf(value){
+        Boolean(Math.abs(player1.y - player2.y) < value);
+    },
+    
+    //AG: x version
+    xValueinMarginOf(value){
+        Boolean(Math.abs(player1.x - player2.x) < value);
     }
 }
 

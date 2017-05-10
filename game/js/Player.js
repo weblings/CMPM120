@@ -6,7 +6,7 @@ Player = function(game, key, x, y, playerNum){
     this.playerNum = playerNum; //Player number
     this.speed = 8; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 32;
-    this.jumpHeight = -350;
+    this.jumpHeight = -500; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     
     //Animations
     this.animations.add('left', [0,1,2,3], 10, true);
@@ -105,7 +105,7 @@ Player.prototype.preState =function (){
     }
     if (this.state != this.lightAttack){
         //light attack reset
-        this.fist.position.x = this.position.x;
+        this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         this.fist.position.y = this.position.y;
         this.body.gravity.y = 600;
     }
@@ -163,12 +163,14 @@ Player.prototype.lightAttack = function(){
             //var fist = game.add.sprite(this.position.x+50,this.position.y,'fist');
             //fist.scale.setTo(0.25,0.25);
             //this.fists.add(fist);
-            this.fist.position.x += 50;
+            //this.fist.position.x += 50;
+            this.fist.position.x = this.position.x + 50; //AG: Brings fist back on screen
         } else{
             //var fist = game.add.sprite(this.position.x-50,this.position.y,'fist');
             //fist.scale.setTo(0.25,0.25);
             //this.fists.add(fist);
-            this.fist.position.x -= 50;
+            //this.fist.position.x -= 50;
+            this.fist.position.x = this.position.x - 50; //AG: Brings fist back on screen
         }
         this.action.attacking = true;
 
@@ -218,6 +220,9 @@ Player.prototype.heavyAttack = function(){
         if (this.timer.timerDone('heavy_cast') && !this.action.dive){
             //can cancel out of attack NH
             //this.action.cancel = false;
+            
+            this.fist.position.x = this.position.x; //AG: Brings fist back on screen
+            
             if (this.faceRIGHT){
                 this.fist.scale.x = 1;
             }else{
@@ -255,6 +260,11 @@ Player.prototype.takeDamage = function(damage,staggerLength){
     this.debugText.text = this.health;
     this.timer.startTimer('shamed',50);
     this.timer.startTimer('staggered',staggerLength);
+}
+
+Player.prototype.applyKnockBack = function(x,y){
+    this.body.velocity.x = x;
+    this.body.velocity.y = y;
 }
 
 //Handles player input and change state accordingly NH

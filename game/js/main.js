@@ -98,17 +98,23 @@ var mainState = {
         }
         
         //Calc if y should be negative
-        if(player1.y < player2.y && numOfHitPlayer == 1){
-            if(!hitPlayer.body.touching.down) y = y;
-        }else if(player1.y > player2.y && numOfHitPlayer == 2){
-            if(!hitPlayer.body.touching.down) y = y;
+        if(mainState.acceptableYValue() && numOfHitPlayer == 1){
+            if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
+        }else if(mainState.acceptableYValue() && numOfHitPlayer == 2){
+            if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
         }else{ //sends player up
             y = -y;
         }
+        //y=-4000;
+        //y=-y;
         
         //Apply knockback to hit player
         hitPlayer.applyKnockBack(x,y);
 
+    },
+    
+    acceptableYValue(){
+        Boolean(Math.abs(player1.x - player2.x < 0.5));
     }
 }
 

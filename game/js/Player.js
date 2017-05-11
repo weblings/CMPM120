@@ -323,8 +323,12 @@ Player.prototype.heavyAttack = function(){
 
 //Should make player take Damage
 Player.prototype.takeDamage = function(damage,staggerLength){
+    var def = 1;
     if(!this.shamed){
-        this.damage(damage);
+        if (this.action.block){
+            def = 0.2;
+        }
+        this.damage(damage*def);
         this.shamed = true;
         this.staggered = true;
     }

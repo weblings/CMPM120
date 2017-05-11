@@ -232,7 +232,7 @@ var mainState = {
     
     Tween2completed(){
         tween1 = game.add.tween(introText1).to( { alpha: 0 }, 650, "Linear", true, 100);
-        tween2 = game.add.tween(introText2).to( { alpha: 0 }, 650, "Linear", true, 100);
+        tween2 = game.add.tween(introText2).to( { alpha: 0 }, 850, "Linear", true, 200);
         player1.introFinished = true;
         player2.introFinished = true;
     }

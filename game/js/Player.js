@@ -57,13 +57,17 @@ Player = function(game, key, x, y, playerNum){
     //Debug text and health bars
     this.graphics = game.add.graphics(0,0);
     if(playerNum == 1){
-        this.debugText = game.add.text(16,16,'test', {fontSize: '32px', fill: '#000000'});
+        this.debugText = game.add.text(16,16,'100', {fontSize: '32px', fill: '#000000'});
         this.graphics.beginFill(0x46c601, 1);
         this.healthBar = this.graphics.drawRect(10,48,450,50);
+        //this.graphics.beginFill(0xa4af9e, 1);
+        //this.damageBar = this.graphics.drawRect(10,48,1,50);
     }else{ //playerNum == 2
-        this.debugText = game.add.text(game.width - 100,16,'test', {fontSize: '32px', fill: '#000000'});
-        this.graphics.beginFill(0xa4af9e, 1);
-        this.healthBar = this.graphics.drawRect(game.width - 460,48,450,50);
+        this.debugText = game.add.text(game.width - 100,16,'100', {fontSize: '32px', fill: '#000000'});
+        this.graphics.beginFill(0x46c601, 1);
+        this.healthBar = this.graphics.drawRect(game.width - 460,48,450,50); //game.width - 460
+        //this.graphics.beginFill(0xa4af9e, 1);
+        //this.damageBar = this.graphics.drawRect(game.width - 460,48,1,50);  
     }
 
     //AG: Player input
@@ -243,7 +247,7 @@ Player.prototype.lightAttack = function(){
     //this.debugText.text = this.position.x;
     
     if (this.timer.timerDone('light')){
-        this.debugText.text = 'done';
+        //this.debugText.text = 'done';
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -331,6 +335,10 @@ Player.prototype.takeDamage = function(damage,staggerLength){
         this.damage(damage*def);
         this.shamed = true;
         this.staggered = true;
+        /*if(this.healthBar.width - 100 > 0){
+            this.healthBar.width -=100;
+            if(this.playerNum == 2) this.healthBar.x = game.width - this.healthBar.width - 10;
+        }else this.healthBar.width = 0;*/
     }
     this.debugText.text = this.health;
     this.timer.startTimer('shamed',50);
@@ -352,7 +360,7 @@ Player.prototype.applyKnockBack = function(x,y){
 Player.prototype.input = function(){
 
 
-        this.debugText.text = this.position.y;
+        //this.debugText.text = this.position.y;
 
         if(!this.introFinished){
             if(this.playerNum == 1) this.char.frame = 5;
@@ -395,7 +403,7 @@ Player.prototype.input = function(){
 
             //this line might be redundant NH
             this.body.velocity.x = 0
-            this.debugText.text = 'attack facing right';
+            //this.debugText.text = 'attack facing right';
             this.changeState(this.lightAttack);
 
             

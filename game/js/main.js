@@ -1,5 +1,3 @@
-//var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-
 var mainState = {
 
 	preload: function() {
@@ -30,12 +28,12 @@ var mainState = {
 	},
 
 	create: function() {
-		Player1SpawnX = 325;
-		Player1SpawnY = 200; 
+		Player1SpawnX = 215;
+		Player1SpawnY = 0; 
 
 
-		Player2SpawnX = 475;
-		Player2SpawnY = 200;
+		Player2SpawnX = 1000;
+		Player2SpawnY = 0;
 
 		//bg
 		var bg = game.add.sprite(0,0,'bg');
@@ -64,10 +62,10 @@ var mainState = {
 
 	    
 	    //AG: Attempt to get physics working
-	    var plat = game.add.sprite(0, game.height-32, 'player');
-	    game.physics.enable(plat);
-	    plat.body.immovable = true;
-	    plat.scale.setTo(25,1);
+        //var plat = game.add.sprite(0, game.height-32, 'player');
+	    //game.physics.enable(plat);
+	    //plat.body.immovable = true;
+	    //plat.scale.setTo(25,1);
 	    
 	    //AG: Physics from http://www.codevinsky.com/phaser-2-0-tutorial-flappy-bird-part-2/
 	    game.physics.startSystem(Phaser.Physics.Arcade);
@@ -75,8 +73,8 @@ var mainState = {
 	    players.add(player1);
 	    players.add(player2);
 	    
-	    ground = this.game.add.physicsGroup();
-	    ground.add(plat);
+	    //ground = this.game.add.physicsGroup();
+	    //ground.add(plat);
         
         fist1 = player1.fists;
         fist2 = player2.fists;
@@ -202,10 +200,6 @@ var mainState = {
         }else if(player1.x < player2.x && numOfHitPlayer == 1){
             x = -x;
         }
-        
-        /*if(player1.action.dive || player2.action.dive){
-            x = 0;
-        }*/
         
         //Calc if y should be negative (Might be busted)
         if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 1){

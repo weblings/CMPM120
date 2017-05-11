@@ -1,46 +1,25 @@
 //AG: This is pretty much just Nathan's code from the slides
 Player = function(game, key, x, y, playerNum){
     Phaser.Sprite.call(this, game, x, y, key, playerNum);
-
-    this.alpha = 0.5;
     
     //Vars
     this.playerNum = playerNum; //Player number
     this.speed = 8; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 32;
-    this.jumpHeight = -600; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
+    this.jumpHeight = -500; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     
     //Animations
-    this.char = game.add.sprite(this.position.x, this.position.y, 'player');
-    this.char.animations.add('left', [0,1,2,3], 10, true);
-    this.char.animations.add('right', [5,6,7,8], 10, true);
-    this.char.scale.setTo(4,4);
-
-
-    /*
-    //body hitbox
-    this.hitboxes = game.add.physicsGroup();
-    this.hitbox = game.add.sprite(this.position.x,this.position.y,'hitbox');
-    this.hitbox.scale.setTo(0.25,0.25);
-    //this.hitbox.anchor.x = 0.5;
-    //this.hitbox.anchor.y = 0.5;
-    this.hitboxes.add(this.hitbox);
-    */
-
-
+    this.animations.add('left', [0,1,2,3], 10, true);
+    this.animations.add('right', [5,6,7,8], 10, true);
     
     //Physics
-    //for adjustments, change NH
-    this.worldGrav = 800;
-
-    //Do not touch stuff 
     game.physics.enable(this);
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
-    this.body.gravity.y = this.worldGrav;
+    this.body.gravity.y = 600;
     
     //AG: Scale to find character sizing
-    this.scale.setTo(0.5,0.25);
+    this.scale.setTo(4,4);
 
     //animation stuff NH
     this.prev_anim = 0;
@@ -86,8 +65,6 @@ Player = function(game, key, x, y, playerNum){
 
     //hitbox stuff
     this.fists = game.add.physicsGroup();
-
-    //why the extra  = ? NH
     this.fist = fist = game.add.sprite(this.position.x,this.position.y,'fist');
     this.fist.scale.setTo(0.25,0.25);
     this.fist.anchor.x = 0;
@@ -112,8 +89,10 @@ Player = function(game, key, x, y, playerNum){
     this.action.attacking = false;
     this.action.dive = false;
     this.action.cancel = false;
-    this.action.down = false;
-
+    
+    //AG: Knockback booleans
+    this.inLightAttack = false;
+    this.inHeavyAttack = false;
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -123,34 +102,19 @@ Player.prototype.constructor = Player;
 //basically reset stuff every frame
 Player.prototype.preState =function (){
 
-    //reset hitbox
-    /*
-    this.hitbox.position.x = this.position.x +25;
-    this.hitbox.position.y = this.position.y +70;
-    */
-    this.char.position = this.position;
-
-    //this value needs to be changed when art is finalized NH
-    /*
-    if (this.position.y > 331){
-        this.position.y = 331;
-    }
-    */
-
     //cancel velocity when not in input
     if (this.state != this.input){
         this.body.velocity.x = 0;
     }
     if (this.state != this.lightAttack){
         //light attack reset
-        //this.fist.position.x = this.position.x; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
-        //this.fist.position.y = this.position.y;
-        this.resetFist();
-        this.body.gravity.y = this.worldGrav;
+        this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
+        this.fist.position.y = this.position.y;
+        this.body.gravity.y = 600;
     }
 
     if (this.state != this.heavyAttack){
-        this.resetFist();
+        this.fist.scale.x = 0.25;
     }
 
     //check if in air
@@ -159,47 +123,7 @@ Player.prototype.preState =function (){
     }else{
         this.action.jump = false;
     }
-
-    //check if downed NH
-    if (!this.timer.timerDone('downed') && this.action.down){
-        //insert sprite change here
-        this.action.down = false;
-    }
     
-
-    //
-    
-    
-}
-
-Player.prototype.resetFist = function(){
-    this.fist.position.x = this.position.x;
-    this.fist.position.y = this.position.y;
-    this.fist.scale.setTo(0.25,0.25);
-    this.fist.exists = false;
-
-}
-
-/*
-Player.prototype.iFrame = function(){
-    this.timer.startTimer('iframe', 1000);
-}
-*/
-
-//I'll revisit this when we get the sprites NH
-//note, this is a state
-Player.prototype.downed = function(){
-    this.action.down = true;
-    //set timer down max down time
-    this.timer.startTimer('downed', 2500);
-
-    if (game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
-        game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
-        game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)){
-        this.action.down = false;
-        this.changeState(this.input);
-    }
-
     
 }
 
@@ -229,7 +153,6 @@ Player.prototype.fisting = function(x,y){
 //states
 Player.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
-    this.fist.exists = true;
     //insert attack animation here
 
     if (this.action.jump){
@@ -253,6 +176,7 @@ Player.prototype.lightAttack = function(){
             this.fist.position.x = this.position.x - 50; //AG: Brings fist back on screen
         }
         this.action.attacking = true;
+        this.inLightAttack = true; //AG: Adding for knockback
 
     }
     //this.debugText.text = this.position.x;
@@ -261,12 +185,12 @@ Player.prototype.lightAttack = function(){
         this.debugText.text = 'done';
         this.changeState(this.input);
         this.action.attacking = false;
+        this.inLightAttack = false; //AG: Adding for knockback
     }
         
 }
 
 Player.prototype.heavyAttack = function(){
-    this.fist.exists = true;
 
     if (this.action.jump){
         //dive kick
@@ -288,6 +212,7 @@ Player.prototype.heavyAttack = function(){
         if (!this.action.attacking && !this.action.dive){
             this.action.cancel = true;
             this.action.attacking = true;
+            this.inHeavyAttack = true; //AG: Adding for knockback
         }
 
         if (this.action.cancel == true && game.input.keyboard.isDown(this.keyUp)){
@@ -296,6 +221,7 @@ Player.prototype.heavyAttack = function(){
             this.action.cancel = false;
             this.body.velocity.y = this.jumpHeight;
             this.changeState(this.input);
+            this.inHeavyAttack = false; //AG: Adding for knockback
         }
 
         if (this.timer.timerDone('heavy_cast') && !this.action.dive){
@@ -325,6 +251,7 @@ Player.prototype.heavyAttack = function(){
             this.action.dive = false;
             this.action.cancel = false;
             this.changeState(this.input);
+            this.inHeavyAttack = false; //AG: Adding for knockback
         }
         
     }
@@ -351,7 +278,7 @@ Player.prototype.applyKnockBack = function(x,y){
 //Handles player input and change state accordingly NH
 Player.prototype.input = function(){
         //this.fists.removeAll(true);
-        this.debugText.text = this.position.y;
+
         //AG: Turn off shamed
         if(this.timer.timerDone('shamed')){
             this.shamed = false;
@@ -424,16 +351,16 @@ Player.prototype.input = function(){
             }else{
                 this.body.velocity.x = -200;
             }
-            this.char.animations.play('left');
+            this.animations.play('left');
             
             
             //stop that animation shit  NH
             if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
                 
                 if (this.prev_anim == 0){
-                    this.char.frame = 0;
+                    this.frame = 0;
                 }else{
-                    this.char.frame = 5;
+                    this.frame = 5;
                     this.anim_lock = true;
                 }
                 this.body.velocity.x = 0;
@@ -458,7 +385,7 @@ Player.prototype.input = function(){
             }else{
                 this.body.velocity.x = 200;
             }
-            this.char.animations.play('right');
+            this.animations.play('right');
             this.prev_anim = 1;
             this.faceRIGHT = true;
 
@@ -467,10 +394,10 @@ Player.prototype.input = function(){
 
             
             if (this.prev_anim == 0){
-                this.char.frame = 0;
+                this.frame = 0;
                 this.faceRIGHT = false;
             }else{
-                this.char.frame = 5;
+                this.frame = 5;
                 this.faceRIGHT = true;
             }
             this.body.velocity.x = 0;

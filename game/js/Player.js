@@ -54,10 +54,17 @@ Player = function(game, key, x, y, playerNum){
     this.shamed = false; //keeps Phaser from triggering damage more than we want
     this.staggered = false; //immobilizes player;
 
-    //Debug text
-    //AG: Made it so the debugText for each player is on their side of the screen
-    if(playerNum == 1) this.debugText = game.add.text(16,16,'test', {fontSize: '32px', fill: '#000000'});
-    if(playerNum == 2) this.debugText = game.add.text(game.width - 100,16,'test', {fontSize: '32px', fill: '#000000'});
+    //Debug text and health bars
+    this.graphics = game.add.graphics(0,0);
+    if(playerNum == 1){
+        this.debugText = game.add.text(16,16,'test', {fontSize: '32px', fill: '#000000'});
+        this.graphics.beginFill(0x46c601, 1);
+        this.healthBar = this.graphics.drawRect(10,48,450,50);
+    }else{ //playerNum == 2
+        this.debugText = game.add.text(game.width - 100,16,'test', {fontSize: '32px', fill: '#000000'});
+        this.graphics.beginFill(0xa4af9e, 1);
+        this.healthBar = this.graphics.drawRect(game.width - 460,48,450,50);
+    }
 
     //AG: Player input
     this.keyLeft;
@@ -76,7 +83,7 @@ Player = function(game, key, x, y, playerNum){
         this.keyA = Phaser.Keyboard.R;
         this.keyB = Phaser.Keyboard.T;
         this.prev_anim =1;
-        this.faceRIGHT = true;
+        this.faceRIGHT = true; //for Spawning
     }else if(this.playerNum == 2){ 
         this.keyLeft = Phaser.Keyboard.K;
         this.keyRight = Phaser.Keyboard.COLON;
@@ -124,7 +131,6 @@ Player = function(game, key, x, y, playerNum){
     this.inHeavyAttack = false;
     
     this.introFinished = false; //AG: Intro in Main finished
-
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);

@@ -28,10 +28,10 @@ var mainState = {
 		Player2SpawnY = 200;
 
 
-	    player1 = new Player(game, 'player', Player1SpawnX, Player1SpawnY, 1);
+	    player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
 	    game.add.existing(player1);
 	    
-	    player2 = new Player(game, 'player', Player2SpawnX, Player2SpawnY, 2);
+	    player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
 	    game.add.existing(player2);
 	    
 	    //AG: Attempt to get physics working
@@ -55,8 +55,16 @@ var mainState = {
 
 	update: function() {
 	    game.physics.arcade.collide(players,ground);
-        game.physics.arcade.collide(player1,player2);
-        
+
+	    //insert if statement here to turn off collision on hits
+	    //add more checks later depending on scenario 
+	    //this is mainly to fix the dive kick stuf but we need the divekick working fist NH
+	    if (!player1.staggered || !player2.staggered || !player1.action.dive || !player2.action.dive){
+	    	game.physics.arcade.collide(player1,player2);
+	    }
+        //game.physics.arcade.collide(player1,player2);
+
+
         //Light and heavy attacks
         game.physics.arcade.overlap(player1,fist2,mainState.determineAttack, null, this);
         game.physics.arcade.overlap(player2,fist1,mainState.determineAttack, null, this);
@@ -67,6 +75,27 @@ var mainState = {
         }
         if(game.physics.arcade.collide(player2,player1) && player2.action.dive){
             game.physics.arcade.overlap(player1,player2,mainState.heavyAttack, null, this);
+        }
+
+        if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
+        	&& !player2.action.dive){
+        	player2.body.velocity.y -= 300;
+        	if (player2.faceRIGHT){
+        		player2.position.x +=50;
+        	}else{
+        		player2.position.x -=50;
+        	}
+
+        }
+
+        if (player2.body.touching.up && player2.body.touching.down && player1.body.touching.down 
+        	&& !player1.action.dive){
+        	player1.body.velocity.y -= 300;
+        	if (player1.faceRIGHT){
+        		player1.position.x +=50;
+        	}else{
+        		player1.position.x -=50;
+        	}
         }
     },
     
@@ -86,6 +115,7 @@ var mainState = {
             mainState.heavyAttack(player,hitbox);
         }else{
             mainState.lightAttack(player,hitbox);
+
         }
     },
     

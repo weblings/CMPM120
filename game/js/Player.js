@@ -121,6 +121,8 @@ Player = function(game, key, x, y, playerNum){
     //AG: Knockback booleans
     this.inLightAttack = false;
     this.inHeavyAttack = false;
+    
+    this.introFinished = false; //AG: Intro in Main finished
 
 }
 
@@ -328,7 +330,10 @@ Player.prototype.input = function(){
 
         this.debugText.text = this.position.y;
 
-
+        if(!this.introFinished){
+            if(this.playerNum == 1) this.char.animations.play('right');
+            return;
+        } 
 
         //AG: Turn off shamed
         if(this.timer.timerDone('shamed')){

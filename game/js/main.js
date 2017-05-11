@@ -28,10 +28,10 @@ var mainState = {
 		Player2SpawnY = 200;
 
 
-	    player1 = new Player(game, 'player', Player1SpawnX, Player1SpawnY, 1);
+	    player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
 	    game.add.existing(player1);
 	    
-	    player2 = new Player(game, 'player', Player2SpawnX, Player2SpawnY, 2);
+	    player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
 	    game.add.existing(player2);
 	    
 	    //AG: Attempt to get physics working

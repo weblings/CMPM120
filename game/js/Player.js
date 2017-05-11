@@ -401,16 +401,16 @@ Player.prototype.input = function(){
             }else{
                 this.body.velocity.x = -200;
             }
-            this.animations.play('left');
+            this.char.animations.play('left');
             
             
             //stop that animation shit  NH
             if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
                 
                 if (this.prev_anim == 0){
-                    this.frame = 0;
+                    this.char.frame = 0;
                 }else{
-                    this.frame = 5;
+                    this.char.frame = 5;
                     this.anim_lock = true;
                 }
                 this.body.velocity.x = 0;
@@ -435,7 +435,7 @@ Player.prototype.input = function(){
             }else{
                 this.body.velocity.x = 200;
             }
-            this.animations.play('right');
+            this.char.animations.play('right');
             this.prev_anim = 1;
             this.faceRIGHT = true;
 
@@ -444,11 +444,11 @@ Player.prototype.input = function(){
 
             
             if (this.prev_anim == 0){
-                this.frame = 0;
+                this.char.frame = 0;
                 this.faceRIGHT = false;
             }else{
-                this.frame = 5;
-                this.faceRIGHT = true;
+                this.char.frame = 5;
+                this.char.faceRIGHT = true;
             }
             this.body.velocity.x = 0;
         }

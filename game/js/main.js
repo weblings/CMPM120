@@ -17,6 +17,10 @@ var mainState = {
 		var ground;
         var fist1;
         var fist2;
+        
+        //AG: Intro Text
+        var introText1;
+        var introText2;
 	},
 
 	create: function() {
@@ -51,6 +55,21 @@ var mainState = {
         
         fist1 = player1.fists;
         fist2 = player2.fists;
+        
+        //AG: Intro Text
+        introText1 =  game.add.text(game.world.centerX, game.world.centerY - game.world.centerY/3, "FLIGHT IS OVERBOOKED", { font: "32px Arial", fill: "#fff", align: "center" });
+        introText1.alpha = 0;
+        introText1.anchor.set(0.5);
+        
+        introText2 =  game.add.text(game.world.centerX, game.world.centerY - game.world.centerY/7, "FIGHT FOR YOUR SEAT", { font: "64px Arial", fill: "#f44242", align: "center" });
+        introText2.alpha = 0;
+        introText2.anchor.set(0.5);
+        
+        var tween1 = game.add.tween(introText1).to( { alpha: 1 }, 800, "Linear", true, 800);
+        var tween2;
+
+        tween1.onComplete.add(mainState.Tween1completed, this);
+
 	},
 
 	update: function() {
@@ -167,6 +186,18 @@ var mainState = {
     //AG: x version
     xValueinMarginOf(value){
         Boolean(Math.abs(player1.x - player2.x) < value);
+    },
+    
+    Tween1completed(){
+        tween2 = game.add.tween(introText2).to( { alpha: 1 }, 400, "Linear", true, 600);
+        tween2.onComplete.add(mainState.Tween2completed, this);
+    },
+    
+    Tween2completed(){
+        tween1 = game.add.tween(introText1).to( { alpha: 0 }, 650, "Linear", true, 100);
+        tween2 = game.add.tween(introText2).to( { alpha: 0 }, 650, "Linear", true, 100);
+        player1.introFinished = true;
+        player2.introFinished = true;
     }
 }
 

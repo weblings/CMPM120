@@ -3,18 +3,21 @@ Player = function(game, key, x, y, playerNum){
     Phaser.Sprite.call(this, game, x, y, key, playerNum);
 
     this.alpha = 0.5;
+    this.anchor.y = 1;
     
     //Vars
     this.playerNum = playerNum; //Player number
     this.speed = 8; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 32;
     this.jumpHeight = -600; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
-    
+    this.floorLevel = 568;
+
     //Animations
     this.char = game.add.sprite(this.position.x, this.position.y, 'player');
     this.char.animations.add('left', [0,1,2,3], 10, true);
     this.char.animations.add('right', [5,6,7,8], 10, true);
     this.char.scale.setTo(4,4);
+    this.char.anchor.y = 1
 
 
     /*
@@ -40,7 +43,7 @@ Player = function(game, key, x, y, playerNum){
     this.body.gravity.y = this.worldGrav;
     
     //AG: Scale to find character sizing
-    this.scale.setTo(0.5,0.25);
+    this.scale.setTo(0.15,0.25);
 
     //animation stuff NH
     this.prev_anim = 0;
@@ -91,7 +94,7 @@ Player = function(game, key, x, y, playerNum){
     this.fist = fist = game.add.sprite(this.position.x,this.position.y,'fist');
     this.fist.scale.setTo(0.25,0.25);
     this.fist.anchor.x = 0;
-    this.fist.anchor.y = -0.5;
+    this.fist.anchor.y = 1.5;
     this.fists.add(this.fist);
 
 
@@ -113,6 +116,7 @@ Player = function(game, key, x, y, playerNum){
     this.action.dive = false;
     this.action.cancel = false;
     this.action.down = false;
+    this.action.noCollide =false;
 
 }
 
@@ -131,11 +135,11 @@ Player.prototype.preState =function (){
     this.char.position = this.position;
 
     //this value needs to be changed when art is finalized NH
-    /*
-    if (this.position.y > 331){
-        this.position.y = 331;
+    
+    if (this.position.y > this.floorLevel){
+        this.position.y = this.floorLevel;
     }
-    */
+    
 
     //cancel velocity when not in input
     if (this.state != this.input){
@@ -232,7 +236,7 @@ Player.prototype.lightAttack = function(){
     this.fist.exists = true;
     //insert attack animation here
 
-    if (this.action.jump){
+    if (this.action.jump ){
         this.body.gravity.y = 0;
         this.body.velocity.y =0 ;
     }
@@ -268,7 +272,7 @@ Player.prototype.lightAttack = function(){
 Player.prototype.heavyAttack = function(){
     this.fist.exists = true;
 
-    if (this.action.jump){
+    if (this.action.jump || (this.position.y < this.floorLevel)){
         //dive kick
         
         this.body.velocity.y = 550;
@@ -279,6 +283,7 @@ Player.prototype.heavyAttack = function(){
         }
         this.action.attacking = true;
         this.action.dive = true;
+        //this.action.noCollide = true;
         
     }else{
         //reset velocity
@@ -350,8 +355,12 @@ Player.prototype.applyKnockBack = function(x,y){
 
 //Handles player input and change state accordingly NH
 Player.prototype.input = function(){
-        //this.fists.removeAll(true);
+
         this.debugText.text = this.position.y;
+
+
+
+
         //AG: Turn off shamed
         if(this.timer.timerDone('shamed')){
             this.shamed = false;

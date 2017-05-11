@@ -61,7 +61,7 @@ var mainState = {
 	    //insert if statement here to turn off collision on hits
 	    //add more checks later depending on scenario 
 	    //this is mainly to fix the dive kick stuf but we need the divekick working fist NH
-	    if (!player1.staggered || !player2.staggered){
+	    if (!player1.staggered || !player2.staggered || !player1.action.dive || !player2.action.dive){
 	    	game.physics.arcade.collide(player1,player2);
 	    }
         //game.physics.arcade.collide(player1,player2);
@@ -82,7 +82,8 @@ var mainState = {
         //stop landing on each other NH
 
         
-        if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down){
+        if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
+        	&& !player2.action.dive){
         	player2.body.velocity.y -= 300;
         	if (player2.faceRIGHT){
         		player2.position.x +=50;
@@ -92,7 +93,8 @@ var mainState = {
 
         }
 
-        if (player2.body.touching.up && player2.body.touching.down && player1.body.touching.down){
+        if (player2.body.touching.up && player2.body.touching.down && player1.body.touching.down 
+        	&& !player1.action.dive){
         	player1.body.velocity.y -= 300;
         	if (player1.faceRIGHT){
         		player1.position.x +=50;

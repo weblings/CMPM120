@@ -133,13 +133,9 @@ Player = function(game, key, x, y, playerNum){
     this.inHeavyAttack = false;
     
     this.introFinished = false; //AG: Intro in Main finished
-<<<<<<< HEAD
-=======
 
     //misc.
     this.canLightAttack = true; 
-
->>>>>>> 9508d2a82ffcbad3c90c634d7b386ed6bceae81f
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);

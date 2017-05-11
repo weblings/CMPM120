@@ -21,17 +21,17 @@ var mainState = {
 
 	create: function() {
 		Player1SpawnX = 325;
-		Player1SpawnY =100; 
+		Player1SpawnY = 200; 
 
 
 		Player2SpawnX = 475;
-		Player2SpawnY = 100;
+		Player2SpawnY = 200;
 
 
-	    player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+	    player1 = new Player(game, 'player', Player1SpawnX, Player1SpawnY, 1);
 	    game.add.existing(player1);
 	    
-	    player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+	    player2 = new Player(game, 'player', Player2SpawnX, Player2SpawnY, 2);
 	    game.add.existing(player2);
 	    
 	    //AG: Attempt to get physics working
@@ -51,8 +51,6 @@ var mainState = {
         
         fist1 = player1.fists;
         fist2 = player2.fists;
-
-
 	},
 
 	update: function() {
@@ -68,20 +66,17 @@ var mainState = {
 
 
         //Light and heavy attacks
-        game.physics.arcade.overlap(player1,fist2,mainState.lightAttack, null, this);
-        game.physics.arcade.overlap(player2,fist1,mainState.heavyAttack, null, this);
+        game.physics.arcade.overlap(player1,fist2,mainState.determineAttack, null, this);
+        game.physics.arcade.overlap(player2,fist1,mainState.determineAttack, null, this);
         
         //Dive kicks
-        if(player1.action.dive){
+        if(game.physics.arcade.collide(player1,player2) && player1.action.dive){
             game.physics.arcade.overlap(player2,player1,mainState.heavyAttack, null, this);
         }
-        if(player2.action.dive){
+        if(game.physics.arcade.collide(player2,player1) && player2.action.dive){
             game.physics.arcade.overlap(player1,player2,mainState.heavyAttack, null, this);
         }
 
-        //stop landing on each other NH
-
-        
         if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
         	&& !player2.action.dive){
         	player2.body.velocity.y -= 300;
@@ -101,24 +96,40 @@ var mainState = {
         	}else{
         		player1.position.x -=50;
         	}
+        }
+    },
+    
+    determineAttack: function(player,hitbox){
+        var attackingPlayer;
+        var hitPlayer = player.playerNum;
+        
+        //AG: Determines out who is attacking
+        if(hitPlayer == 1){
+            attackingPlayer = player2;
+        }else{
+            attackingPlayer = player1;
+        }
+        
+        //AG: Determines which attack they did
+        if(attackingPlayer.inHeavyAttack){
+            mainState.heavyAttack(player,hitbox);
+        }else{
+            mainState.lightAttack(player,hitbox);
 
         }
-
-
     },
     
     lightAttack: function(player,hitbox){
         player.takeDamage(3,100);
-        //mainState.calcKnockBack(50,30);
         mainState.calcKnockBack(50,30,player.playerNum);
     },
   
     heavyAttack: function(player,hitbox){
         player.takeDamage(10,1000);
-        //player.applyKnockBack(100,70);
         mainState.calcKnockBack(100,70,player.playerNum);
     },
     
+    //AG: Should figure out which direction to apply knockback
     calcKnockBack: function(x,y,numOfHitPlayer){
         
         if(numOfHitPlayer == 1){
@@ -134,24 +145,28 @@ var mainState = {
             x = -x;
         }
         
-        //Calc if y should be negative
-        if(mainState.acceptableYValue() && numOfHitPlayer == 1){
+        //Calc if y should be negative (Might be busted)
+        if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 1){
             if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
-        }else if(mainState.acceptableYValue() && numOfHitPlayer == 2){
+        }else if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 2){
             if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
         }else{ //sends player up
             y = -y;
         }
-        //y=-4000;
-        //y=-y;
         
         //Apply knockback to hit player
         hitPlayer.applyKnockBack(x,y);
 
     },
     
-    acceptableYValue(){
-        Boolean(Math.abs(player1.x - player2.x < 0.5));
+    //AG: Phaser doesn't keep characters at whole numbers during calculation
+    yValueinMarginOf(value){
+        Boolean(Math.abs(player1.y - player2.y) < value);
+    },
+    
+    //AG: x version
+    xValueinMarginOf(value){
+        Boolean(Math.abs(player1.x - player2.x) < value);
     }
 }
 

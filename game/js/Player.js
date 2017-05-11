@@ -327,8 +327,12 @@ Player.prototype.heavyAttack = function(){
 
 //Should make player take Damage
 Player.prototype.takeDamage = function(damage,staggerLength){
+    var def = 1;
     if(!this.shamed){
-        this.damage(damage);
+        if (this.action.block){
+            def = 0.2;
+        }
+        this.damage(damage*def);
         this.shamed = true;
         this.staggered = true;
         /*if(this.healthBar.width - 100 > 0){
@@ -342,8 +346,14 @@ Player.prototype.takeDamage = function(damage,staggerLength){
 }
 
 Player.prototype.applyKnockBack = function(x,y){
-    this.body.velocity.x = x;
-    this.body.velocity.y = y;
+    var x1 = x;
+    var y1 = y;
+    if (this.action.block){
+        x1 *= 0.2;
+        y1 = 0;
+    }
+    this.body.velocity.x = x1;
+    this.body.velocity.y = y1;
 }
 
 //Handles player input and change state accordingly NH

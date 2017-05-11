@@ -82,7 +82,7 @@ var mainState = {
         fist2 = player2.fists;
         
         //AG: Intro Text
-        introText1 =  game.add.text(game.world.centerX, game.world.centerY - game.world.centerY/3, "FLIGHT IS OVERBOOKED", { font: "32px Arial", fill: "#fff", align: "center" });
+        introText1 =  game.add.text(game.world.centerX, game.world.centerY - game.world.centerY/3, "FLIGHT IS OVERBOOKED", { font: "32px Arial", fill: "#000", align: "center" });
         introText1.alpha = 0;
         introText1.anchor.set(0.5);
         
@@ -124,10 +124,10 @@ var mainState = {
         
         //Dive kicks
         if(player1.action.dive){
-            game.physics.arcade.overlap(player2,player1,mainState.heavyAttack, null, this);
+            game.physics.arcade.overlap(player2,player1,mainState.diveKick, null, this);
         }
         if(player2.action.dive){
-            game.physics.arcade.overlap(player1,player2,mainState.heavyAttack, null, this);
+            game.physics.arcade.overlap(player1,player2,mainState.diveKick, null, this);
         }
 
         if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
@@ -182,6 +182,11 @@ var mainState = {
         mainState.calcKnockBack(100,70,player.playerNum);
     },
     
+    diveKick: function(player,hitbox){
+        player.takeDamage(5,250);
+        mainState.calcKnockBack(40,30,player.playerNum);
+    },
+    
     //AG: Should figure out which direction to apply knockback
     calcKnockBack: function(x,y,numOfHitPlayer){
         
@@ -198,13 +203,17 @@ var mainState = {
             x = -x;
         }
         
+        /*if(player1.action.dive || player2.action.dive){
+            x = 0;
+        }*/
+        
         //Calc if y should be negative (Might be busted)
         if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 1){
             if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
         }else if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 2){
             if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
         }else{ //sends player up
-            y = -y;
+           y = -y;
         }
         
         //Apply knockback to hit player

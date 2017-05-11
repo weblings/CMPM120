@@ -17,6 +17,9 @@ var mainState = {
 		var ground;
         var fist1;
         var fist2;
+        var floor;
+
+
 	},
 
 	create: function() {
@@ -27,12 +30,31 @@ var mainState = {
 		Player2SpawnX = 475;
 		Player2SpawnY = 200;
 
+		//bg
+		var bg = game.add.sprite(0,0,'bg');
+		bg.scale.setTo(0.8);
+
+
 
 	    player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
 	    game.add.existing(player1);
 	    
 	    player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
 	    game.add.existing(player2);
+
+	    //new ground
+	    //game.physics.startSystem(Phaser.Physics.ARCADE)
+	    platforms = game.add.group();
+		platforms.enableBody = true;
+
+	    floor = game.add.tileSprite(0, game.world.height -40, 1280, 720,'bg');
+	    platforms.add(floor);
+
+
+
+	    floor.body.immovable = true;
+	    
+
 	    
 	    //AG: Attempt to get physics working
 	    var plat = game.add.sprite(0, game.height-32, 'player');
@@ -54,15 +76,24 @@ var mainState = {
 	},
 
 	update: function() {
-	    game.physics.arcade.collide(players,ground);
+	    game.physics.arcade.collide(players,platforms);
 
 	    //insert if statement here to turn off collision on hits
 	    //add more checks later depending on scenario 
 	    //this is mainly to fix the dive kick stuf but we need the divekick working fist NH
-	    if (!player1.staggered || !player2.staggered || !player1.action.dive || !player2.action.dive){
+	    if ((!player1.action.dive && !player2.action.dive)){
 	    	game.physics.arcade.collide(player1,player2);
 	    }
         //game.physics.arcade.collide(player1,player2);
+
+
+        //update test
+        if (player1.position.y > player1.floorLevel){
+        	player1.position.y = player1.floorLevel;
+    	}
+    	if (player2.position.y > player2.floorLevel){
+        	player2.position.y = player2.floorLevel;
+    	}
 
 
         //Light and heavy attacks
@@ -70,15 +101,15 @@ var mainState = {
         game.physics.arcade.overlap(player2,fist1,mainState.determineAttack, null, this);
         
         //Dive kicks
-        if(game.physics.arcade.collide(player1,player2) && player1.action.dive){
+        if(player1.action.dive){
             game.physics.arcade.overlap(player2,player1,mainState.heavyAttack, null, this);
         }
-        if(game.physics.arcade.collide(player2,player1) && player2.action.dive){
+        if(player2.action.dive){
             game.physics.arcade.overlap(player1,player2,mainState.heavyAttack, null, this);
         }
 
         if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player2.action.dive){
+        	&& !player2.action.dive && player1.alive){
         	player2.body.velocity.y -= 300;
         	if (player2.faceRIGHT){
         		player2.position.x +=50;
@@ -89,7 +120,7 @@ var mainState = {
         }
 
         if (player2.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player1.action.dive){
+        	&& !player1.action.dive && player2.alive){
         	player1.body.velocity.y -= 300;
         	if (player1.faceRIGHT){
         		player1.position.x +=50;

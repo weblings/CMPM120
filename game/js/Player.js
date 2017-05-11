@@ -11,7 +11,7 @@ Player = function(game, key, x, y, playerNum){
     this.maxSpeed = 32;
 
     this.jumpHeight = -600; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
-    this.floorLevel = 568;
+    this.floorLevel = 680;
 
     //Animations
     this.char = game.add.sprite(this.position.x, this.position.y, 'player');
@@ -56,8 +56,8 @@ Player = function(game, key, x, y, playerNum){
 
     //Debug text
     //AG: Made it so the debugText for each player is on their side of the screen
-    if(playerNum == 1) this.debugText = game.add.text(16,16,'test', {fontSize: '32px', fill: '#FFFFFF'});
-    if(playerNum == 2) this.debugText = game.add.text(game.width - 100,16,'test', {fontSize: '32px', fill: '#FFFFFF'});
+    if(playerNum == 1) this.debugText = game.add.text(16,16,'test', {fontSize: '32px', fill: '#000000'});
+    if(playerNum == 2) this.debugText = game.add.text(game.width - 100,16,'test', {fontSize: '32px', fill: '#000000'});
 
     //AG: Player input
     this.keyLeft;
@@ -140,6 +140,7 @@ Player.prototype.preState =function (){
     this.char.position = this.position;
 
     //this value needs to be changed when art is finalized NH
+    
     
     if (this.position.y > this.floorLevel){
         this.position.y = this.floorLevel;

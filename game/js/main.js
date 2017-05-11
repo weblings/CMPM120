@@ -1,5 +1,3 @@
-//var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-
 var mainState = {
 
 	preload: function() {
@@ -30,12 +28,12 @@ var mainState = {
 	},
 
 	create: function() {
-		Player1SpawnX = 325;
-		Player1SpawnY = 200; 
+		Player1SpawnX = 215;
+		Player1SpawnY = 0; 
 
 
-		Player2SpawnX = 475;
-		Player2SpawnY = 200;
+		Player2SpawnX = 1000;
+		Player2SpawnY = 0;
 
 		//bg
 		var bg = game.add.sprite(0,0,'bg');
@@ -64,10 +62,10 @@ var mainState = {
 
 	    
 	    //AG: Attempt to get physics working
-	    var plat = game.add.sprite(0, game.height-32, 'player');
-	    game.physics.enable(plat);
-	    plat.body.immovable = true;
-	    plat.scale.setTo(25,1);
+        //var plat = game.add.sprite(0, game.height-32, 'player');
+	    //game.physics.enable(plat);
+	    //plat.body.immovable = true;
+	    //plat.scale.setTo(25,1);
 	    
 	    //AG: Physics from http://www.codevinsky.com/phaser-2-0-tutorial-flappy-bird-part-2/
 	    game.physics.startSystem(Phaser.Physics.Arcade);
@@ -75,14 +73,14 @@ var mainState = {
 	    players.add(player1);
 	    players.add(player2);
 	    
-	    ground = this.game.add.physicsGroup();
-	    ground.add(plat);
+	    //ground = this.game.add.physicsGroup();
+	    //ground.add(plat);
         
         fist1 = player1.fists;
         fist2 = player2.fists;
         
         //AG: Intro Text
-        introText1 =  game.add.text(game.world.centerX, game.world.centerY - game.world.centerY/3, "FLIGHT IS OVERBOOKED", { font: "32px Arial", fill: "#fff", align: "center" });
+        introText1 =  game.add.text(game.world.centerX, game.world.centerY - game.world.centerY/3, "FLIGHT IS OVERBOOKED", { font: "32px Arial", fill: "#000", align: "center" });
         introText1.alpha = 0;
         introText1.anchor.set(0.5);
         
@@ -124,10 +122,10 @@ var mainState = {
         
         //Dive kicks
         if(player1.action.dive){
-            game.physics.arcade.overlap(player2,player1,mainState.heavyAttack, null, this);
+            game.physics.arcade.overlap(player2,player1,mainState.diveKick, null, this);
         }
         if(player2.action.dive){
-            game.physics.arcade.overlap(player1,player2,mainState.heavyAttack, null, this);
+            game.physics.arcade.overlap(player1,player2,mainState.diveKick, null, this);
         }
 
         if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
@@ -182,6 +180,11 @@ var mainState = {
         mainState.calcKnockBack(100,70,player.playerNum);
     },
     
+    diveKick: function(player,hitbox){
+        player.takeDamage(5,250);
+        mainState.calcKnockBack(40,30,player.playerNum);
+    },
+    
     //AG: Should figure out which direction to apply knockback
     calcKnockBack: function(x,y,numOfHitPlayer){
         
@@ -204,7 +207,7 @@ var mainState = {
         }else if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 2){
             if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
         }else{ //sends player up
-            y = -y;
+           y = -y;
         }
         
         //Apply knockback to hit player

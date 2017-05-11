@@ -76,6 +76,7 @@ Player = function(game, key, x, y, playerNum){
         this.keyA = Phaser.Keyboard.R;
         this.keyB = Phaser.Keyboard.T;
         this.prev_anim =1;
+        this.faceRIGHT = true;
     }else if(this.playerNum == 2){ 
         this.keyLeft = Phaser.Keyboard.K;
         this.keyRight = Phaser.Keyboard.COLON;
@@ -338,9 +339,9 @@ Player.prototype.input = function(){
         this.debugText.text = this.position.y;
 
         if(!this.introFinished){
-            if(this.playerNum == 1) this.char.animations.play('right');
+            if(this.playerNum == 1) this.char.frame = 5;
             return;
-        } 
+        }
 
         //AG: Turn off shamed
         if(this.timer.timerDone('shamed')){

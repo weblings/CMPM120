@@ -118,12 +118,17 @@ Player = function(game, key, x, y, playerNum){
     this.action.noCollide =false;
 
 
+
+
     
     //AG: Knockback booleans
     this.inLightAttack = false;
     this.inHeavyAttack = false;
     
     this.introFinished = false; //AG: Intro in Main finished
+
+    //misc.
+    this.canLightAttack = true; 
 
 }
 
@@ -171,6 +176,7 @@ Player.prototype.preState =function (){
         this.action.jump = true;
     }else{
         this.action.jump = false;
+        this.canLightAttack = true;
     }
     
     
@@ -234,6 +240,7 @@ Player.prototype.lightAttack = function(){
         this.debugText.text = 'done';
         this.changeState(this.input);
         this.action.attacking = false;
+        this.canLightAttack = false;
         this.inLightAttack = false; //AG: Adding for knockback
     }
         
@@ -366,9 +373,9 @@ Player.prototype.input = function(){
 
 
         //light attack NH
-        if (game.input.keyboard.isDown(this.keyA) && !this.action.block){
+        if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
             //set timer for half a second
-            this.timer.startTimer('light',300);
+            this.timer.startTimer('light',500);
 
             //this line might be redundant NH
             this.body.velocity.x = 0

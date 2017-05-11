@@ -5,6 +5,7 @@ var preloaderState = {
 		game.load.spritesheet('player','assets/img/dude.png', 32, 48);
 		game.load.image('fist', 'assets/img/fist.jpg');
 		game.load.image('hitbox', 'assets/img/hitbox.png');
+		game.load.image('bg', 'assets/img/bg.png');
 		//insert assets to load here NH
 	},
 

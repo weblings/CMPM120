@@ -338,8 +338,14 @@ Player.prototype.takeDamage = function(damage,staggerLength){
 }
 
 Player.prototype.applyKnockBack = function(x,y){
-    this.body.velocity.x = x;
-    this.body.velocity.y = y;
+    var x1 = x;
+    var y1 = y;
+    if (this.action.block){
+        x1 *= 0.2;
+        y1 = 0;
+    }
+    this.body.velocity.x = x1;
+    this.body.velocity.y = y1;
 }
 
 //Handles player input and change state accordingly NH

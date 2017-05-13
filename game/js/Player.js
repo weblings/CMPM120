@@ -6,6 +6,7 @@ Player = function(game, key, x, y, playerNum){
     this.anchor.y = 1;
 
     //Vars
+    this.charName = "THE TEMP"
     this.playerNum = playerNum; //Player number
     this.speed = 8; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 32;
@@ -332,7 +333,10 @@ Player.prototype.takeDamage = function(damage,staggerLength){
         if (this.action.block){
             def = 0.2;
         }
-        this.damage(damage*def);
+        if(this.health - damage*def < 0){
+            this.health = 0;
+            this.alive = false;
+        }else this.damage(damage*def);
         this.shamed = true;
         this.staggered = true;
         /*if(this.healthBar.width - 100 > 0){

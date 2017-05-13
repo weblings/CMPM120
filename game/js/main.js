@@ -17,18 +17,14 @@ var mainState = {
         var fist2;
 
         var floor;
-
-
-
         
-        //AG: Intro Text
+        //AG: Text
         var introText1;
         var introText2;
-
 	},
 
 	create: function() {
-		Player1SpawnX = 215;
+		Player1SpawnX = 215; //AG: TO-DO: Need to extend this once we get characters
 		Player1SpawnY = 0; 
 
 
@@ -38,8 +34,6 @@ var mainState = {
 		//bg
 		var bg = game.add.sprite(0,0,'bg');
 		bg.scale.setTo(0.8);
-
-
 
 	    player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
 	    game.add.existing(player1);
@@ -79,6 +73,8 @@ var mainState = {
         fist1 = player1.fists;
         fist2 = player2.fists;
         
+        //---Text Stuff---//
+        
         //AG: Intro Text
         introText1 =  game.add.text(game.world.centerX, game.world.centerY - game.world.centerY/3, "FLIGHT IS OVERBOOKED", { font: "32px Arial", fill: "#000", align: "center" });
         introText1.alpha = 0;
@@ -96,6 +92,28 @@ var mainState = {
 	},
 
 	update: function() {
+        
+        //AG: If a player has won
+        if(!player1.alive || !player2.alive){    
+            if(!player1.alive && !player2.alive){
+                introText2.text = "YOU BOTH GET ARRESTED AND THROWN OFF"
+            }else if(!player1.alive){
+                introText1.text = player2.charName
+                introText2.text = "GETS TO KEEP THEIR SEAT"
+                introText1.alpha = 1;
+            }else{ //player2 dead
+                introText1.text = player1.charName
+                introText2.text = player1.charName + "GETS TO KEEP THEIR SEAT"
+                introText1.alpha = 1;
+            }
+            introText2.alpha = 1; //make text visible
+            introText2.fill = "#b70030"; //AG: TO-DO: Finalize this color when get bg
+            introText1.font = "48px Arial";
+            if(game.time.slowMotion < 4){
+                game.time.slowMotion += 1;
+            }
+        }
+        
 	    game.physics.arcade.collide(players,platforms);
 
 	    //insert if statement here to turn off collision on hits

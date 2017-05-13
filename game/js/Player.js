@@ -133,9 +133,11 @@ Player = function(game, key, x, y, playerNum){
 
 
     
-    //AG: Knockback booleans
+    //AG: Knockback stuff
     this.inLightAttack = false;
     this.inHeavyAttack = false;
+    this.touchRightWallAt = 1242.5;
+    this.hitAgainstWall = false;
     
     this.introFinished = false; //AG: Intro in Main finished
 
@@ -350,6 +352,7 @@ Player.prototype.takeDamage = function(damage,staggerLength){
 }
 
 Player.prototype.applyKnockBack = function(x,y){
+
     var x1 = x;
     var y1 = y;
     if (this.action.block){
@@ -358,6 +361,22 @@ Player.prototype.applyKnockBack = function(x,y){
     }
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;
+}
+
+Player.prototype.wallKnockBack = function(x,y,wallFrames){
+    
+    if(this.hitAgainstWall) return;
+    
+    var x1 = x;
+    var y1 = y;
+    if (this.action.block){
+        x1 *= 0.2;
+        y1 = 0;
+    }
+    this.body.velocity.x = x1;
+    this.body.velocity.y = y1;
+    this.hitAgainstWall = true;
+    this.timer.startTimer('wall',wallFrames);
 }
 
 //Handles player input and change state accordingly NH
@@ -374,6 +393,11 @@ Player.prototype.input = function(){
         //AG: Turn off shamed
         if(this.timer.timerDone('shamed')){
             this.shamed = false;
+        }
+    
+        //AG: Turn off wallFrames
+        if(this.timer.timerDone('wall')){
+            this.hitAgainstWall = false;
         }
     
         //AG: If staggered on: player can't move, else: turn staggered off

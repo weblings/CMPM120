@@ -107,6 +107,11 @@ Player = function(game, key, x, y, playerNum){
     this.fist.anchor.y = 1.5;
     this.fists.add(this.fist);
 
+    //projectile
+    this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
+    
+
+
 
     //set timer
     this.timer = new setTime();
@@ -251,6 +256,7 @@ Player.prototype.lightAttack = function(){
     
     if (this.timer.timerDone('light')){
         //this.debugText.text = 'done';
+        this.projectile();
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -326,6 +332,37 @@ Player.prototype.heavyAttack = function(){
         
     }
     
+}
+
+//projectile
+Player.prototype.projectile = function(){
+    var bullet = game.add.sprite(this.position.x, this.position.y-75, 'player');
+    this.bullets.add(bullet);
+    game.physics.arcade.enable(bullet);
+    bullet.startLocation = this.position.x;
+
+
+    if (this.faceRIGHT){
+        bullet.body.velocity.x = 200;
+        bullet.headingRight = true;
+    }else{
+        bullet.body.velocity.x = -200;
+        bullet.headingRight = false;
+    }
+
+    
+}
+
+Player.prototype.killBullets = function(b){
+    if (b.headingRight){
+        if (b.position.x - b.startLocation > 500){
+            b.kill();
+        }
+    }else{
+        if (b.startLocation - b.position.x > 500){
+            b.kill();
+        }
+    }
 }
 
 //Should make player take Damage
@@ -447,6 +484,10 @@ Player.prototype.input = function(){
 
 
         }
+
+        //projectile 
+
+        this.bullets.forEachAlive(this.killBullets,this);
         
 
 

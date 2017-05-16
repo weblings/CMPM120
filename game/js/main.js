@@ -17,18 +17,14 @@ var mainState = {
         var fist2;
 
         var floor;
-
-
-
         
-        //AG: Intro Text
+        //AG: Text
         var introText1;
         var introText2;
-
 	},
 
 	create: function() {
-		Player1SpawnX = 215;
+		Player1SpawnX = 215; //AG: TO-DO: Need to extend this once we get characters
 		Player1SpawnY = 0; 
 
 
@@ -38,8 +34,6 @@ var mainState = {
 		//bg
 		var bg = game.add.sprite(0,0,'bg');
 		bg.scale.setTo(0.8);
-
-
 
 	    player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
 	    game.add.existing(player1);
@@ -79,6 +73,8 @@ var mainState = {
         fist1 = player1.fists;
         fist2 = player2.fists;
         
+        //---Text Stuff---//
+        
         //AG: Intro Text
         introText1 =  game.add.text(game.world.centerX, game.world.centerY - game.world.centerY/3, "FLIGHT IS OVERBOOKED", { font: "32px Arial", fill: "#000", align: "center" });
         introText1.alpha = 0;
@@ -96,12 +92,34 @@ var mainState = {
 	},
 
 	update: function() {
+        
+        //AG: If a player has won
+        if(!player1.alive || !player2.alive){    
+            if(!player1.alive && !player2.alive){
+                introText2.text = "YOU BOTH GET ARRESTED AND THROWN OFF"
+            }else if(!player1.alive){
+                introText1.text = player2.charName
+                introText2.text = "GETS TO KEEP THEIR SEAT"
+                introText1.alpha = 1;
+            }else{ //player2 dead
+                introText1.text = player1.charName
+                introText2.text = player1.charName + "GETS TO KEEP THEIR SEAT"
+                introText1.alpha = 1;
+            }
+            introText2.alpha = 1; //make text visible
+            introText2.fill = "#b70030"; //AG: TO-DO: Finalize this color when get bg
+            introText1.font = "48px Arial";
+            if(game.time.slowMotion < 4){
+                game.time.slowMotion += 1;
+            }
+        }
+        
 	    game.physics.arcade.collide(players,platforms);
 
 	    //insert if statement here to turn off collision on hits
 	    //add more checks later depending on scenario 
 	    //this is mainly to fix the dive kick stuf but we need the divekick working fist NH
-	    if ((!player1.action.dive && !player2.action.dive)){
+	    if (!player1.action.dive && !player2.action.dive && !player1.hitAgainstWall && !player2.hitAgainstWall){
 	    	game.physics.arcade.collide(player1,player2);
 	    }
         //game.physics.arcade.collide(player1,player2);
@@ -114,7 +132,14 @@ var mainState = {
     	if (player2.position.y > player2.floorLevel){
         	player2.position.y = player2.floorLevel;
     	}
-
+        
+        //Check if back on floor after wall-hit
+        if(player1.hitAgainstWall && mainState.yValueinMarginOfGround(player1,1)){
+            player1.hitAgainstWall = false;
+        }
+        if(player2.hitAgainstWall && mainState.yValueinMarginOfGround(player2,1)){
+            player2.hitAgainstWall = false;
+        }
 
         //Light and heavy attacks
         game.physics.arcade.overlap(player1,fist2,mainState.determineAttack, null, this);
@@ -171,18 +196,18 @@ var mainState = {
     },
     
     lightAttack: function(player,hitbox){
-        player.takeDamage(3,100);
         mainState.calcKnockBack(50,30,player.playerNum);
+        player.takeDamage(3,100);
     },
   
     heavyAttack: function(player,hitbox){
-        player.takeDamage(10,1000);
         mainState.calcKnockBack(100,70,player.playerNum);
+        player.takeDamage(10,1000);
     },
     
     diveKick: function(player,hitbox){
-        player.takeDamage(5,250);
         mainState.calcKnockBack(40,30,player.playerNum);
+        player.takeDamage(5,250);
     },
     
     //AG: Should figure out which direction to apply knockback
@@ -192,50 +217,95 @@ var mainState = {
             var hitPlayer = player1;
         }else if(numOfHitPlayer == 2){
             var hitPlayer = player2;
-        }  
+        } 
+        
+        if(hitPlayer.hitAgainstWall) return;
+            
+        var wallFactor = 3; //multiplier to normal knockback to launch player
         
         //Calc if x should be negative
-        if(player1.x > player2.x && numOfHitPlayer == 2){
-            x = -x;
+        if(player1.x < player2.x && numOfHitPlayer == 2){
+            if(mainState.playerXinMarginOfWall(player2, "right", 5)){
+                x = -wallFactor*x;
+                y = -wallFactor*y;
+                hitPlayer.wallKnockBack(x,y,1000);
+                return;
+            }
+            else x = x;
         }else if(player1.x < player2.x && numOfHitPlayer == 1){
-            x = -x;
+            if(mainState.playerXinMarginOfWall(player1, "left", 5)){
+                x = wallFactor*x;
+                y = -wallFactor*y;
+                hitPlayer.wallKnockBack(x,y,1000);
+                return;
+            }
+            else x = -x;
         }
         
-        //Calc if y should be negative (Might be busted)
-        if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 1){
+        if(player2.x < player1.x && numOfHitPlayer == 1){
+            if(mainState.playerXinMarginOfWall(player1, "right", 5)){
+                x = -wallFactor*x;
+                y = -wallFactor*y;
+                hitPlayer.wallKnockBack(x,y,1000);
+                return;
+            }
+            else x = x;
+        }else if(player2.x < player1.x && numOfHitPlayer == 2){
+            if(mainState.playerXinMarginOfWall(player2, "left", 5)){
+                x = wallFactor*x;
+                y = -wallFactor*y;
+                hitPlayer.wallKnockBack(x,y,1000);
+                return;
+            }
+            else x = -x;
+        }
+        
+        //Calc if y should be negative TO-DO: IS BUSTED (WON'T SEND PLAYER DOWN IF DIVE-KICKED IN MID-AIR)
+        /*if(!mainState.yValueinMarginOf(10) && numOfHitPlayer == 1){
             if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
-        }else if(mainState.yValueinMarginOf(.5) && numOfHitPlayer == 2){
+        }else if(!mainState.yValueinMarginOf(10) && numOfHitPlayer == 2){
             if(hitPlayer.action.jump || hitPlayer.action.dive) y = y;
         }else{ //sends player up
            y = -y;
-        }
-        
+        }*/
+        y=-y;
+            
         //Apply knockback to hit player
         hitPlayer.applyKnockBack(x,y);
 
     },
     
-    //AG: Phaser doesn't keep characters at whole numbers during calculation
-    yValueinMarginOf(value){
-        Boolean(Math.abs(player1.y - player2.y) < value);
+    //AG: Returns if Players are within a margin of eachother (Phaser doesn't keep characters at whole numbers during calculation)
+    yValueinMarginOf: function(value){
+        return Boolean(Math.abs(player1.y - player2.y) < value);
+    },
+    
+    //AG: Returns if player is within a margin of the ground
+    yValueinMarginOfGround: function(player,value){
+        return Boolean(Math.abs(player.y - 720) < value);
     },
     
     //AG: x version
-    xValueinMarginOf(value){
-        Boolean(Math.abs(player1.x - player2.x) < value);
+    playerXinMarginOfWall: function(player, wall, value){
+        if(wall == "left"){
+            var wallX = 0;
+        }else{
+            var wallX = player.touchRightWallAt;
+        }
+        return Boolean(Math.abs(player.x - wallX) < value);
     },
     
-    Tween1completed(){
+    Tween1completed: function(){
         tween2 = game.add.tween(introText2).to( { alpha: 1 }, 400, "Linear", true, 600);
         tween2.onComplete.add(mainState.Tween2completed, this);
     },
     
-    Tween2completed(){
+    Tween2completed: function(){
         tween1 = game.add.tween(introText1).to( { alpha: 0 }, 650, "Linear", true, 100);
         tween2 = game.add.tween(introText2).to( { alpha: 0 }, 850, "Linear", true, 200);
         player1.introFinished = true;
         player2.introFinished = true;
     }
-}
+};
 
 

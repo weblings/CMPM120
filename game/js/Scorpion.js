@@ -18,6 +18,7 @@ Scorpion = function(game, key, x, y, playerNum){
     //this.char.animations.add('left', [0,1,2,3], 10, true);
     //this.char.animations.add('right', [5,6,7,8], 10, true);
     this.char.scale.setTo(.5,.5);
+    this.char.anchor.x = 0.5;
     this.char.anchor.y = 1
 
 
@@ -41,7 +42,9 @@ Scorpion = function(game, key, x, y, playerNum){
     
     //AG: Scale to find character sizing
 
-    this.scale.setTo(0.15,0.25);
+    this.scale.setTo(1.25,0.65);
+    this.anchor.x = 0.5;
+    //this.anchor.y = 0.5;
 
 
     //animation stuff NH
@@ -97,9 +100,10 @@ Scorpion = function(game, key, x, y, playerNum){
     this.fists = game.add.physicsGroup();
     this.fist = fist = game.add.sprite(this.position.x,this.position.y,'fist');
     this.fist.scale.setTo(0.25,0.25);
-    this.fist.anchor.x = 0;
-    this.fist.anchor.y = 1.5;
+    this.fist.anchor.x = 0.5;
+    this.fist.anchor.y = 0.5;
     this.fists.add(this.fist);
+    this.fist.exists = false;
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
@@ -157,9 +161,16 @@ Scorpion.prototype.preState =function (){
     this.hitbox.position.x = this.position.x +25;
     this.hitbox.position.y = this.position.y +70;
     */
-    this.char.position = this.position;
+    this.char.position.x = this.position.x ;
+    this.char.position.y= this.position.y+18;
 
     //this value needs to be changed when art is finalized NH
+    if (!this.action.attacking){
+        this.fist.exists = false;
+        this.fist.position.x = this.position.x;
+        this.fist.position.y = this.position.y-50;
+    }
+    
     
     
     if (this.position.y > this.floorLevel){
@@ -174,8 +185,8 @@ Scorpion.prototype.preState =function (){
     }
     if (this.state != this.lightAttack){
         //light attack reset
-        this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
-        this.fist.position.y = this.position.y;
+        //this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
+        //this.fist.position.y = this.position.y;
         this.body.gravity.y = 600;
     }
 
@@ -186,6 +197,7 @@ Scorpion.prototype.preState =function (){
     //check if in air
     if (!this.body.touching.down){
         this.action.jump = true;
+
     }else{
         this.action.jump = false;
         this.canLightAttack = true;
@@ -221,6 +233,7 @@ Scorpion.prototype.fisting = function(x,y){
 Scorpion.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
     //insert attack animation here
+    this.fist.exists = true;
 
     if (this.action.jump ){
         this.body.gravity.y = 0;
@@ -234,13 +247,13 @@ Scorpion.prototype.lightAttack = function(){
             //fist.scale.setTo(0.25,0.25);
             //this.fists.add(fist);
             //this.fist.position.x += 50;
-            this.fist.position.x = this.position.x + 50; //AG: Brings fist back on screen
+            this.fist.position.x +=  150; 
         } else{
             //var fist = game.add.sprite(this.position.x-50,this.position.y,'fist');
             //fist.scale.setTo(0.25,0.25);
             //this.fists.add(fist);
             //this.fist.position.x -= 50;
-            this.fist.position.x = this.position.x - 50; //AG: Brings fist back on screen
+            this.fist.position.x -= 150; //AG: Brings fist back on screen
         }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
@@ -250,7 +263,7 @@ Scorpion.prototype.lightAttack = function(){
     
     if (this.timer.timerDone('light')){
         //this.debugText.text = 'done';
-        this.projectile();
+        //this.projectile();
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -260,9 +273,11 @@ Scorpion.prototype.lightAttack = function(){
 }
 
 Scorpion.prototype.heavyAttack = function(){
+    this.fist.exists = true;
 
     if (this.action.jump || (this.position.y < this.floorLevel)){
         //dive kick
+
         
         this.body.velocity.y = 550;
         if (this.faceRIGHT){
@@ -302,8 +317,10 @@ Scorpion.prototype.heavyAttack = function(){
             
             if (this.faceRIGHT){
                 this.fist.scale.x = 1;
+                this.fist.position.x += 250;
             }else{
-                this.fist.scale.x = -1;
+                this.fist.scale.x = 1;
+                this.fist.position.x -= 250;
             }
             
         }
@@ -557,6 +574,7 @@ Scorpion.prototype.input = function(){
     
         //AG: Left controls
         if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
+            this.char.scale.x = 0.5;
 
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
@@ -567,6 +585,12 @@ Scorpion.prototype.input = function(){
                 this.body.velocity.x = -200;
             }
             //this.char.animations.play('left');
+
+            if (this.action.jump){
+                this.char.loadTexture('scorpion_jump');
+            }else{
+                this.char.loadTexture('scorpion_idle');
+            }
             
             
             //stop that animation shit  NH
@@ -592,6 +616,8 @@ Scorpion.prototype.input = function(){
 
         //AG: Right controls
         }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
+            this.char.scale.x = -0.5;
+
             if (this.body.velocity.x < 0){
                 this.body.velocity.x = 0;
             }
@@ -601,18 +627,33 @@ Scorpion.prototype.input = function(){
                 this.body.velocity.x = 200;
             }
             //this.char.animations.play('right');
+
+            if (this.action.jump){
+                this.char.loadTexture('scorpion_jump');
+            }else{
+                this.char.loadTexture('scorpion_idle');
+            }
+
             this.prev_anim = 1;
             this.faceRIGHT = true;
 
         }else{
             this.body.velocity.x = 0;
+            if (this.action.jump){
+                this.char.loadTexture('scorpion_jump');
+            }else{
+                this.char.loadTexture('scorpion_idle');
+            }
 
             
             if (this.prev_anim == 0){
                 //this.char.frame = 0;
+                this.char.scale.x = 0.5;
+
                 this.faceRIGHT = false;
             }else{
                 //this.char.frame = 5;
+                this.char.scale.x = -0.5;
                 this.char.faceRIGHT = true;
             }
             this.body.velocity.x = 0;

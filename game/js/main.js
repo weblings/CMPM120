@@ -38,7 +38,8 @@ var mainState = {
 	    player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
 	    game.add.existing(player1);
 	    
-	    player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+	    //player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+        player2 = new Scorpion(game,'hitbox',Player2SpawnX,Player2SpawnY,2);
 	    game.add.existing(player2);
 
 	    //new ground

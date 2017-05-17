@@ -6,11 +6,15 @@ var preloaderState = {
 		game.load.image('fist', 'assets/img/fist.jpg');
 		game.load.image('hitbox', 'assets/img/hitbox.png');
 		game.load.image('bg', 'assets/img/bg.png');
-        //game.load.image('scorp','assets/img/Scorpion_Idle.png');
         game.load.image('health_full','assets/img/health_full.png');
         game.load.image('health_empty','assets/img/health_empty.png');
         game.load.image('health_damage','assets/img/health_damage.png');
-
+        
+        //Scorpion
+        game.load.image('scorpion_idle','assets/img/Scorpion/Scorpion_Idle.png');
+        game.load.image('scorpion_crouch','assets/img/Scorpion/Scorpion_crouch.png');
+        game.load.image('scorpion_jump','assets/img/Scorpion/Scorpion_Jump.png');
+        game.load.image('scorpion_A','assets/img/Scorpion/Scorpion_LightAttack.png');
 		//insert assets to load here NH
 	},
 

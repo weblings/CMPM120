@@ -93,12 +93,12 @@ var charSelect = {
         
         if(game.input.keyboard.justPressed(P2keyA) && !P2Chose){
             P2Chose = true;
-            P1InstructionText.text = "Deselect with ]";
+            P2InstructionText.text = "Deselect with ]";
         }
         
         if(game.input.keyboard.justPressed(P2keyB) && P2Chose){
             P2Chose = false;
-            P1InstructionText.text = "Select with T";
+            P2InstructionText.text = "Select with T";
         }
         
         //update Text
@@ -108,8 +108,7 @@ var charSelect = {
         if(P1Chose && P2Chose){
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
-            game.stage.backgroundColor = "#000";
-            game.state.start("main",false,true,P1CharChosen,P2CharChosen);
+        game.state.start("main",false,true,P1CharChosen,P2CharChosen);
         }
     }
     

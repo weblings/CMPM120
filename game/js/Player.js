@@ -377,7 +377,6 @@ Player.prototype.takeDamage = function(damage,staggerLength){
         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged
             this.healthBarScaleMaster = 1 - ((damage*def)/100);
-            console.log(this.healthBarScaleMaster);
             this.healthBar.scale.x *= this.healthBarScaleMaster;
             if(this.playerNum == 2){
                 this.damageBar = game.add.image(game.width-460,48,"health_empty");

@@ -21,7 +21,7 @@ var mainState = {
         //AG: Text
         var introText1;
         var introText2;
-	},
+    },
 
 	create: function() {
 		Player1SpawnX = 215; //AG: TO-DO: Need to extend this once we get characters
@@ -96,7 +96,6 @@ var mainState = {
         var tween2;
 
         tween1.onComplete.add(mainState.Tween1completed, this);
-
 	},
 
 	update: function() {
@@ -104,7 +103,7 @@ var mainState = {
         //AG: If a player has won
         if(!player1.alive || !player2.alive){    
             if(!player1.alive && !player2.alive){
-                introText2.text = "YOU BOTH GET ARRESTED AND THROWN OFF"
+                introText2.text = "YOU'RE BOTH DETAINED"
             }else if(!player1.alive){
                 introText1.text = player2.charName
                 introText1.fontSize = 64;

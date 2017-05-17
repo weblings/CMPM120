@@ -1,6 +1,6 @@
 var mainState = {
-
-	preload: function() {
+    
+    preload: function() {
 	 	
 	 	var player1;
 		var Player1SpawnX;
@@ -34,12 +34,19 @@ var mainState = {
 		//bg
 		var bg = game.add.sprite(0,0,'bg');
 		bg.scale.setTo(0.8);
-
-	    player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+        
+        if(P1CharChosen == "THE TEMP"){
+	       player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+        }else{ //Scorpion
+            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+        }
 	    game.add.existing(player1);
 	    
-	    //player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
-        player2 = new Scorpion(game,'hitbox',Player2SpawnX,Player2SpawnY,2);
+        if(P2CharChosen == "THE TEMP"){
+	       player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+        }else{ //Scorpion
+            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+        }
 	    game.add.existing(player2);
 
 	    //new ground
@@ -100,16 +107,17 @@ var mainState = {
                 introText2.text = "YOU BOTH GET ARRESTED AND THROWN OFF"
             }else if(!player1.alive){
                 introText1.text = player2.charName
-                introText2.text = " GETS TO KEEP THEIR SEAT"
+                introText1.fontSize = 64;
+                introText2.text = "GETS TO KEEP THEIR SEAT"
                 introText1.alpha = 1;
             }else{ //player2 dead
                 introText1.text = player1.charName
-                introText2.text = player1.charName + " GETS TO KEEP THEIR SEAT"
+                introText1.fontSize = 64;
+                introText2.text = "GETS TO KEEP THEIR SEAT"
                 introText1.alpha = 1;
             }
             introText2.alpha = 1; //make text visible
             introText2.fill = "#b70030"; //AG: TO-DO: Finalize this color when get bg
-            introText1.font = "48px Arial";
             if(game.time.slowMotion < 4){
                 game.time.slowMotion += 1;
             }
@@ -307,6 +315,7 @@ var mainState = {
         player1.introFinished = true;
         player2.introFinished = true;
     }
+    
 };
 
 

@@ -99,11 +99,11 @@ var mainState = {
                 introText2.text = "YOU BOTH GET ARRESTED AND THROWN OFF"
             }else if(!player1.alive){
                 introText1.text = player2.charName
-                introText2.text = "GETS TO KEEP THEIR SEAT"
+                introText2.text = " GETS TO KEEP THEIR SEAT"
                 introText1.alpha = 1;
             }else{ //player2 dead
                 introText1.text = player1.charName
-                introText2.text = player1.charName + "GETS TO KEEP THEIR SEAT"
+                introText2.text = player1.charName + " GETS TO KEEP THEIR SEAT"
                 introText1.alpha = 1;
             }
             introText2.alpha = 1; //make text visible

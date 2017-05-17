@@ -6,6 +6,11 @@ var preloaderState = {
 		game.load.image('fist', 'assets/img/fist.jpg');
 		game.load.image('hitbox', 'assets/img/hitbox.png');
 		game.load.image('bg', 'assets/img/bg.png');
+        //game.load.image('scorp','assets/img/Scorpion_Idle.png');
+        game.load.image('health_full','assets/img/health_full.png');
+        game.load.image('health_empty','assets/img/health_empty.png');
+        game.load.image('health_damage','assets/img/health_damage.png');
+
 		//insert assets to load here NH
 	},
 

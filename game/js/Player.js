@@ -56,20 +56,15 @@ Player = function(game, key, x, y, playerNum){
     this.staggered = false; //immobilizes player;
 
     //Debug text and health bars
-    this.graphics = game.add.graphics(0,0);
+    this.healthBarScaleMaster = 1; //used to scale bars
     if(playerNum == 1){
         this.debugText = game.add.text(16,16,'100', {fontSize: '32px', fill: '#000000'});
-        this.graphics.beginFill(0x46c601, 1);
-        this.healthBar = this.graphics.drawRect(10,48,450,50);
-        //this.graphics.beginFill(0xa4af9e, 1);
-        //this.damageBar = this.graphics.drawRect(10,48,1,50);
+        this.healthBar = game.add.image(10,48,'health_full');
     }else{ //playerNum == 2
         this.debugText = game.add.text(game.width - 100,16,'100', {fontSize: '32px', fill: '#000000'});
-        this.graphics.beginFill(0x46c601, 1);
-        this.healthBar = this.graphics.drawRect(game.width - 460,48,450,50); //game.width - 460
-        //this.graphics.beginFill(0xa4af9e, 1);
-        //this.damageBar = this.graphics.drawRect(game.width - 460,48,1,50);  
+        this.healthBar = game.add.image(game.width-460,48,'health_full');
     }
+    
 
     //AG: Player input
     this.keyLeft;
@@ -378,10 +373,74 @@ Player.prototype.takeDamage = function(damage,staggerLength){
         }else this.damage(damage*def);
         this.shamed = true;
         this.staggered = true;
-        /*if(this.healthBar.width - 100 > 0){
-            this.healthBar.width -=100;
-            if(this.playerNum == 2) this.healthBar.x = game.width - this.healthBar.width - 10;
-        }else this.healthBar.width = 0;*/
+        
+        //AG: HealthBar handling
+        if(this.healthBar.width == 450){ //If first time damaged
+            this.healthBarScaleMaster = 1 - ((damage*def)/100);
+            console.log(this.healthBarScaleMaster);
+            this.healthBar.scale.x *= this.healthBarScaleMaster;
+            if(this.playerNum == 2){
+                this.damageBar = game.add.image(game.width-460,48,"health_empty");
+                this.damageBar.scale.x *= (damage*def)/100;
+                this.healthBar.x = this.damageBar.x + this.damageBar.width;
+                //Red from hit
+                var damaged = game.add.image(game.width-460,48,"health_damage");
+                damaged.scale.x *= (damage*def)/100;
+                var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
+            }else{ //playerNum == 1
+                var calcDamageX = this.healthBar.x + this.healthBar.width;
+                this.damageBar = game.add.image(calcDamageX,48,"health_empty");
+                this.damageBarScaledMaster = 0;
+                this.damageBar.scale.x *= (damage*def)/100;
+                this.damageBarScaledMaster += this.damageBar.scale.x;
+                //Red from hit
+                var damaged = game.add.image(calcDamageX,48,"health_damage");
+                damaged.scale.x *= (damage*def)/100;
+                var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
+            }
+        }else if(this.health != 0){ //subsequent times
+            var newScaler = (damage*def)/100;
+            this.healthBarScaleMaster -= newScaler;
+            this.healthBar.scale.x = 1;
+            this.healthBar.scale.x *= this.healthBarScaleMaster;
+            if(this.playerNum == 2){
+                var oldDamageEnd = this.damageBar.x + this.damageBar.width;
+                this.damageBar.scale.x = 1;
+                this.damageBar.scale.x *= 1 - this.healthBarScaleMaster;
+                this.healthBar.x = this.damageBar.x + this.damageBar.width;
+                //Red from hit
+                var damaged = game.add.image(oldDamageEnd,48,"health_damage");
+                damaged.scale.x *= newScaler;
+                var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
+            }else{ //playerNum == 1
+                var calcDamageX = this.healthBar.x + this.healthBar.width;
+                this.damageBar.x = calcDamageX;
+                this.damageBar.scale.x = 1;
+                this.damageBar.scale.x *= 1 - this.healthBarScaleMaster;
+                //Red from hit
+                var damaged = game.add.image(calcDamageX,48,"health_damage");
+                damaged.scale.x *= newScaler;
+                var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear",true, 800); 
+            } 
+        }else{ //if health = 0
+            var lastScaler = this.healthBarScaleMaster;
+            this.healthBar.scale = 0;
+            if(this.playerNum == 2){
+                var oldDamageEnd = this.damageBar.x + this.damageBar.width;
+                this.damageBar.scale.x = 1;
+                //Red from hit
+                var damaged = game.add.image(oldDamageEnd,48,"health_damage");
+                damaged.scale.x *= lastScaler;
+                var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
+            }else{ //playerNum == 1
+                this.damageBar.x = 10;
+                this.damageBar.scale.x = 1;
+                //Red from hit
+                var damaged = game.add.image(10,48,"health_damage");
+                damaged.scale.x *= lastScaler;
+                var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear",true, 800); 
+            } 
+        }
     }
     this.debugText.text = this.health;
     this.timer.startTimer('shamed',50);

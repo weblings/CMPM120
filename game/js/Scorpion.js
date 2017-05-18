@@ -5,7 +5,7 @@ Scorpion = function(game, key, x, y, playerNum){
     this.anchor.y = 1;
 
     //Vars
-    this.charName = "LITERALLY A SCORPION"
+    this.charName = "LITERALLY A SCORPION";
     this.playerNum = playerNum; //Player number
     this.speed = 8; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 32;

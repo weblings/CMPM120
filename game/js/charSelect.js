@@ -22,7 +22,7 @@ var charSelect = {
     },
     
     create: function(){
-        characters = ["THE TEMP","LITERALLY A SCORPION"];
+        characters = ["THE TEMP","LITERALLY A SCORPION","SECURITY"];
 
         P1keyUp = Phaser.Keyboard.W;
         P1keyDown = Phaser.Keyboard.S;

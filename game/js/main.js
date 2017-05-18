@@ -15,6 +15,8 @@ var mainState = {
 		var ground;
         var fist1;
         var fist2;
+        var bullets1;
+        var bullets2;
 
         var floor;
         
@@ -37,15 +39,19 @@ var mainState = {
         
         if(P1CharChosen == "THE TEMP"){
 	       player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
-        }else{ //Scorpion
+        }else if(P1CharChosen == "LITERALLY A SCORPION"){
             player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+        }else{
+            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
         }
 	    game.add.existing(player1);
 	    
         if(P2CharChosen == "THE TEMP"){
 	       player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
-        }else{ //Scorpion
+        }else if(P2CharChosen == "LITERALLY A SCORPION"){
             player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+        }else{
+            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
         }
 	    game.add.existing(player2);
 
@@ -79,7 +85,9 @@ var mainState = {
 	    //ground.add(plat);
         
         fist1 = player1.fists;
+        if(player1.charName == "SECURITY") bullets1 = player1.bullets;
         fist2 = player2.fists;
+        if(player2.charName == "SECURITY") bullets2 = player2.bullets;
         
         //---Text Stuff---//
         

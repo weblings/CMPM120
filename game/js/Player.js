@@ -103,7 +103,7 @@ Player = function(game, key, x, y, playerNum){
     this.fists.add(this.fist);
 
     //projectile
-    this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
+    this.bullets = game.add.physicsGroup(); //= game.add.sprite(this.position.x,this.position.y,'player');
     
 
 

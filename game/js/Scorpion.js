@@ -233,6 +233,8 @@ Scorpion.prototype.fisting = function(x,y){
 Scorpion.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
     //insert attack animation here
+    this.char.loadTexture('scorpion_A');
+
     this.fist.exists = true;
 
     if (this.action.jump ){
@@ -258,12 +260,15 @@ Scorpion.prototype.lightAttack = function(){
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
 
+
+
     }
     //this.debugText.text = this.position.x;
     
     if (this.timer.timerDone('light')){
         //this.debugText.text = 'done';
         //this.projectile();
+        this.char.loadTexture('scorpion_idle');
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -528,9 +533,11 @@ Scorpion.prototype.input = function(){
         //blocking NH
         if (game.input.keyboard.isDown(this.keyDown)){
             this.action.block = true;
+            
         }else{
             //possibly have a millisecond of un guarding? NH
             this.action.block = false;
+
         }
 
         //test combat inputs
@@ -641,9 +648,15 @@ Scorpion.prototype.input = function(){
             this.body.velocity.x = 0;
             if (this.action.jump){
                 this.char.loadTexture('scorpion_jump');
+            }else if (this.action.block){
+                this.char.loadTexture('scorpion_crouch');
+
             }else{
                 this.char.loadTexture('scorpion_idle');
             }
+            
+
+
 
             
             if (this.prev_anim == 0){

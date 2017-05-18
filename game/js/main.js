@@ -161,6 +161,14 @@ var mainState = {
         game.physics.arcade.overlap(player1,fist2,mainState.determineAttack, null, this);
         game.physics.arcade.overlap(player2,fist1,mainState.determineAttack, null, this);
         
+        //Handling SECURITY's Projectiles
+        if(player2.charName == "SECURITY"){
+            game.physics.arcade.overlap(player1,bullets2,mainState.determineAttack, null, this);
+        }
+        if(player1.charName == "SECURITY"){
+            game.physics.arcade.overlap(player2,bullets1,mainState.determineAttack, null, this);
+        }
+        
         //Dive kicks
         if(player1.action.dive){
             game.physics.arcade.overlap(player2,player1,mainState.diveKick, null, this);
@@ -204,7 +212,11 @@ var mainState = {
         
         //AG: Determines which attack they did
         if(attackingPlayer.inHeavyAttack){
-            mainState.heavyAttack(player,hitbox);
+            if(attackingPlayer.charName == "SECURITY"){
+                mainState.SecurityHeavyAttack(player,hitbox);
+            }else{ //AG: Every other character's stuff is here rn (Should change by final)
+                mainState.heavyAttack(player,hitbox);
+            }
         }else{
             mainState.lightAttack(player,hitbox);
 
@@ -219,6 +231,11 @@ var mainState = {
     heavyAttack: function(player,hitbox){
         mainState.calcKnockBack(100,70,player.playerNum);
         player.takeDamage(10,1000);
+    },
+    
+    SecurityHeavyAttack: function(player,hitbox){
+        mainState.calcKnockBack(400,100,player.playerNum);
+        player.takeDamage(10,1000); 
     },
     
     diveKick: function(player,hitbox){

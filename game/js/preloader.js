@@ -16,6 +16,9 @@ var preloaderState = {
         game.load.image('scorpion_jump','assets/img/Scorpion/Scorpion_Jump.png');
         game.load.image('scorpion_A','assets/img/Scorpion/Scorpion_LightAttack.png');
 		//insert assets to load here NH
+        
+        //Security
+        game.load.image('security_idle', 'assets/img/Security/security_guard_idle.png');
 	},
 
 	create: function(){

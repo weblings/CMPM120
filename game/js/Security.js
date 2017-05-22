@@ -14,10 +14,10 @@ Security = function(game, key, x, y, playerNum){
     this.floorLevel = 680;
 
     //Animations
-    this.char = game.add.sprite(this.position.x, this.position.y, 'player');
+    this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
     //this.char.animations.add('left', [0,1,2,3], 10, true);
     //this.char.animations.add('right', [5,6,7,8], 10, true);
-    this.char.scale.setTo(4,8);
+    //this.char.scale.setTo(4,8);
     this.char.anchor.x = 0.5;
     this.char.anchor.y = 1
 
@@ -29,7 +29,7 @@ Security = function(game, key, x, y, playerNum){
     
     //AG: Scale to find character sizing
 
-    this.scale.setTo(.5,.7);
+    this.scale.setTo(.5,.65);
     this.anchor.x = 0.5;
     //this.anchor.y = 0.5;
 
@@ -548,7 +548,7 @@ Security.prototype.input = function(){
     
         //AG: Left controls
         if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
-            //this.char.scale.x = 0.5;
+            this.char.scale.x = 1;//0.5;
 
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
@@ -590,7 +590,7 @@ Security.prototype.input = function(){
 
         //AG: Right controls
         }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
-            //this.char.scale.x = -0.5;
+            this.char.scale.x = -1;//0.5;
 
             if (this.body.velocity.x < 0){
                 this.body.velocity.x = 0;

@@ -139,7 +139,8 @@ Scorpion = function(game, key, x, y, playerNum){
     //AG: Knockback stuff
     this.inLightAttack = false;
     this.inHeavyAttack = false;
-    this.touchRightWallAt = 1242.5;
+    this.touchLeftWallAt = 156.25;
+    this.touchRightWallAt = 1123.75;
     this.hitAgainstWall = false;
     
     this.introFinished = false; //AG: Intro in Main finished

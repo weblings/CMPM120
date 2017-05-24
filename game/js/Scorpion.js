@@ -135,6 +135,11 @@ Scorpion = function(game, key, x, y, playerNum){
     this.action.down = false;
     this.action.noCollide =false;
 
+    this.action.stagfall = false;
+
+    //down stuff NH
+    this.downCount = 0;
+
 
 
 
@@ -142,8 +147,8 @@ Scorpion = function(game, key, x, y, playerNum){
     //AG: Knockback stuff
     this.inLightAttack = false;
     this.inHeavyAttack = false;
-    this.touchLeftWallAt = 156.25;
-    this.touchRightWallAt = 1123.75;
+    this.touchLeftWallAt = 131.25;
+    this.touchRightWallAt = 1148.75;
     this.hitAgainstWall = false;
     
     this.introFinished = false; //AG: Intro in Main finished
@@ -180,6 +185,19 @@ Scorpion.prototype.preState =function (){
     if (this.position.y > this.floorLevel){
         this.position.y = this.floorLevel;
     }
+
+    //stagger sprite change
+
+    
+    if (this.staggered && !this.action.block){
+        this.char.loadTexture('scorpion_stagger');
+    }
+    /*
+    else{
+        this.char.loadTexture('scorpion_idle');
+    }
+    */
+
     
 
 
@@ -206,6 +224,26 @@ Scorpion.prototype.preState =function (){
         this.action.jump = false;
         this.canLightAttack = true;
     }
+
+    if (!this.timer.timerDone('downed') && this.action.down){
+         //insert sprite change here
+         this.char.loadTexture('scorpion_down');
+         //this.action.down = false;
+    }
+
+    if (this.timer.timerDone('downed') && this.action.down){
+        this.action.down = false;
+        this.changeState(this.input);
+    }
+
+    if (this.timer.timerDone('downWindow')){
+         //insert sprite change here
+         this.downCount = 0;
+    }
+
+    if (this.downCount >= 3){
+        this.changeState(this.downed);
+    }
     
     
 }
@@ -231,6 +269,21 @@ Scorpion.prototype.fisting = function(x,y){
     fist.scale.setTo(0.25,0.25);
     this.fists.add(fist);
 
+}
+
+Scorpion.prototype.downed = function(){
+     this.action.down = true;
+     //set timer down max down time
+     this.timer.startTimer('downed', 2500);
+ 
+     if (game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
+         game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
+         game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)){
+         this.action.down = false;
+         this.changeState(this.input);
+     }
+ 
+     
 }
 
 //states
@@ -283,6 +336,7 @@ Scorpion.prototype.lightAttack = function(){
 
 Scorpion.prototype.heavyAttack = function(){
     this.fist.exists = true;
+    this.char.loadTexture('scorpion_B1');
 
     if (this.action.jump || (this.position.y < this.floorLevel)){
         //dive kick
@@ -307,6 +361,7 @@ Scorpion.prototype.heavyAttack = function(){
             this.action.cancel = true;
             this.action.attacking = true;
             this.inHeavyAttack = true; //AG: Adding for knockback
+            
         }
 
         if (this.action.cancel == true && game.input.keyboard.isDown(this.keyUp)){
@@ -321,6 +376,7 @@ Scorpion.prototype.heavyAttack = function(){
         if (this.timer.timerDone('heavy_cast') && !this.action.dive){
             //can cancel out of attack NH
             //this.action.cancel = false;
+            this.char.loadTexture('scorpion_B2');
             
             this.fist.position.x = this.position.x; //AG: Brings fist back on screen
             
@@ -398,6 +454,10 @@ Scorpion.prototype.takeDamage = function(damage,staggerLength){
         }else this.damage(damage*def);
         this.shamed = true;
         this.staggered = true;
+
+        //count for down NH
+        this.timer.startTimer('downWindow',2000);
+        this.downCount++;
         
         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged
@@ -480,6 +540,9 @@ Scorpion.prototype.applyKnockBack = function(x,y){
         x1 *= 0.2;
         y1 = 0.1;
     }
+    if (this.action.down){
+        y1 = 0.1;
+    }
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;
 }
@@ -492,7 +555,7 @@ Scorpion.prototype.wallKnockBack = function(x,y,wallFrames){
     var y1 = y;
     if (this.action.block){
         x1 *= 0.2;
-        y1 = 0;
+        y1 = 0.1;
     }
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;
@@ -525,6 +588,10 @@ Scorpion.prototype.input = function(){
         if(this.staggered == true && !this.timer.timerDone('staggered')){
             return;
         }else{
+            if (this.action.jump && this.staggered == true){
+                this.action.stagfall = true;
+            }
+            
             this.staggered = false;
         }
     
@@ -597,9 +664,11 @@ Scorpion.prototype.input = function(){
             }
             //this.char.animations.play('left');
 
-            if (this.action.jump){
+            if (this.action.jump && !this.staggered){
                 this.char.loadTexture('scorpion_jump');
-            }else{
+            }else if(this.staggered) {
+                this.char.loadTexture('scorpion_stagger');
+            }else {
                 this.char.loadTexture('scorpion_idle');
             }
             
@@ -650,14 +719,18 @@ Scorpion.prototype.input = function(){
 
         }else{
             this.body.velocity.x = 0;
-            if (this.action.jump){
+
+            if (this.action.jump && !this.action.stagfall){
                 this.char.loadTexture('scorpion_jump');
             }else if (this.action.block){
                 this.char.loadTexture('scorpion_crouch');
 
-            }else{
+            }else if(this.action.stagfall) {
+                this.char.loadTexture('scorpion_stagger');
+            }else {
                 this.char.loadTexture('scorpion_idle');
             }
+
             
 
 
@@ -674,6 +747,10 @@ Scorpion.prototype.input = function(){
                 this.char.faceRIGHT = true;
             }
             this.body.velocity.x = 0;
+        }
+
+        if (this.action.stagfall && !this.action.jump){
+            this.action.stagfall = false;
         }
 
 };

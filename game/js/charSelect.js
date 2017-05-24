@@ -26,23 +26,23 @@ var charSelect = {
 
         P1keyUp = Phaser.Keyboard.W;
         P1keyDown = Phaser.Keyboard.S;
-        P1keyA = Phaser.Keyboard.R;
-        P1keyB = Phaser.Keyboard.T;
+        P1keyA = Phaser.Keyboard.E;
+        P1keyB = Phaser.Keyboard.R;
         P1index = 0;
         P1Chose = false;
         
         P2keyUp = Phaser.Keyboard.O;
         P2keyDown = Phaser.Keyboard.L;
-        P2keyA = Phaser.Keyboard.OPEN_BRACKET;
-        P2keyB = Phaser.Keyboard.CLOSED_BRACKET;
+        P2keyA = Phaser.Keyboard.I;//Phaser.Keyboard.OPEN_BRACKET;
+        P2keyB = Phaser.Keyboard.U;//Phaser.Keyboard.CLOSED_BRACKET;
         P2index = 0;
         P2Chose = false;
         
         game.stage.backgroundColor = "#000";
         P1Text = game.add.text(game.width/5,game.height/2,characters[P1index], {fontSize: '32px', fill: '#fff'});
-        P1InstructionText = game.add.text(game.width/5,(3 * game.height)/4,"Select with R", {fontSize: '32px', fill: '#fff'});
+        P1InstructionText = game.add.text(game.width/5,(3 * game.height)/4,"Select with E", {fontSize: '32px', fill: '#fff'});
         P2Text = game.add.text((3 * game.width)/5,game.height/2,characters[P2index], {fontSize: '32px', fill: '#fff'});
-        P2InstructionText = game.add.text(3 * game.width/5,(3 * game.height)/4,"Select with [", {fontSize: '32px', fill: '#fff'});
+        P2InstructionText = game.add.text(3 * game.width/5,(3 * game.height)/4,"Select with I", {fontSize: '32px', fill: '#fff'});
     },
     
     update: function(){
@@ -66,12 +66,12 @@ var charSelect = {
         
         if(game.input.keyboard.justPressed(P1keyA) && !P1Chose){
             P1Chose = true;
-            P1InstructionText.text = "Deselect with T";
+            P1InstructionText.text = "Deselect with R";
         }
         
         if(game.input.keyboard.justPressed(P1keyB) && P1Chose){
             P1Chose = false;
-            P1InstructionText.text = "Select with R";
+            P1InstructionText.text = "Select with E";
         }
         
         //P2 keys
@@ -93,12 +93,12 @@ var charSelect = {
         
         if(game.input.keyboard.justPressed(P2keyA) && !P2Chose){
             P2Chose = true;
-            P2InstructionText.text = "Deselect with ]";
+            P2InstructionText.text = "Deselect with U";
         }
         
         if(game.input.keyboard.justPressed(P2keyB) && P2Chose){
             P2Chose = false;
-            P2InstructionText.text = "Select with T";
+            P2InstructionText.text = "Select with I";
         }
         
         //update Text

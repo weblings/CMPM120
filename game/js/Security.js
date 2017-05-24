@@ -69,8 +69,8 @@ Security = function(game, key, x, y, playerNum){
         this.keyRight = Phaser.Keyboard.D;
         this.keyUp = Phaser.Keyboard.W;
         this.keyDown = Phaser.Keyboard.S;
-        this.keyA = Phaser.Keyboard.R;
-        this.keyB = Phaser.Keyboard.T;
+        this.keyA = Phaser.Keyboard.E; //R
+        this.keyB = Phaser.Keyboard.R; //T
         this.prev_anim =1;
         this.faceRIGHT = true; //for Spawning
     }else if(this.playerNum == 2){ 
@@ -78,8 +78,8 @@ Security = function(game, key, x, y, playerNum){
         this.keyRight = Phaser.Keyboard.COLON;
         this.keyUp = Phaser.Keyboard.O;
         this.keyDown = Phaser.Keyboard.L;
-        this.keyA = Phaser.Keyboard.OPEN_BRACKET;
-        this.keyB = Phaser.Keyboard.CLOSED_BRACKET;
+        this.keyA = Phaser.Keyboard.I;//Phaser.Keyboard.OPEN_BRACKET;
+        this.keyB = Phaser.Keyboard.U;//Phaser.Keyboard.CLOSED_BRACKET;
         this.prev_anim =0;
     }
 

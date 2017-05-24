@@ -177,26 +177,30 @@ var mainState = {
             game.physics.arcade.overlap(player1,player2,mainState.diveKick, null, this);
         }
 
+        
         if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player2.action.dive && player1.alive){
+        	&& !player2.action.dive && player1.alive && !player2.action.attacking){
         	player2.body.velocity.y -= 300;
         	if (player2.faceRIGHT){
         		player2.position.x +=50;
         	}else{
         		player2.position.x -=50;
         	}
+        	
 
         }
 
         if (player2.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player1.action.dive && player2.alive){
+        	&& !player1.action.dive && player2.alive && !player1.action.attacking){
         	player1.body.velocity.y -= 300;
         	if (player1.faceRIGHT){
         		player1.position.x +=50;
         	}else{
         		player1.position.x -=50;
         	}
+        	
         }
+
     },
     
     determineAttack: function(player,hitbox){

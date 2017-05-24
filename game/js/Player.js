@@ -35,10 +35,11 @@ Player = function(game, key, x, y, playerNum){
 
 
     //Physics
+    this.gravFactor = 1234;
     game.physics.enable(this);
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
-    this.body.gravity.y = 600;
+    this.body.gravity.y = this.gravFactor;
     
     //AG: Scale to find character sizing
 
@@ -178,7 +179,7 @@ Player.prototype.preState =function (){
         //light attack reset
         this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         this.fist.position.y = this.position.y;
-        this.body.gravity.y = 600;
+        this.body.gravity.y = this.gravFactor;
     }
 
     if (this.state != this.heavyAttack){

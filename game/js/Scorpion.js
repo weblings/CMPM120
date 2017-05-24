@@ -7,17 +7,18 @@ Scorpion = function(game, key, x, y, playerNum){
     //Vars
     this.charName = "LITERALLY A SCORPION";
     this.playerNum = playerNum; //Player number
-    this.speed = 8; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
-    this.maxSpeed = 32;
+    this.speed = 5; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.maxSpeed = 50;
 
-    this.jumpHeight = -600; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
+    this.jumpHeight = -800; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = 680;
 
     //Animations
     this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_idle');
     //this.char.animations.add('left', [0,1,2,3], 10, true);
     //this.char.animations.add('right', [5,6,7,8], 10, true);
-    this.char.scale.setTo(.5,.5);
+    this.scaleFactor = 0.4;
+    this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
     this.char.anchor.y = 1
 
@@ -36,13 +37,14 @@ Scorpion = function(game, key, x, y, playerNum){
 
     //Physics
     game.physics.enable(this);
+    this.gravFactor = 888;
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
-    this.body.gravity.y = 600;
+    this.body.gravity.y = this.gravFactor;
     
     //AG: Scale to find character sizing
 
-    this.scale.setTo(1.25,0.65);
+    this.scale.setTo(1.05,0.50);
     this.anchor.x = 0.5;
     //this.anchor.y = 0.5;
 
@@ -188,7 +190,7 @@ Scorpion.prototype.preState =function (){
         //light attack reset
         //this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         //this.fist.position.y = this.position.y;
-        this.body.gravity.y = 600;
+        this.body.gravity.y = this.gravFactor;
     }
 
     if (this.state != this.heavyAttack){
@@ -475,7 +477,7 @@ Scorpion.prototype.applyKnockBack = function(x,y){
     var y1 = y;
     if (this.action.block){
         x1 *= 0.2;
-        y1 = 0;
+        y1 = 0.1;
     }
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;
@@ -582,7 +584,7 @@ Scorpion.prototype.input = function(){
     
         //AG: Left controls
         if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
-            this.char.scale.x = 0.5;
+            this.char.scale.x = this.scaleFactor;
 
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
@@ -624,7 +626,7 @@ Scorpion.prototype.input = function(){
 
         //AG: Right controls
         }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
-            this.char.scale.x = -0.5;
+            this.char.scale.x = -1*this.scaleFactor;
 
             if (this.body.velocity.x < 0){
                 this.body.velocity.x = 0;
@@ -662,12 +664,12 @@ Scorpion.prototype.input = function(){
             
             if (this.prev_anim == 0){
                 //this.char.frame = 0;
-                this.char.scale.x = 0.5;
+                this.char.scale.x = this.scaleFactor;
 
                 this.faceRIGHT = false;
             }else{
                 //this.char.frame = 5;
-                this.char.scale.x = -0.5;
+                this.char.scale.x = -1*this.scaleFactor;
                 this.char.faceRIGHT = true;
             }
             this.body.velocity.x = 0;

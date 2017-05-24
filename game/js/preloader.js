@@ -15,6 +15,11 @@ var preloaderState = {
         game.load.image('scorpion_crouch','assets/img/Scorpion/Scorpion_crouch.png');
         game.load.image('scorpion_jump','assets/img/Scorpion/Scorpion_Jump.png');
         game.load.image('scorpion_A','assets/img/Scorpion/Scorpion_LightAttack.png');
+        game.load.image('scorpion_B1','assets/img/Scorpion/Scorpion_HeavyAttackCharge.png');
+        game.load.image('scorpion_B2','assets/img/Scorpion/Scorpion_HeavyAttack.png');
+        game.load.image('scorpion_down','assets/img/Scorpion/Scorpion_Down.png');
+        game.load.image('scorpion_stagger','assets/img/Scorpion/Scorpion_stagger.png');
+
 		//insert assets to load here NH
         
         //Security

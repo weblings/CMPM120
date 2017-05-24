@@ -135,7 +135,8 @@ var mainState = {
 	    //insert if statement here to turn off collision on hits
 	    //add more checks later depending on scenario 
 	    //this is mainly to fix the dive kick stuf but we need the divekick working fist NH
-	    if (!player1.action.dive && !player2.action.dive && !player1.hitAgainstWall && !player2.hitAgainstWall){
+	    if (!player1.action.dive && !player2.action.dive && !player1.hitAgainstWall && !player2.hitAgainstWall
+	    	&& !player1.action.down && !player2.action.down){
 	    	game.physics.arcade.collide(player1,player2);
 	    }
         //game.physics.arcade.collide(player1,player2);

@@ -17,8 +17,8 @@ Security = function(game, key, x, y, playerNum){
     this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
     //this.char.animations.add('left', [0,1,2,3], 10, true);
     //this.char.animations.add('right', [5,6,7,8], 10, true);
-    //this.scaleFactor = 0.4;
-    //this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
+    this.scaleFactor = 1;
+    this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
     this.char.anchor.y = 1
 
@@ -89,6 +89,7 @@ Security = function(game, key, x, y, playerNum){
         this.keyB = Phaser.Keyboard.R; //T
         this.prev_anim =1;
         this.faceRIGHT = true; //for Spawning
+        this.char.scale.x = -1*this.scaleFactor;
     }else if(this.playerNum == 2){ 
         this.keyLeft = Phaser.Keyboard.K;
         this.keyRight = Phaser.Keyboard.COLON;
@@ -150,7 +151,7 @@ Security = function(game, key, x, y, playerNum){
 
     //misc.
     this.canLightAttack = true;
-    this.loaded = true; //AG: can fire another projectile
+    //this.loaded = true; //AG: can fire another projectile
 }
 
 Security.prototype = Object.create(Phaser.Sprite.prototype);
@@ -205,7 +206,7 @@ Security.prototype.preState =function (){
 
     }else{
         this.action.jump = false;
-        this.canLightAttack = true;
+        //this.canLightAttack = true;
     }
     
     
@@ -361,13 +362,13 @@ Security.prototype.projectile = function(){
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);
     bullet.startLocation = this.position.x;
-
+    var projectileSpeed = 400;
 
     if (this.faceRIGHT){
-        bullet.body.velocity.x = 200;
+        bullet.body.velocity.x = projectileSpeed;
         bullet.headingRight = true;
     }else{
-        bullet.body.velocity.x = -200;
+        bullet.body.velocity.x = -projectileSpeed;
         bullet.headingRight = false;
     }
 
@@ -514,7 +515,8 @@ Security.prototype.input = function(){
 
         //AG: Reload
         if(this.timer.timerDone('reload')){
-            this.loaded = true;
+            this.canLightAttack = true;
+            this.debugText.text = "loaded";
         }
     
         //AG: Turn off shamed
@@ -557,8 +559,9 @@ Security.prototype.input = function(){
         if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
             //set timer for half a second
             this.timer.startTimer('light',500);
-            this.timer.startTimer('reload',2000);
-            this.loaded = false;
+            this.timer.startTimer('reload',1500);
+            this.debugText.text = "empty";
+            //this.loaded = false;
 
             //this line might be redundant NH
             this.body.velocity.x = 0
@@ -593,7 +596,7 @@ Security.prototype.input = function(){
     
         //AG: Left controls
         if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
-            //this.char.scale.x = this.scaleFactor;
+            this.char.scale.x = this.scaleFactor;
 
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
@@ -635,7 +638,7 @@ Security.prototype.input = function(){
 
         //AG: Right controls
         }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
-            //this.char.scale.x = -1*this.scaleFactor;
+            this.char.scale.x = -1*this.scaleFactor;
 
             if (this.body.velocity.x < 0){
                 this.body.velocity.x = 0;
@@ -674,7 +677,6 @@ Security.prototype.input = function(){
                 this.faceRIGHT = false;
             }else{
                 //this.char.frame = 5;
-                //this.char.scale.x = -1*this.scaleFactor;
                 this.char.faceRIGHT = true;
             }
             this.body.velocity.x = 0;

@@ -243,7 +243,7 @@ var mainState = {
     },
     
     SecurityHeavyAttack: function(player,hitbox){
-        mainState.calcKnockBack(400,100,player.playerNum);
+        mainState.calcKnockBack(300,100,player.playerNum);
         player.takeDamage(10,1000); 
     },
     

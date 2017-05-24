@@ -88,6 +88,7 @@ Scorpion = function(game, key, x, y, playerNum){
         this.keyB = Phaser.Keyboard.R; //T
         this.prev_anim =1;
         this.faceRIGHT = true; //for Spawning
+        this.char.scale.x = -1*this.scaleFactor;
     }else if(this.playerNum == 2){ 
         this.keyLeft = Phaser.Keyboard.K;
         this.keyRight = Phaser.Keyboard.COLON;

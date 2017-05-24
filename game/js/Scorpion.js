@@ -7,8 +7,8 @@ Scorpion = function(game, key, x, y, playerNum){
     //Vars
     this.charName = "LITERALLY A SCORPION";
     this.playerNum = playerNum; //Player number
-    this.speed = 5; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
-    this.maxSpeed = 50;
+    this.speed = 7; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.maxSpeed = 420;
 
     this.jumpHeight = -800; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = 680;
@@ -287,7 +287,7 @@ Scorpion.prototype.heavyAttack = function(){
         //dive kick
 
         
-        this.body.velocity.y = 550;
+        this.body.velocity.y = 750;
         if (this.faceRIGHT){
             this.body.velocity.x = 250;
         }else{
@@ -589,10 +589,10 @@ Scorpion.prototype.input = function(){
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
             }
-            if (this.body.velocity.x > -200){
+            if (this.body.velocity.x > -1*this.maxSpeed){
                 this.body.velocity.x -= this.speed;      
             }else{
-                this.body.velocity.x = -200;
+                this.body.velocity.x = -1*this.maxSpeed;
             }
             //this.char.animations.play('left');
 
@@ -631,10 +631,10 @@ Scorpion.prototype.input = function(){
             if (this.body.velocity.x < 0){
                 this.body.velocity.x = 0;
             }
-            if (this.body.velocity.x < 200){
+            if (this.body.velocity.x < this.maxSpeed){
                 this.body.velocity.x += this.speed;        
             }else{
-                this.body.velocity.x = 200;
+                this.body.velocity.x = this.maxSpeed;
             }
             //this.char.animations.play('right');
 

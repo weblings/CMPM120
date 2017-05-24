@@ -117,7 +117,8 @@ Security = function(game, key, x, y, playerNum){
     //AG: Knockback stuff
     this.inLightAttack = false;
     this.inHeavyAttack = false;
-    this.touchRightWallAt = 1242.5;
+    this.touchLeftWallAt = 62.5;
+    this.touchRightWallAt = 1217.5;
     this.hitAgainstWall = false;
     
     this.introFinished = false; //AG: Intro in Main finished
@@ -367,7 +368,6 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged
             this.healthBarScaleMaster = 1 - ((damage*def)/100);
-            console.log(this.healthBarScaleMaster);
             this.healthBar.scale.x *= this.healthBarScaleMaster;
             if(this.playerNum == 2){
                 this.damageBar = game.add.image(game.width-460,48,"health_empty");
@@ -445,8 +445,11 @@ Security.prototype.applyKnockBack = function(x,y){
         x1 *= 0.2;
         y1 = 0;
     }
+    
+    //console.log("x: "+x1+", y: "+y1);
+        
     this.body.velocity.x = x1;
-    this.body.velocity.y = y1;
+    this.body.velocity.y = y1;    
 }
 
 Security.prototype.wallKnockBack = function(x,y,wallFrames){
@@ -459,6 +462,7 @@ Security.prototype.wallKnockBack = function(x,y,wallFrames){
         x1 *= 0.2;
         y1 = 0;
     }
+    //console.log("WALL x: "+x1+", y: "+y1);
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;
     this.hitAgainstWall = true;

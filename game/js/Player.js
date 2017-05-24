@@ -137,6 +137,7 @@ Player = function(game, key, x, y, playerNum){
     //AG: Knockback stuff
     this.inLightAttack = false;
     this.inHeavyAttack = false;
+    this.touchLeftWallAt = 0;
     this.touchRightWallAt = 1242.5;
     this.hitAgainstWall = false;
     
@@ -455,6 +456,7 @@ Player.prototype.applyKnockBack = function(x,y){
         x1 *= 0.2;
         y1 = 0;
     }
+    
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;
 }

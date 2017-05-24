@@ -215,15 +215,19 @@ var mainState = {
         }
         
         //AG: Determines which attack they did
-        if(attackingPlayer.inHeavyAttack){
+        if(attackingPlayer.inHeavyAttack || attackingPlayer.action.dive){
             if(attackingPlayer.charName == "SECURITY"){
                 mainState.SecurityHeavyAttack(player,hitbox);
             }else{ //AG: Every other character's stuff is here rn (Should change by final)
                 mainState.heavyAttack(player,hitbox);
             }
-        }else{
+        }else if(attackingPlayer.inLightAttack){
             mainState.lightAttack(player,hitbox);
-
+        }else{
+            //AG: Projectile could hit after leaving inLightAttack
+            if(attackingPlayer.charName == "SECURITY"){
+                mainState.lightAttack(player,hitbox);
+            }
         }
     },
     
@@ -322,10 +326,10 @@ var mainState = {
         return Boolean(Math.abs(player.y - 720) < value);
     },
     
-    //AG: x version
+    //AG: x version for walls
     playerXinMarginOfWall: function(player, wall, value){
         if(wall == "left"){
-            var wallX = 0;
+            var wallX = player.touchLeftWallAt;
         }else{
             var wallX = player.touchRightWallAt;
         }

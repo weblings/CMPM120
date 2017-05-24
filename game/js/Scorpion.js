@@ -11,7 +11,7 @@ Scorpion = function(game, key, x, y, playerNum){
     this.maxSpeed = 420;
 
     this.jumpHeight = -800; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
-    this.floorLevel = 680;
+    this.floorLevel = game.world.height - 20;
 
     //Animations
     this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_idle');
@@ -88,6 +88,7 @@ Scorpion = function(game, key, x, y, playerNum){
         this.keyB = Phaser.Keyboard.R; //T
         this.prev_anim =1;
         this.faceRIGHT = true; //for Spawning
+        this.char.scale.x = -1*this.scaleFactor;
     }else if(this.playerNum == 2){ 
         this.keyLeft = Phaser.Keyboard.K;
         this.keyRight = Phaser.Keyboard.COLON;

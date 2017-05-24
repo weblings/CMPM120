@@ -7,28 +7,44 @@ Security = function(game, key, x, y, playerNum){
     //Vars
     this.charName = "SECURITY";
     this.playerNum = playerNum; //Player number
-    this.speed = 8; 
-    this.maxSpeed = 32;
+    this.speed = 7; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.maxSpeed = 420;
 
-    this.jumpHeight = -600; 
-    this.floorLevel = 680;
+    this.jumpHeight = -800; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
+    this.floorLevel = game.world.height - 20;
 
     //Animations
     this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
     //this.char.animations.add('left', [0,1,2,3], 10, true);
     //this.char.animations.add('right', [5,6,7,8], 10, true);
-    //this.char.scale.setTo(4,8);
+    this.scaleFactor = 1;
+    this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
     this.char.anchor.y = 1
 
+
+    /*
+    //body hitbox
+    this.hitboxes = game.add.physicsGroup();
+    this.hitbox = game.add.sprite(this.position.x,this.position.y,'hitbox');
+    this.hitbox.scale.setTo(0.25,0.25);
+    //this.hitbox.anchor.x = 0.5;
+    //this.hitbox.anchor.y = 0.5;
+    this.hitboxes.add(this.hitbox);
+    */
+
+
+
     //Physics
     game.physics.enable(this);
+    this.gravFactor = 888;
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
-    this.body.gravity.y = 600;
+    this.body.gravity.y = this.gravFactor;
     
     //AG: Scale to find character sizing
 
+    //this.scale.setTo(1.05,0.50);
     this.scale.setTo(.5,.65);
     this.anchor.x = 0.5;
     //this.anchor.y = 0.5;
@@ -73,6 +89,7 @@ Security = function(game, key, x, y, playerNum){
         this.keyB = Phaser.Keyboard.R; //T
         this.prev_anim =1;
         this.faceRIGHT = true; //for Spawning
+        this.char.scale.x = -1*this.scaleFactor;
     }else if(this.playerNum == 2){ 
         this.keyLeft = Phaser.Keyboard.K;
         this.keyRight = Phaser.Keyboard.COLON;
@@ -94,9 +111,14 @@ Security = function(game, key, x, y, playerNum){
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
+    
+
+
 
     //set timer
     this.timer = new setTime();
+
+    
 
     //state change stuff
     //an experiment NH
@@ -113,6 +135,10 @@ Security = function(game, key, x, y, playerNum){
 
     this.action.down = false;
     this.action.noCollide =false;
+
+
+
+
     
     //AG: Knockback stuff
     this.inLightAttack = false;
@@ -124,7 +150,8 @@ Security = function(game, key, x, y, playerNum){
     this.introFinished = false; //AG: Intro in Main finished
 
     //misc.
-    this.canLightAttack = true; 
+    this.canLightAttack = true;
+    //this.loaded = true; //AG: can fire another projectile
 }
 
 Security.prototype = Object.create(Phaser.Sprite.prototype);
@@ -134,8 +161,14 @@ Security.prototype.constructor = Player;
 //basically reset stuff every frame
 Security.prototype.preState =function (){
 
+
+    //reset hitbox
+    /*
+    this.hitbox.position.x = this.position.x +25;
+    this.hitbox.position.y = this.position.y +70;
+    */
     this.char.position.x = this.position.x ;
-    this.char.position.y= this.position.y+18;
+    this.char.position.y= this.position.y+50;//18; //AG: Trying to lower character
 
     //this value needs to be changed when art is finalized NH
     if (!this.action.attacking){
@@ -154,13 +187,13 @@ Security.prototype.preState =function (){
 
     //cancel velocity when not in input
     if (this.state != this.input){
-        this.body.velocity.x = 0;
+        //this.body.velocity.x = 0;
     }
     if (this.state != this.lightAttack){
         //light attack reset
         this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         this.fist.position.y = this.position.y;
-        this.body.gravity.y = 600;
+        this.body.gravity.y = this.gravFactor;
     }
 
     if (this.state != this.heavyAttack){
@@ -173,7 +206,7 @@ Security.prototype.preState =function (){
 
     }else{
         this.action.jump = false;
-        this.canLightAttack = true;
+        //this.canLightAttack = true;
     }
     
     
@@ -206,6 +239,8 @@ Security.prototype.fisting = function(x,y){
 Security.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
     //insert attack animation here
+    //this.char.loadTexture('scorpion_A');
+
     this.fist.exists = true;
 
     if (this.action.jump ){
@@ -225,18 +260,19 @@ Security.prototype.lightAttack = function(){
             //var fist = game.add.sprite(this.position.x-50,this.position.y,'fist');
             //fist.scale.setTo(0.25,0.25);
             //this.fists.add(fist);
-            this.fist.position.x = -300;
-            //this.fist.position.x -= 150; //AG: Brings fist back on screen
+            //this.fist.position.x -= 50;
+            this.fist.position.x = -300; //AG: Brings fist back on screen
         }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
-
+        this.projectile();
     }
     //this.debugText.text = this.position.x;
     
     if (this.timer.timerDone('light')){
         //this.debugText.text = 'done';
-        this.projectile();
+        //this.projectile();
+        //this.char.loadTexture('scorpion_idle');
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -252,7 +288,7 @@ Security.prototype.heavyAttack = function(){
         //dive kick
 
         
-        this.body.velocity.y = 550;
+        this.body.velocity.y = 550; //750
         if (this.faceRIGHT){
             this.body.velocity.x = 250;
         }else{
@@ -289,13 +325,13 @@ Security.prototype.heavyAttack = function(){
             this.fist.position.x = this.position.x; //AG: Brings fist back on screen
             
             if (this.faceRIGHT){
-                this.fist.scale.x = .5;
+                this.fist.scale.x = .5;//1;
                 this.fist.scale.y = .7;
-                this.fist.position.x += 125;
+                this.fist.position.x += 125;//250;
             }else{
-                this.fist.scale.x = .5;
+                this.fist.scale.x = .5;//1;
                 this.fist.scale.y = .7;
-                this.fist.position.x -= 125;
+                this.fist.position.x -= 125;//250;
             }
             
         }
@@ -326,13 +362,13 @@ Security.prototype.projectile = function(){
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);
     bullet.startLocation = this.position.x;
-
+    var projectileSpeed = 400;
 
     if (this.faceRIGHT){
-        bullet.body.velocity.x = 200;
+        bullet.body.velocity.x = projectileSpeed;
         bullet.headingRight = true;
     }else{
-        bullet.body.velocity.x = -200;
+        bullet.body.velocity.x = -projectileSpeed;
         bullet.headingRight = false;
     }
 
@@ -368,6 +404,7 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged
             this.healthBarScaleMaster = 1 - ((damage*def)/100);
+            console.log(this.healthBarScaleMaster);
             this.healthBar.scale.x *= this.healthBarScaleMaster;
             if(this.playerNum == 2){
                 this.damageBar = game.add.image(game.width-460,48,"health_empty");
@@ -443,13 +480,10 @@ Security.prototype.applyKnockBack = function(x,y){
     var y1 = y;
     if (this.action.block){
         x1 *= 0.2;
-        y1 = 0;
+        y1 = 0.1;
     }
-    
-    //console.log("x: "+x1+", y: "+y1);
-        
     this.body.velocity.x = x1;
-    this.body.velocity.y = y1;    
+    this.body.velocity.y = y1;
 }
 
 Security.prototype.wallKnockBack = function(x,y,wallFrames){
@@ -462,7 +496,6 @@ Security.prototype.wallKnockBack = function(x,y,wallFrames){
         x1 *= 0.2;
         y1 = 0;
     }
-    //console.log("WALL x: "+x1+", y: "+y1);
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;
     this.hitAgainstWall = true;
@@ -480,6 +513,12 @@ Security.prototype.input = function(){
             return;
         }
 
+        //AG: Reload
+        if(this.timer.timerDone('reload')){
+            this.canLightAttack = true;
+            this.debugText.text = "loaded";
+        }
+    
         //AG: Turn off shamed
         if(this.timer.timerDone('shamed')){
             this.shamed = false;
@@ -506,9 +545,11 @@ Security.prototype.input = function(){
         //blocking NH
         if (game.input.keyboard.isDown(this.keyDown)){
             this.action.block = true;
+            
         }else{
             //possibly have a millisecond of un guarding? NH
             this.action.block = false;
+
         }
 
         //test combat inputs
@@ -518,6 +559,9 @@ Security.prototype.input = function(){
         if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
             //set timer for half a second
             this.timer.startTimer('light',500);
+            this.timer.startTimer('reload',1500);
+            this.debugText.text = "empty";
+            //this.loaded = false;
 
             //this line might be redundant NH
             this.body.velocity.x = 0
@@ -552,15 +596,15 @@ Security.prototype.input = function(){
     
         //AG: Left controls
         if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
-            this.char.scale.x = 1;//0.5;
+            this.char.scale.x = this.scaleFactor;
 
             if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
             }
-            if (this.body.velocity.x > -200){
+            if (this.body.velocity.x > -1*this.maxSpeed){
                 this.body.velocity.x -= this.speed;      
             }else{
-                this.body.velocity.x = -200;
+                this.body.velocity.x = -1*this.maxSpeed;
             }
             //this.char.animations.play('left');
 
@@ -594,15 +638,15 @@ Security.prototype.input = function(){
 
         //AG: Right controls
         }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
-            this.char.scale.x = -1;//0.5;
+            this.char.scale.x = -1*this.scaleFactor;
 
             if (this.body.velocity.x < 0){
                 this.body.velocity.x = 0;
             }
-            if (this.body.velocity.x < 200){
+            if (this.body.velocity.x < this.maxSpeed){
                 this.body.velocity.x += this.speed;        
             }else{
-                this.body.velocity.x = 200;
+                this.body.velocity.x = this.maxSpeed;
             }
             //this.char.animations.play('right');
 
@@ -619,19 +663,20 @@ Security.prototype.input = function(){
             this.body.velocity.x = 0;
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
+            }else if (this.action.block){
+                //this.char.loadTexture('scorpion_crouch');
+
             }else{
                 //this.char.loadTexture('scorpion_idle');
             }
-
             
             if (this.prev_anim == 0){
                 //this.char.frame = 0;
-                //this.char.scale.x = 0.5;
+                //this.char.scale.x = this.scaleFactor;
 
                 this.faceRIGHT = false;
             }else{
                 //this.char.frame = 5;
-                //this.char.scale.x = -0.5;
                 this.char.faceRIGHT = true;
             }
             this.body.velocity.x = 0;

@@ -60,7 +60,8 @@ var mainState = {
 	    platforms = game.add.group();
 		platforms.enableBody = true;
 
-	    floor = game.add.tileSprite(0, game.world.height -40, 1280, 720,'bg');
+	    floor = game.add.tileSprite(0, game.world.height -20, 1280, 720,'bg');
+        floor.alpha = 0;
 	    platforms.add(floor);
 
 

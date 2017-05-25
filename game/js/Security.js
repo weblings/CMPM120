@@ -137,9 +137,11 @@ Security = function(game, key, x, y, playerNum){
     this.action.down = false;
     this.action.noCollide =false;
 
+    this.action.stagfall = false;
 
-
-
+    //down stuff NH
+    this.downCount = 0;
+    this.downFactor = 1000;
     
     //AG: Knockback stuff
     this.inLightAttack = false;
@@ -190,8 +192,10 @@ Security.prototype.preState =function (){
     }
     
     //cancel velocity when not in input
-    if (this.state != this.input){
-        //this.body.velocity.x = 0;
+    //might be the reason why dive kick is so slow
+    //also the reason why down does not move in x NH
+    if (this.state != this.input && this.state != this.downed){
+        this.body.velocity.x = 0;
     }
     if (this.state != this.lightAttack){
         //light attack reset
@@ -213,7 +217,34 @@ Security.prototype.preState =function (){
         //this.canLightAttack = true;
     }
     
-    
+    //AG: Pasted from Scorpion for downed state
+    if (!this.action.jump && this.action.down){
+        this.body.velocity.x = 0;
+    }
+
+    //might need some changes here NH
+    if (!this.timer.timerDone('downed') && this.action.down){
+         //insert sprite change here
+         this.char.loadTexture('scorpion_down');
+         //this.action.down = false;
+    }
+
+    if (this.timer.timerDone('downed') && this.action.down){
+        this.action.down = false;
+        this.changeState(this.input);
+    }
+
+    if (this.timer.timerDone('downWindow')){
+         //insert sprite change here
+         this.downCount = 0;
+    }
+
+    if (this.downCount >= 3){
+        this.changeState(this.downed);
+        this.timer.startTimer('downed', this.downFactor*2);
+        this.timer.startTimer('forcedDown', this.downFactor);
+        this.downCount = 0;
+    }
 }
 
 
@@ -239,7 +270,26 @@ Security.prototype.fisting = function(x,y){
 
 }
 
-//states
+Security.prototype.downed = function(){
+     this.action.down = true;
+     this.action.attacking = false;
+     this.action.dive = false;
+     
+     //set timer down max down time
+     //this.timer.startTimer('downed', 2500);
+ 
+     if ((game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
+         game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
+         game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
+         this.action.down = false;
+         this.changeState(this.input);
+     }
+ 
+     
+}
+
+//--States--//
+
 Security.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
     this.char.loadTexture('security_A1'); //First animation frame
@@ -388,6 +438,12 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         this.shamed = true;
         this.staggered = true;
         
+        //count for down NH
+        if (!this.action.block){
+            this.timer.startTimer('downWindow',2000);
+            this.downCount++;
+        }
+        
         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged
             this.healthBarScaleMaster = 1 - ((damage*def)/100);
@@ -468,6 +524,15 @@ Security.prototype.applyKnockBack = function(x,y){
     if (this.action.block){
         x1 *= 0.2;
         y1 = 0.1;
+    }
+    //Added for downed state NH
+    if (this.action.down && this.action.jump){
+        y1 = -100*y;
+        x1 = 50*x;
+        
+    }else if (this.action.down){
+        y1=0.1;
+        x1=0;
     }
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;

@@ -15,6 +15,7 @@ Security = function(game, key, x, y, playerNum){
 
     //Animations
     this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
+    this.char.animations.add('security_A',[0,1],10,true)
     //this.char.animations.add('left', [0,1,2,3], 10, true);
     //this.char.animations.add('right', [5,6,7,8], 10, true);
     this.scaleFactor = 1;
@@ -184,7 +185,10 @@ Security.prototype.preState =function (){
     }
     
 
-
+    if (this.staggered && !this.action.block){
+        this.char.loadTexture('security_stagger');
+    }
+    
     //cancel velocity when not in input
     if (this.state != this.input){
         //this.body.velocity.x = 0;
@@ -238,41 +242,24 @@ Security.prototype.fisting = function(x,y){
 //states
 Security.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
-    //insert attack animation here
-    //this.char.loadTexture('scorpion_A');
+    this.char.loadTexture('security_A1'); //First animation frame
 
-    this.fist.exists = true;
-
-    if (this.action.jump ){
-        //this.body.gravity.y = 0;
-        //this.body.velocity.y =0 ;
-    }
-    
-
-    if (!this.action.attacking){
-        if (dir){
-            //var fist = game.add.sprite(this.position.x+50,this.position.y,'fist');
-            //fist.scale.setTo(0.25,0.25);
-            //this.fists.add(fist);
-            this.fist.position.x = -300;
-            //this.fist.position.x +=  150; 
-        } else{
-            //var fist = game.add.sprite(this.position.x-50,this.position.y,'fist');
-            //fist.scale.setTo(0.25,0.25);
-            //this.fists.add(fist);
-            //this.fist.position.x -= 50;
-            this.fist.position.x = -300; //AG: Brings fist back on screen
-        }
+    if (this.timer.timerDone('light2') && !this.action.attacking){ 
+        this.fist.position.x = -300; //AG: Keeps fist offscreen
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
-        this.projectile();
+        this.projectile(); //launches projectile
+        this.char.loadTexture('security_A2'); //Second animation frame
+
     }
-    //this.debugText.text = this.position.x;
+
+    
+    if (this.timer.timerDone('light2')){
+        this.char.loadTexture('security_A2'); //Second animation frame
+    }
     
     if (this.timer.timerDone('light')){
-        //this.debugText.text = 'done';
-        //this.projectile();
-        //this.char.loadTexture('scorpion_idle');
+        this.char.loadTexture('security_idle');
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -358,7 +345,7 @@ Security.prototype.heavyAttack = function(){
 
 //projectile
 Security.prototype.projectile = function(){
-    var bullet = game.add.sprite(this.position.x, this.position.y-75, 'player');
+    var bullet = game.add.sprite(this.position.x, this.position.y-200, 'player');
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);
     bullet.startLocation = this.position.x;
@@ -558,8 +545,9 @@ Security.prototype.input = function(){
         //light attack NH
         if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
             //set timer for half a second
-            this.timer.startTimer('light',500);
-            this.timer.startTimer('reload',1500);
+            this.timer.startTimer('light',400); //AG: done light attacking
+            this.timer.startTimer('light2',200); //AG: Triggers second animation frame
+            this.timer.startTimer('reload',1500); //AG: Allows player to throw again
             this.debugText.text = "empty";
             //this.loaded = false;
 
@@ -611,7 +599,7 @@ Security.prototype.input = function(){
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
             }else{
-                //this.char.loadTexture('scorpion_idle');
+                this.char.loadTexture('security_idle');
             }
             
             
@@ -653,7 +641,7 @@ Security.prototype.input = function(){
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
             }else{
-                //this.char.loadTexture('scorpion_idle');
+                this.char.loadTexture('security_idle');
             }
 
             this.prev_anim = 1;
@@ -667,7 +655,7 @@ Security.prototype.input = function(){
                 //this.char.loadTexture('scorpion_crouch');
 
             }else{
-                //this.char.loadTexture('scorpion_idle');
+                this.char.loadTexture('security_idle');
             }
             
             if (this.prev_anim == 0){

@@ -24,6 +24,10 @@ var preloaderState = {
         
         //Security
         game.load.image('security_idle', 'assets/img/Security/security_guard_idle.png');
+        game.load.image('security_A1', 'assets/img/Security/security_guard_light_attack1.png');
+        game.load.image('security_A2', 'assets/img/Security/security_guard_light_attack2.png');
+        game.load.image('security_stagger', 'assets/img/Security/security_guard_stagger.png');
+        
 	},
 
 	create: function(){

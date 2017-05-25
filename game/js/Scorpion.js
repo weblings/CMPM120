@@ -139,6 +139,7 @@ Scorpion = function(game, key, x, y, playerNum){
 
     //down stuff NH
     this.downCount = 0;
+    this.downFactor = 1000;
 
 
 
@@ -202,9 +203,12 @@ Scorpion.prototype.preState =function (){
 
 
     //cancel velocity when not in input
-    if (this.state != this.input){
+    //might be the reason why dive kick is so slow
+    //also the reason why down does not move in x NH
+    if (this.state != this.input && this.state != this.downed){
         this.body.velocity.x = 0;
     }
+
     if (this.state != this.lightAttack){
         //light attack reset
         //this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
@@ -217,7 +221,9 @@ Scorpion.prototype.preState =function (){
     }
 
     //check if in air
-    if (!this.body.touching.down){
+    //if (!this.body.touching.down){
+
+    if (this.position.y != this.floorLevel){
         this.action.jump = true;
 
     }else{
@@ -225,6 +231,11 @@ Scorpion.prototype.preState =function (){
         this.canLightAttack = true;
     }
 
+    if (!this.action.jump && this.action.down){
+        this.body.velocity.x = 0;
+    }
+
+    //might need some changes here NH
     if (!this.timer.timerDone('downed') && this.action.down){
          //insert sprite change here
          this.char.loadTexture('scorpion_down');
@@ -243,6 +254,9 @@ Scorpion.prototype.preState =function (){
 
     if (this.downCount >= 3){
         this.changeState(this.downed);
+        this.timer.startTimer('downed', this.downFactor*2);
+        this.timer.startTimer('forcedDown', this.downFactor);
+        this.downCount = 0;
     }
     
     
@@ -273,12 +287,15 @@ Scorpion.prototype.fisting = function(x,y){
 
 Scorpion.prototype.downed = function(){
      this.action.down = true;
+     this.action.attacking = false;
+     this.action.dive = false;
+     
      //set timer down max down time
-     this.timer.startTimer('downed', 2500);
+     //this.timer.startTimer('downed', 2500);
  
-     if (game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
+     if ((game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
          game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
-         game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)){
+         game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
          this.action.down = false;
          this.changeState(this.input);
      }
@@ -456,9 +473,10 @@ Scorpion.prototype.takeDamage = function(damage,staggerLength){
         this.staggered = true;
 
         //count for down NH
-        this.timer.startTimer('downWindow',2000);
-        this.downCount++;
-        
+        if (!this.action.block){
+            this.timer.startTimer('downWindow',2000);
+            this.downCount++;
+        }
         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged
             this.healthBarScaleMaster = 1 - ((damage*def)/100);
@@ -540,8 +558,20 @@ Scorpion.prototype.applyKnockBack = function(x,y){
         x1 *= 0.2;
         y1 = 0.1;
     }
-    if (this.action.down){
-        y1 = 0.1;
+    /*
+    if (this.action.jump && this.downCount>=3){
+            y1 = -2*y;
+    }
+    */
+
+
+    if (this.action.down && this.action.jump){
+        y1 = -100*y;
+        x1 = 50*x;
+        
+    }else if (this.action.down){
+        y1=0.1;
+        x1=0;
     }
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;

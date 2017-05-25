@@ -203,6 +203,15 @@ var mainState = {
         	
         }
 
+        //press space to restart
+        if ((!player1.alive || !player2) && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+        	game.time.slowMotion = 1;
+        	this.game.world.removeAll();
+        	game.state.start('charSelect',false,false);
+        }
+
+        
+
     },
     
     determineAttack: function(player,hitbox){

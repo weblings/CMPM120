@@ -141,6 +141,7 @@ Scorpion = function(game, key, x, y, playerNum){
     this.action.attacking = false;
     this.action.dive = false;
     this.action.cancel = false;
+    this.action.perfectguard =false;
 
     this.action.down = false;
     this.action.noCollide =false;
@@ -485,7 +486,13 @@ Scorpion.prototype.takeDamage = function(damage,staggerLength){
     var def = 1;
     if(!this.shamed){
         if (this.action.block){
-            def = 0.2;
+            if (!this.timer.timerDone('perfectguard')){
+                def = 0;
+            }else{
+                def = 0.2;
+
+            }
+            
         }
         if(this.health - damage*def < 0){
             this.health = 0;
@@ -660,10 +667,15 @@ Scorpion.prototype.input = function(){
         //blocking NH
         if (game.input.keyboard.isDown(this.keyDown)){
             this.action.block = true;
+            if (!this.action.perfectguard){
+                this.timer.startTimer('perfectguard',250);
+                this.action.perfectguard = true;
+            }
             
         }else{
             //possibly have a millisecond of un guarding? NH
             this.action.block = false;
+            this.action.perfectguard = false;
 
         }
 

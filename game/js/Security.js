@@ -620,6 +620,7 @@ Security.prototype.input = function(){
         }else{
             //possibly have a millisecond of un guarding? NH
             this.action.block = false;
+            this.action.perfectguard = false;
 
         }
 

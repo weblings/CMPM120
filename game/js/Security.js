@@ -225,7 +225,7 @@ Security.prototype.preState =function (){
     //might need some changes here NH
     if (!this.timer.timerDone('downed') && this.action.down){
          //insert sprite change here
-         this.char.loadTexture('scorpion_down');
+         this.char.loadTexture('security_downed');
          //this.action.down = false;
     }
 
@@ -395,7 +395,8 @@ Security.prototype.heavyAttack = function(){
 
 //projectile
 Security.prototype.projectile = function(){
-    var bullet = game.add.sprite(this.position.x, this.position.y-200, 'player');
+    var bullet = game.add.sprite(this.position.x,this.position.y-200,'water_bottle'); //'player');
+    bullet.scale.setTo(1.3,1.3);
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);
     bullet.startLocation = this.position.x;
@@ -413,12 +414,13 @@ Security.prototype.projectile = function(){
 }
 
 Security.prototype.killBullets = function(b){
+    var killLocation = 600;
     if (b.headingRight){
-        if (b.position.x - b.startLocation > 500){
+        if (b.position.x - b.startLocation > killLocation){
             b.kill();
         }
     }else{
-        if (b.startLocation - b.position.x > 500){
+        if (b.startLocation - b.position.x > killLocation){
             b.kill();
         }
     }
@@ -717,7 +719,7 @@ Security.prototype.input = function(){
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
             }else if (this.action.block){
-                //this.char.loadTexture('scorpion_crouch');
+                this.char.loadTexture('security_block');
 
             }else{
                 this.char.loadTexture('security_idle');

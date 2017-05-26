@@ -729,8 +729,11 @@ Scorpion.prototype.input = function(){
                 
                 if (this.prev_anim == 0){
                     //this.char.frame = 0;
+
+                    this.faceRIGHT = false;
                 }else{
                     //this.char.frame = 5;
+                    this.char.scale.x = -1*this.scaleFactor;
                     this.anim_lock = true;
                 }
                 this.body.velocity.x = 0;

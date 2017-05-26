@@ -23,6 +23,14 @@ var mainState = {
         //AG: Text
         var introText1;
         var introText2;
+
+
+        var tempgrav1 ;
+        var tempvely1 ;
+        var tempvelx1 ;
+        var tempgrav2 ;
+        var tempvely2 ;
+        var tempvelx2 ;
     },
 
 	create: function() {
@@ -105,6 +113,15 @@ var mainState = {
         var tween2;
 
         tween1.onComplete.add(mainState.Tween1completed, this);
+
+        //timer stuff
+        this.timer = new setTime();
+
+        //hitstop stuff
+        this.hitting = false;
+        this.hitter = 1;
+        this.justhev = false;
+
 	},
 
 	update: function() {
@@ -160,8 +177,38 @@ var mainState = {
         }
 
         //Light and heavy attacks
+
         game.physics.arcade.overlap(player1,fist2,mainState.determineAttack, null, this);
         game.physics.arcade.overlap(player2,fist1,mainState.determineAttack, null, this);
+
+        /*
+
+        if (!this.hitting){
+        	tempgrav1 = player1.body.gravity.y;
+        	tempvely1 = player1.body.velocity.y;
+        	tempvelx1 = player1.body.velocity.x;
+        	tempgrav2 = player2.body.gravity.y;
+        	tempvely2 = player2.body.velocity.y;
+        	tempvelx2 = player2.body.velocity.x;
+        }
+
+        if (this.timer.timerDone('hitstop')){
+        	this.hitting = false;
+
+        	player1.body.gravity.y = tempgrav1;
+        	player1.body.velocity.y = tempvely1;
+       		player1.body.velocity.x = tempvelx1;
+        	player2.body.gravity.y = tempgrav2;
+        	player2.body.velocity.y = tempvely2;
+       		player2.body.velocity.x = tempvelx2;
+       		if (this.justhev){
+       			this.justhev = false;
+       			mainState.calcKnockBack(100,70,this.hitter);
+       		}
+       		
+        }
+        */
+
         
         //Handling SECURITY's Projectiles
         if(player2.charName == "SECURITY"){
@@ -216,8 +263,10 @@ var mainState = {
     
     determineAttack: function(player,hitbox){
         var attackingPlayer;
+
         var hitPlayerNum = player.playerNum;
         var hitPlayer = player;
+
         
         //AG: Determines out who is attacking
         if(hitPlayerNum == 1){
@@ -258,18 +307,52 @@ var mainState = {
     },
     
     lightAttack: function(player,hitbox){
-        mainState.calcKnockBack(50,30,player.playerNum);
-        player.takeDamage(3,100);
+        mainState.calcKnockBack(35,10,player.playerNum);
+        player.takeDamage(5,50);
+
+        if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
+        	game.camera.shake(0.001, 100);
+        }
+
     },
   
     heavyAttack: function(player,hitbox){
-        mainState.calcKnockBack(100,70,player.playerNum);
-        player.takeDamage(10,1000);
+        mainState.calcKnockBack(400,40,player.playerNum);
+
+        player.takeDamage(15,200);
+        if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
+        	game.camera.shake(0.005, 100);
+        }
+        
+
+        /*
+
+        this.hitting = true;
+        this.hitter = player.playerNum
+        this.justhev = true;
+
+        this.timer.startTimer('hitstop',500);
+        
+        player1.body.gravity.y = 0;
+        player1.body.velocity.y = 0;
+        player1.body.velocity.x = 0;
+        player2.body.gravity.y = 0;
+        player2.body.velocity.y = 0;
+        player2.body.velocity.x = 0;
+        */
+        
+        
+
     },
     
+
     diveKick: function(player,hitbox){
         mainState.calcKnockBack(40,30,player.playerNum);
         player.takeDamage(5,250);
+        if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
+        	game.camera.shake(0.005, 100);
+    	}
+
     },
     
     //--Security's Attacks--//
@@ -283,6 +366,9 @@ var mainState = {
     SecurityHeavyAttack: function(player,hitbox){
         mainState.calcKnockBack(300,100,player.playerNum);
         player.takeDamage(10,1000); 
+        if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
+        	game.camera.shake(0.005, 100);
+    	  }
     },
     
     //AG: Should figure out which direction to apply knockback

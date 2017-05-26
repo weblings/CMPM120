@@ -216,10 +216,11 @@ var mainState = {
     
     determineAttack: function(player,hitbox){
         var attackingPlayer;
-        var hitPlayer = player.playerNum;
+        var hitPlayerNum = player.playerNum;
+        var hitPlayer = player;
         
         //AG: Determines out who is attacking
-        if(hitPlayer == 1){
+        if(hitPlayerNum == 1){
             attackingPlayer = player2;
         }else{
             attackingPlayer = player1;
@@ -233,11 +234,25 @@ var mainState = {
                 mainState.heavyAttack(player,hitbox);
             }
         }else if(attackingPlayer.inLightAttack){
-            mainState.lightAttack(player,hitbox);
+            if(attackingPlayer.charName == "SECURITY"){
+                attackingPlayer.bullets.removeAll(); //AG: If bullet hits opponent, destroy it
+                if(hitPlayer.action.block){ //AG: If opponent is blocking
+                    mainState.SecurityLightAttack(player,hitbox,false);
+                }else{
+                    mainState.SecurityLightAttack(player,hitbox,true);
+                }
+            }else{
+                mainState.lightAttack(player,hitbox);
+            }
         }else{
             //AG: Projectile could hit after leaving inLightAttack
             if(attackingPlayer.charName == "SECURITY"){
-                mainState.lightAttack(player,hitbox);
+                attackingPlayer.bullets.removeAll();
+                if(hitPlayer.action.block){
+                    mainState.SecurityLightAttack(player,hitbox,false);
+                }else{
+                    mainState.SecurityLightAttack(player,hitbox,true);
+                }            
             }
         }
     },
@@ -252,14 +267,22 @@ var mainState = {
         player.takeDamage(10,1000);
     },
     
-    SecurityHeavyAttack: function(player,hitbox){
-        mainState.calcKnockBack(300,100,player.playerNum);
-        player.takeDamage(10,1000); 
-    },
-    
     diveKick: function(player,hitbox){
         mainState.calcKnockBack(40,30,player.playerNum);
         player.takeDamage(5,250);
+    },
+    
+    //--Security's Attacks--//
+    
+    SecurityLightAttack: function(player,hitbox,stun){
+        //If player is blocking, they won't be stunned
+        if(stun) mainState.calcKnockBack(10,10,player.playerNum);
+        player.takeDamage(5,50);
+    },
+    
+    SecurityHeavyAttack: function(player,hitbox){
+        mainState.calcKnockBack(300,100,player.playerNum);
+        player.takeDamage(10,1000); 
     },
     
     //AG: Should figure out which direction to apply knockback

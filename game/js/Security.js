@@ -1,13 +1,13 @@
 Security = function(game, key, x, y, playerNum){
     Phaser.Sprite.call(this, game, x, y, key, playerNum);
     
-    this.alpha = 0.5;
+    this.alpha = 0;//0.5;
     this.anchor.y = 1;
 
     //Vars
     this.charName = "SECURITY";
     this.playerNum = playerNum; //Player number
-    this.speed = 7; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.speed = 25; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 420;
 
     this.jumpHeight = -800; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
@@ -34,7 +34,11 @@ Security = function(game, key, x, y, playerNum){
     this.hitboxes.add(this.hitbox);
     */
 
-
+    //particle
+    this.emitter = game.add.emitter(0, 0, 100);
+    this.emitter.makeParticles('player');
+    game.physics.enable(this.emitter);
+    this.emitter.enableBody = true;
 
     //Physics
     game.physics.enable(this);
@@ -133,6 +137,7 @@ Security = function(game, key, x, y, playerNum){
     this.action.attacking = false;
     this.action.dive = false;
     this.action.cancel = false;
+    this.action.perfectguard =false;
 
     this.action.down = false;
     this.action.noCollide =false;
@@ -209,12 +214,13 @@ Security.prototype.preState =function (){
     }
 
     //check if in air
-    if (!this.body.touching.down){
+     if (this.position.y != this.floorLevel){
         this.action.jump = true;
-
+         this.maxSpeed = 120;
     }else{
         this.action.jump = false;
         //this.canLightAttack = true;
+        this.maxSpeed = 420;
     }
     
     //AG: Pasted from Scorpion for downed state
@@ -431,7 +437,12 @@ Security.prototype.takeDamage = function(damage,staggerLength){
     var def = 1;
     if(!this.shamed){
         if (this.action.block){
-            def = 0.2;
+            if (!this.timer.timerDone('perfectguard')){
+                def = 0;
+            }else{
+                def = 0.2;
+
+            }
         }
         if(this.health - damage*def < 0){
             this.health = 0;
@@ -444,6 +455,9 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         if (!this.action.block){
             this.timer.startTimer('downWindow',2000);
             this.downCount++;
+            this.emitter.x = this.position.x;
+            this.emitter.y = this.position.y-200;
+            this.emitter.start(true, 2000, null, 10);
         }
         
         //AG: HealthBar handling
@@ -599,7 +613,10 @@ Security.prototype.input = function(){
         //blocking NH
         if (game.input.keyboard.isDown(this.keyDown)){
             this.action.block = true;
-            
+            if (!this.action.perfectguard){
+                this.timer.startTimer('perfectguard',250);
+                this.action.perfectguard = true;
+            }
         }else{
             //possibly have a millisecond of un guarding? NH
             this.action.block = false;

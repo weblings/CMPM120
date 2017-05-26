@@ -37,6 +37,12 @@ Scorpion = function(game, key, x, y, playerNum){
     this.hitboxes.add(this.hitbox);
     */
 
+    //particle
+    this.emitter = game.add.emitter(0, 0, 100);
+    this.emitter.makeParticles('player');
+    game.physics.enable(this.emitter);
+    this.emitter.enableBody = true;
+    //this.emitter.gravity = 400;
 
 
     //Physics
@@ -492,6 +498,10 @@ Scorpion.prototype.takeDamage = function(damage,staggerLength){
         if (!this.action.block){
             this.timer.startTimer('downWindow',2000);
             this.downCount++;
+            this.emitter.x = this.position.x;
+            this.emitter.y = this.position.y-75;
+            this.emitter.start(true, 2000, null, 10);
+
         }
         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged

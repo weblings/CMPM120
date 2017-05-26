@@ -11,6 +11,7 @@ var preloaderState = {
         game.load.image('health_damage','assets/img/health_damage.png');
         
         //Scorpion
+        /*
         game.load.image('scorpion_idle','assets/img/Scorpion/Scorpion_Idle.png');
         game.load.image('scorpion_crouch','assets/img/Scorpion/Scorpion_crouch.png');
         game.load.image('scorpion_jump','assets/img/Scorpion/Scorpion_Jump.png');
@@ -19,6 +20,11 @@ var preloaderState = {
         game.load.image('scorpion_B2','assets/img/Scorpion/Scorpion_HeavyAttack.png');
         game.load.image('scorpion_down','assets/img/Scorpion/Scorpion_Down.png');
         game.load.image('scorpion_stagger','assets/img/Scorpion/Scorpion_stagger.png');
+        //game.load.image('scorpion_walk1','assets/img/Scorpion/Scorpion_walk_1.png');
+        //game.load.image('scorpion_walk2','assets/img/Scorpion/Scorpion_walk_2.png');
+        game.load.spritesheet('scorp_walk','assets/img/Scorpion/scorp_walk.png', 741, 660);
+        */
+        game.load.atlas('scorpion_atlas', 'assets/img/Scorpion/spritesheet.png','assets/img/Scorpion/sprites.json');
 
 		//insert assets to load here NH
         

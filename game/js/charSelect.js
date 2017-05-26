@@ -22,7 +22,11 @@ var charSelect = {
     },
     
     create: function(){
-        characters = ["THE TEMP","LITERALLY A SCORPION","SECURITY"];
+        
+        var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
+        logo.scale.setTo(.7,.7);
+        
+        characters = ["LITERALLY A SCORPION","SECURITY"];//["THE TEMP","LITERALLY A SCORPION","SECURITY"];
 
         P1keyUp = Phaser.Keyboard.W;
         P1keyDown = Phaser.Keyboard.S;

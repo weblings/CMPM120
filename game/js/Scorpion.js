@@ -1,7 +1,7 @@
 Scorpion = function(game, key, x, y, playerNum){
     Phaser.Sprite.call(this, game, x, y, key, playerNum);
     
-    this.alpha = 0.5;
+    this.alpha = 0;//0.5;
     this.anchor.y = 1;
 
     //Vars

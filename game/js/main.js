@@ -360,7 +360,7 @@ var mainState = {
     SecurityLightAttack: function(player,hitbox,stun){
         //If player is blocking, they won't be stunned
         if(stun) mainState.calcKnockBack(10,10,player.playerNum);
-        player.takeDamage(5,50);
+        player.takeDamage(5,100);
     },
     
     SecurityHeavyAttack: function(player,hitbox){

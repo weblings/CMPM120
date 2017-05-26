@@ -24,6 +24,7 @@ var preloaderState = {
         //game.load.image('scorpion_walk2','assets/img/Scorpion/Scorpion_walk_2.png');
         game.load.spritesheet('scorp_walk','assets/img/Scorpion/scorp_walk.png', 741, 660);
         */
+        //changes needed: divekick, jump, heavyattack
         game.load.atlas('scorpion_atlas', 'assets/img/Scorpion/spritesheet.png','assets/img/Scorpion/sprites.json');
 
 		//insert assets to load here NH

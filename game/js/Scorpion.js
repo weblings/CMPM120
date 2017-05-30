@@ -143,6 +143,7 @@ Scorpion = function(game, key, x, y, playerNum){
     this.action.cancel = false;
     this.action.perfectguard =false;
 
+    this.action.predown = false;
     this.action.down = false;
     this.action.noCollide =false;
 
@@ -268,10 +269,16 @@ Scorpion.prototype.preState =function (){
     }
 
     if (this.downCount >= 3){
-        this.changeState(this.downed);
-        this.timer.startTimer('downed', this.downFactor*2);
-        this.timer.startTimer('forcedDown', this.downFactor);
-        this.downCount = 0;
+        
+        
+        if (!this.staggered && !this.action.jump){
+            this.changeState(this.downed);
+            this.timer.startTimer('downed', this.downFactor*2);
+            this.timer.startTimer('forcedDown', this.downFactor);
+            this.downCount = 0;
+        }
+        
+                   
     }
     
     
@@ -301,6 +308,7 @@ Scorpion.prototype.fisting = function(x,y){
 }
 
 Scorpion.prototype.downed = function(){
+
      this.action.down = true;
      this.action.attacking = false;
      this.action.dive = false;
@@ -309,10 +317,10 @@ Scorpion.prototype.downed = function(){
      //this.timer.startTimer('downed', 2500);
  
      if ((game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
-         game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
-         game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
-         this.action.down = false;
-         this.changeState(this.input);
+        game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
+        game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
+        this.action.down = false;
+        this.changeState(this.input);
      }
  
      
@@ -505,6 +513,7 @@ Scorpion.prototype.takeDamage = function(damage,staggerLength){
         if (!this.action.block){
             this.timer.startTimer('downWindow',2000);
             this.downCount++;
+            console.log(this.downCount);
             this.emitter.x = this.position.x;
             this.emitter.y = this.position.y-75;
             this.emitter.start(true, 2000, null, 10);
@@ -602,6 +611,9 @@ Scorpion.prototype.applyKnockBack = function(x,y){
         y1 = -100*y;
         x1 = 50*x;
         
+    }else if(this.staggered && this.downCount >= 3){
+        y1 *= 10;
+        x1 *= 10; 
     }else if (this.action.down){
         y1=0.1;
         x1=0;

@@ -14,10 +14,18 @@ Security = function(game, key, x, y, playerNum){
     this.floorLevel = game.world.height - 20;
 
     //Animations
-    this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
-    this.char.animations.add('security_A',[0,1],10,true)
-    //this.char.animations.add('left', [0,1,2,3], 10, true);
-    //this.char.animations.add('right', [5,6,7,8], 10, true);
+    //this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
+    this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
+    this.idleFrame = 10;
+    this.downedFrame = 5;
+    this.blockFrame = 4;
+    this.bottleFrame = 2;
+    this.uiFrame = 3;
+    this.char.frame = this.idleFrame;
+    this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
+    this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
+    this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
+    this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
     this.scaleFactor = 1;
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
@@ -84,6 +92,8 @@ Security = function(game, key, x, y, playerNum){
     this.keyA; //AG: standard attack button 
     this.keyB; //AG: special attack button
     
+    this.uiX; //AG: Where UI element will go
+    
     //AG: set keys based on player number
     if(this.playerNum == 1){
         this.keyLeft = Phaser.Keyboard.A;
@@ -95,6 +105,7 @@ Security = function(game, key, x, y, playerNum){
         this.prev_anim =1;
         this.faceRIGHT = true; //for Spawning
         this.char.scale.x = -1*this.scaleFactor;
+        this.uiX = 10;
     }else if(this.playerNum == 2){ 
         this.keyLeft = Phaser.Keyboard.K;
         this.keyRight = Phaser.Keyboard.COLON;
@@ -103,6 +114,7 @@ Security = function(game, key, x, y, playerNum){
         this.keyA = Phaser.Keyboard.I;//Phaser.Keyboard.OPEN_BRACKET;
         this.keyB = Phaser.Keyboard.U;//Phaser.Keyboard.CLOSED_BRACKET;
         this.prev_anim =0;
+        this.uiX = this.game.world.width - 60;
     }
 
     //hitbox stuff
@@ -113,6 +125,7 @@ Security = function(game, key, x, y, playerNum){
     this.fist.anchor.y = 0.5;
     this.fists.add(this.fist);
     this.fist.exists = false;
+    this.fist.alpha = 0;
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
@@ -160,6 +173,11 @@ Security = function(game, key, x, y, playerNum){
     //misc.
     this.canLightAttack = true;
     //this.loaded = true; //AG: can fire another projectile
+    
+    //ui light attack element
+    this.ui = game.add.sprite(this.uiX, 105, 'security_atlas');
+    this.ui.frame = this.uiFrame;
+    this.ui.scale.setTo(.5,.5);
 }
 
 Security.prototype = Object.create(Phaser.Sprite.prototype);
@@ -193,7 +211,8 @@ Security.prototype.preState =function (){
     
 
     if (this.staggered && !this.action.block){
-        this.char.loadTexture('security_stagger');
+        //this.char.loadTexture('security_stagger');
+        this.char.animations.play('security_stagger');
     }
     
     //cancel velocity when not in input
@@ -231,7 +250,8 @@ Security.prototype.preState =function (){
     //might need some changes here NH
     if (!this.timer.timerDone('downed') && this.action.down){
          //insert sprite change here
-         this.char.loadTexture('security_downed');
+         //this.char.loadTexture('security_downed');
+         this.char.frame = this.downedFrame;
          //this.action.down = false;
     }
 
@@ -298,24 +318,26 @@ Security.prototype.downed = function(){
 
 Security.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
-    this.char.loadTexture('security_A1'); //First animation frame
+    //this.char.loadTexture('security_A1'); //First animation frame
 
-    if (this.timer.timerDone('light2') && !this.action.attacking){ 
+    if (!this.action.attacking){//(this.timer.timerDone('light2') && !this.action.attacking){ 
         this.fist.position.x = -300; //AG: Keeps fist offscreen
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
         this.projectile(); //launches projectile
-        this.char.loadTexture('security_A2'); //Second animation frame
-
+        //this.char.loadTexture('security_A2'); //Second animation frame
+        this.char.animations.play('security_light');
+        this.ui.alpha = 0;
     }
 
     
-    if (this.timer.timerDone('light2')){
+    /*if (this.timer.timerDone('light2')){
         this.char.loadTexture('security_A2'); //Second animation frame
-    }
+    }*/
     
     if (this.timer.timerDone('light')){
-        this.char.loadTexture('security_idle');
+        //this.char.loadTexture('security_idle');
+        this.char.frame = this.idleFrame;
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -347,6 +369,7 @@ Security.prototype.heavyAttack = function(){
         this.body.velocity.y = 0;
 
         if (!this.action.attacking && !this.action.dive){
+            this.char.animations.play('security_heavy_cast');
             this.action.cancel = true;
             this.action.attacking = true;
             this.inHeavyAttack = true; //AG: Adding for knockback
@@ -364,17 +387,23 @@ Security.prototype.heavyAttack = function(){
         if (this.timer.timerDone('heavy_cast') && !this.action.dive){
             //can cancel out of attack NH
             //this.action.cancel = false;
+            this.char.animations.play("security_heavy_attack");
             
             this.fist.position.x = this.position.x; //AG: Brings fist back on screen
+            var fistYScale = 1;
+            var fistXScale = .4;
+            var fistYPosOffset = 150;
             
             if (this.faceRIGHT){
-                this.fist.scale.x = .5;//1;
-                this.fist.scale.y = .7;
+                this.fist.scale.x = fistXScale;//1;
+                this.fist.scale.y = fistYScale;
                 this.fist.position.x += 125;//250;
+                this.fist.position.y -= fistYPosOffset;
             }else{
-                this.fist.scale.x = .5;//1;
-                this.fist.scale.y = .7;
+                this.fist.scale.x = fistXScale;//1;
+                this.fist.scale.y = fistYScale;
                 this.fist.position.x -= 125;//250;
+                this.fist.position.y -= fistYPosOffset;
             }
             
         }
@@ -401,7 +430,8 @@ Security.prototype.heavyAttack = function(){
 
 //projectile
 Security.prototype.projectile = function(){
-    var bullet = game.add.sprite(this.position.x,this.position.y-200,'water_bottle'); //'player');
+    var bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas');//water_bottle'); //'player');
+    bullet.frame = this.bottleFrame;
     bullet.scale.setTo(1.3,1.3);
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);
@@ -585,6 +615,7 @@ Security.prototype.input = function(){
         if(this.timer.timerDone('reload')){
             this.canLightAttack = true;
             this.debugText.text = "loaded";
+            this.ui.alpha = 1;
         }
     
         //AG: Turn off shamed
@@ -684,7 +715,8 @@ Security.prototype.input = function(){
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
             }else{
-                this.char.loadTexture('security_idle');
+                //this.char.loadTexture('security_idle');
+                this.char.frame = this.idleFrame;
             }
             
             
@@ -726,7 +758,8 @@ Security.prototype.input = function(){
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
             }else{
-                this.char.loadTexture('security_idle');
+                //this.char.loadTexture('security_idle');
+                this.char.frame = this.idleFrame;
             }
 
             this.prev_anim = 1;
@@ -737,10 +770,11 @@ Security.prototype.input = function(){
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
             }else if (this.action.block){
-                this.char.loadTexture('security_block');
-
+                //this.char.loadTexture('security_block');
+                this.char.frame = this.blockFrame;
             }else{
-                this.char.loadTexture('security_idle');
+                //this.char.loadTexture('security_idle');
+                this.char.frame = this.idleFrame;
             }
             
             if (this.prev_anim == 0){

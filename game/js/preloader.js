@@ -34,11 +34,12 @@ var preloaderState = {
         game.load.image('security_idle', 'assets/img/Security/security_guard_idle.png');
         game.load.image('security_A1', 'assets/img/Security/security_guard_light_attack1.png');
         game.load.image('security_A2', 'assets/img/Security/security_guard_light_attack2.png');
-        game.load.image('security_stagger', 'assets/img/Security/security_guard_stagger.png');
+        //game.load.image('security_stagger', 'assets/img/Security/security_guard_stagger.png');
         game.load.image('security_block', 'assets/img/Security/security_guard_block.png');
         game.load.image('security_downed', 'assets/img/Security/security_guard_downed.png');
         //Projectiles
         game.load.image('water_bottle', 'assets/img/Security/water_bottle.png');
+        game.load.atlas('security_atlas', 'assets/img/Security/security_spritesheet.png','assets/img/Security/security_spritesheet.json');
         
 	},
 

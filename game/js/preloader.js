@@ -40,6 +40,9 @@ var preloaderState = {
         //Projectiles
         game.load.image('water_bottle', 'assets/img/Security/water_bottle.png');
         game.load.atlas('security_atlas', 'assets/img/Security/security_spritesheet.png','assets/img/Security/security_spritesheet.json');
+
+        //audio 
+        game.load.audio('jump_sound', ['assets/audio/jump.wav']);
         
 	},
 

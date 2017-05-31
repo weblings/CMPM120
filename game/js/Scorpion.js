@@ -167,7 +167,11 @@ Scorpion = function(game, key, x, y, playerNum){
     this.introFinished = false; //AG: Intro in Main finished
 
     //misc.
-    this.canLightAttack = true; 
+    this.canLightAttack = true;
+    
+    this.lightSound = game.add.audio('light');
+    this.heavySound = game.add.audio('heavy');
+    this.heavySoundPlayed = false;
 }
 
 Scorpion.prototype = Object.create(Phaser.Sprite.prototype);
@@ -357,7 +361,7 @@ Scorpion.prototype.lightAttack = function(){
         }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
-
+        this.lightSound.play();
 
 
     }
@@ -421,6 +425,10 @@ Scorpion.prototype.heavyAttack = function(){
             //can cancel out of attack NH
             //this.action.cancel = false;
             //this.char.loadTexture('scorpion_B2');
+            if(!this.heavySoundPlayed){
+                this.heavySound.play('',0,1,false,false);
+                this.heavySoundPlayed = true;
+            }
 
             this.char.frame=10;//('Scorpion_HeavyAttack');
             
@@ -442,6 +450,7 @@ Scorpion.prototype.heavyAttack = function(){
 
         if (this.timer.timerDone('heavy') && !this.action.dive){
             this.action.dive = true;
+            this.heavySoundPlayed = false;
         }
 
 

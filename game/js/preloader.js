@@ -35,8 +35,6 @@ var preloaderState = {
 
         //audio 
         game.load.audio('jump_sound', ['assets/audio/jump.wav']);
-        
-        //Sound
         game.load.audio('light','assets/audio/hit8.ogg');
         game.load.audio('heavy','assets/audio/hit15.ogg');
         game.load.audio('dive','assets/audio/hit9.ogg');

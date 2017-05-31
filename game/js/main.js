@@ -31,6 +31,10 @@ var mainState = {
         var tempgrav2 ;
         var tempvely2 ;
         var tempvelx2 ;
+
+        var gamerun
+
+        
         
     },
 
@@ -122,6 +126,8 @@ var mainState = {
         this.hitting = false;
         this.hitter = 1;
         this.justhev = false;
+
+        gamerun = true;
 
         //AG: sound tests
         //lightSound = game.add.audio('light');
@@ -262,10 +268,25 @@ var mainState = {
         }
 
         //press space to restart
-        if ((!player1.alive || !player2.alive) && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+        
+        if(!player1.alive && player2.alive && gamerun ){
+        	p2win++;
+        	gamerun = false;
+        }else if(player1.alive && !player2.alive && gamerun){
+        	p1win++;
+        	gamerun = false;
+        }
+
+
+        if ((!player1.alive || !player2.alive) && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && (p1win>=2 || p2win>=2)){
         	game.time.slowMotion = 1;
         	this.game.world.removeAll();
         	game.state.start('charSelect',false,false);
+
+        }else if ((!player1.alive || !player2.alive) && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+        	game.time.slowMotion = 1;
+        	this.game.world.removeAll();
+        	game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
         }
 
         

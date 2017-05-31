@@ -19,6 +19,10 @@ var charSelect = {
         var P1InstructionText;
         var P2Text;
         var P2InstructionText;
+
+        
+        var p1win;
+        var p2win;
     },
     
     create: function(){
@@ -47,6 +51,9 @@ var charSelect = {
         P1InstructionText = game.add.text(game.width/5,(3 * game.height)/4,"Select with E", {fontSize: '32px', fill: '#fff'});
         P2Text = game.add.text((3 * game.width)/5,game.height/2,characters[P2index], {fontSize: '32px', fill: '#fff'});
         P2InstructionText = game.add.text(3 * game.width/5,(3 * game.height)/4,"Select with I", {fontSize: '32px', fill: '#fff'});
+
+        p1win = 0;
+        p2win = 0;
     },
     
     update: function(){
@@ -112,7 +119,7 @@ var charSelect = {
         if(P1Chose && P2Chose){
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
-        game.state.start("main",false,true,P1CharChosen,P2CharChosen);
+        game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win);
         }
     }
     

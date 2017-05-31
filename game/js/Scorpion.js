@@ -72,10 +72,10 @@ Scorpion = function(game, key, x, y, playerNum){
     //Debug text and health bars
     this.healthBarScaleMaster = 1; //used to scale bars
     if(playerNum == 1){
-        this.debugText = game.add.text(16,16,'100', {fontSize: '32px', fill: '#000000'});
+        this.debugText = game.add.text(16,16,'', {fontSize: '32px', fill: '#000000'});
         this.healthBar = game.add.image(10,48,'health_full');
     }else{ //playerNum == 2
-        this.debugText = game.add.text(game.width - 100,16,'100', {fontSize: '32px', fill: '#000000'});
+        this.debugText = game.add.text(game.width - 100,16,'', {fontSize: '32px', fill: '#000000'});
         this.healthBar = game.add.image(game.width-460,48,'health_full');
     }
     
@@ -117,6 +117,7 @@ Scorpion = function(game, key, x, y, playerNum){
     this.fist.anchor.y = 0.5;
     this.fists.add(this.fist);
     this.fist.exists = false;
+    this.fist.alpha = 0.2;
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
@@ -172,8 +173,14 @@ Scorpion = function(game, key, x, y, playerNum){
     //Sounds
     this.lightSound = game.add.audio('light');
     this.heavySound = game.add.audio('heavy');
-    this.heavySoundPlayed = false;
+    this.heavyChargeSound = game.add.audio('heavy_charge');
     this.jump_sound = game.add.audio('jump_sound');
+    this.block_sound = game.add.audio('block');
+    this.perfect_block_sound = game.add.audio('perfect_block');
+    
+    this.heavyChargeSoundPlayed = false;
+    this.heavySoundPlayed = false;
+
 }
 
 Scorpion.prototype = Object.create(Phaser.Sprite.prototype);
@@ -411,7 +418,8 @@ Scorpion.prototype.heavyAttack = function(){
             this.action.cancel = true;
             this.action.attacking = true;
             this.inHeavyAttack = true; //AG: Adding for knockback
-            
+            this.char.xPosPreShake = this.char.position.x;
+            this.char.yPosPreShake = this.char.position.y;
         }
 
         if (this.action.cancel == true && game.input.keyboard.isDown(this.keyUp)){
@@ -421,13 +429,31 @@ Scorpion.prototype.heavyAttack = function(){
             this.body.velocity.y = this.jumpHeight;
             this.changeState(this.input);
             this.inHeavyAttack = false; //AG: Adding for knockback
+            this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+            this.heavyChargeSound.stop();
+        }
+        
+        if(!this.timer.timerDone('heavy_cast') && !this.action.dive){
+            this.char.position.x = this.char.xPosPreShake + game.rnd.between(-1,1);
+            this.char.position.y = this.char.yPosPreShake + game.rnd.between(-1,1);
+            if(!this.heavyChargeSoundPlayed){
+                this.heavyChargeSound.loop = true;
+                this.heavyChargeSound.play();
+                this.heavyChargeSoundPlayed = true;
+            }
         }
 
         if (this.timer.timerDone('heavy_cast') && !this.action.dive){
+            //AG: Reset to positions before shaking
+            this.char.position.x = this.char.xPosPreShake;
+            this.char.position.y = this.char.yPosPreShake;
+            
             //can cancel out of attack NH
             //this.action.cancel = false;
             //this.char.loadTexture('scorpion_B2');
             if(!this.heavySoundPlayed){
+                this.heavyChargeSoundPlayed = false;
+                this.heavyChargeSound.stop();
                 this.heavySound.play('',0,1,false,false);
                 this.heavySoundPlayed = true;
             }
@@ -507,9 +533,10 @@ Scorpion.prototype.takeDamage = function(damage,staggerLength){
         if (this.action.block){
             if (!this.timer.timerDone('perfectguard')){
                 def = 0;
+                this.perfect_block_sound.play();
             }else{
                 def = 0.2;
-
+                this.block_sound.play();
             }
             
         }else if (this.action.down){
@@ -600,7 +627,7 @@ Scorpion.prototype.takeDamage = function(damage,staggerLength){
             } 
         }
     }
-    this.debugText.text = this.health;
+    //this.debugText.text = this.health;
     this.timer.startTimer('shamed',50);
     this.timer.startTimer('staggered',staggerLength);
 }
@@ -670,6 +697,12 @@ Scorpion.prototype.input = function(){
         //AG: Turn off wallFrames
         if(this.timer.timerDone('wall')){
             this.hitAgainstWall = false;
+        }
+    
+        //AG: Keeps heavy_cast sound from continuing if heavy is cancelled
+        if(!this.action.heavyAttack){
+            this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+            this.heavyChargeSound.stop();
         }
     
         //AG: If staggered on: player can't move, else: turn staggered off

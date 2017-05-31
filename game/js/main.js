@@ -32,9 +32,6 @@ var mainState = {
         var tempvely2 ;
         var tempvelx2 ;
         
-        //Sounds
-        //var lightSound;
-        //var heavySound;
     },
 
 	create: function() {
@@ -129,6 +126,9 @@ var mainState = {
         //AG: sound tests
         //lightSound = game.add.audio('light');
         //heavySound = game.add.audio('heavy');
+        this.diveSound = game.add.audio('dive');
+        this.diveSoundPlayed = false;
+        this.lightSound = game.add.audio('light');
 	},
 
 	update: function() {
@@ -153,6 +153,10 @@ var mainState = {
             if(game.time.slowMotion < 4){
                 game.time.slowMotion += 1;
             }
+        }
+        
+        if (this.timer.timerDone('diveSound')){
+            this.diveSoundPlayed = false;
         }
         
 	    game.physics.arcade.collide(players,platforms);
@@ -295,6 +299,7 @@ var mainState = {
                 if(hitPlayer.action.block){ //AG: If opponent is blocking
                     mainState.SecurityLightAttack(player,hitbox,false);
                 }else{
+                    this.lightSound.play();
                     mainState.SecurityLightAttack(player,hitbox,true);
                 }
             }else{
@@ -307,6 +312,7 @@ var mainState = {
                 if(hitPlayer.action.block){
                     mainState.SecurityLightAttack(player,hitbox,false);
                 }else{
+                    this.lightSound.play();
                     mainState.SecurityLightAttack(player,hitbox,true);
                 }            
             }
@@ -358,6 +364,13 @@ var mainState = {
         player.takeDamage(5,250);
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.005, 100);
+                              
+            //Sound
+            if(!this.diveSoundPlayed){
+                this.diveSound.play();
+                this.diveSoundPlayed = true;
+                this.timer.startTimer('diveSound',500);
+            }
     	}
 
     },

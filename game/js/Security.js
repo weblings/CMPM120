@@ -79,10 +79,10 @@ Security = function(game, key, x, y, playerNum){
     //Debug text and health bars
     this.healthBarScaleMaster = 1; //used to scale bars
     if(playerNum == 1){
-        this.debugText = game.add.text(16,16,'100', {fontSize: '32px', fill: '#000000'});
+        this.debugText = game.add.text(16,16,'', {fontSize: '32px', fill: '#000000'});
         this.healthBar = game.add.image(10,48,'health_full');
     }else{ //playerNum == 2
-        this.debugText = game.add.text(game.width - 100,16,'100', {fontSize: '32px', fill: '#000000'});
+        this.debugText = game.add.text(game.width - 100,16,'', {fontSize: '32px', fill: '#000000'});
         this.healthBar = game.add.image(game.width-460,48,'health_full');
     }
     
@@ -181,6 +181,17 @@ Security = function(game, key, x, y, playerNum){
     this.ui = game.add.sprite(this.uiX, 105, 'security_atlas');
     this.ui.frame = this.uiFrame;
     this.ui.scale.setTo(.5,.5);
+    
+    //Sounds
+    //this.lightSound = game.add.audio('light'); //AG: TO-DO: Get throwing sound
+    this.heavySound = game.add.audio('heavy');
+    this.heavyChargeSound = game.add.audio('heavy_charge');
+    this.jump_sound = game.add.audio('jump_sound');
+    this.block_sound = game.add.audio('block');
+    this.perfect_block_sound = game.add.audio('perfect_block');
+    
+    this.heavyChargeSoundPlayed = false;
+    this.heavySoundPlayed = false;
 }
 
 Security.prototype = Object.create(Phaser.Sprite.prototype);
@@ -327,6 +338,7 @@ Security.prototype.lightAttack = function(){
         this.projectile(); //launches projectile
         this.char.animations.play('security_light');
         this.ui.alpha = 0;
+        //this.lightSound.play();
     }
 
     
@@ -385,8 +397,13 @@ Security.prototype.heavyAttack = function(){
         }
         
         if(!this.timer.timerDone('heavy_cast') && !this.action.dive){
-            this.char.position.x = this.char.xPosPreShake + game.rnd.between(-3,3);
-            this.char.position.y = this.char.yPosPreShake + game.rnd.between(-3,3);
+            this.char.position.x = this.char.xPosPreShake + game.rnd.between(-1,1);
+            this.char.position.y = this.char.yPosPreShake + game.rnd.between(-1,1);
+            if(!this.heavyChargeSoundPlayed){
+                this.heavyChargeSound.loop = true;
+                this.heavyChargeSound.play();
+                this.heavyChargeSoundPlayed = true;
+            }
         }
 
         if (this.timer.timerDone('heavy_cast') && !this.action.dive){
@@ -397,6 +414,12 @@ Security.prototype.heavyAttack = function(){
             //can cancel out of attack NH
             //this.action.cancel = false;
             this.char.animations.play("security_heavy_attack");
+            if(!this.heavySoundPlayed){
+                this.heavyChargeSoundPlayed = false;
+                this.heavyChargeSound.stop();
+                this.heavySound.play('',0,1,false,false);
+                this.heavySoundPlayed = true;
+            }
             
             this.fist.position.x = this.position.x; //AG: Brings fist back on screen
             var fistYScale = 1;
@@ -421,6 +444,7 @@ Security.prototype.heavyAttack = function(){
 
         if (this.timer.timerDone('heavy') && !this.action.dive){
             this.action.dive = true;
+            this.heavySoundPlayed = false;
         }
 
 
@@ -478,9 +502,10 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         if (this.action.block){
             if (!this.timer.timerDone('perfectguard')){
                 def = 0;
+                this.perfect_block_sound.play();
             }else{
                 def = 0.2;
-
+                this.block_sound.play();
             }
         }
         if(this.health - damage*def < 0){
@@ -567,7 +592,7 @@ Security.prototype.takeDamage = function(damage,staggerLength){
             } 
         }
     }
-    this.debugText.text = this.health;
+    //this.debugText.text = this.health;
     this.timer.startTimer('shamed',50);
     this.timer.startTimer('staggered',staggerLength);
 }
@@ -584,7 +609,9 @@ Security.prototype.applyKnockBack = function(x,y){
     if (this.action.down && this.action.jump){
         y1 = -100*y;
         x1 = 50*x;
-        
+    }else if(this.staggered && this.downCount >= 3){
+        y1 *= 10;
+        x1 *= 10;    
     }else if (this.action.down){
         y1=0.1;
         x1=0;
@@ -622,7 +649,7 @@ Security.prototype.input = function(){
         //AG: Reload
         if(this.timer.timerDone('reload')){
             this.canLightAttack = true;
-            this.debugText.text = "loaded";
+            //this.debugText.text = "loaded";
             this.ui.alpha = 1;
         }
     
@@ -634,6 +661,12 @@ Security.prototype.input = function(){
         //AG: Turn off wallFrames
         if(this.timer.timerDone('wall')){
             this.hitAgainstWall = false;
+        }
+        
+        //AG: Keeps heavy_cast sound from continuing if heavy is cancelled
+        if(!this.action.heavyAttack){
+            this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+            this.heavyChargeSound.stop();
         }
     
         //AG: If staggered on: player can't move, else: turn staggered off
@@ -647,6 +680,7 @@ Security.prototype.input = function(){
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
         if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
             this.body.velocity.y = this.jumpHeight;
+            this.jump_sound.play();
         }
 
         //blocking NH
@@ -672,7 +706,7 @@ Security.prototype.input = function(){
             this.timer.startTimer('light',400); //AG: done light attacking
             this.timer.startTimer('light2',200); //AG: Triggers second animation frame
             this.timer.startTimer('reload',1500); //AG: Allows player to throw again
-            this.debugText.text = "empty";
+            //this.debugText.text = "empty";
             //this.loaded = false;
 
             //this line might be redundant NH

@@ -32,6 +32,9 @@ var preloaderState = {
         
         //Security
         game.load.atlas('security_atlas', 'assets/img/Security/security_spritesheet.png','assets/img/Security/security_spritesheet.json');
+
+        //audio 
+        game.load.audio('jump_sound', ['assets/audio/jump.wav']);
         
         //Sound
         game.load.audio('light','assets/audio/hit8.ogg');

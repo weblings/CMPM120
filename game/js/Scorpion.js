@@ -277,7 +277,7 @@ Scorpion.prototype.preState =function (){
         
         if (!this.staggered && !this.action.jump){
             this.changeState(this.downed);
-            this.timer.startTimer('downed', this.downFactor*2);
+            this.timer.startTimer('downed', this.downFactor*3);
             this.timer.startTimer('forcedDown', this.downFactor);
             this.downCount = 0;
         }

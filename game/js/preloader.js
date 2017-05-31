@@ -38,7 +38,10 @@ var preloaderState = {
         
         //Sound
         game.load.audio('light','assets/audio/hit8.ogg');
-        game.load.audio('heavy','assets/audio/hit9.ogg')
+        game.load.audio('heavy','assets/audio/hit15.ogg');
+        game.load.audio('dive','assets/audio/hit9.ogg');
+        game.load.audio('block','assets/audio/hit2.ogg');
+        game.load.audio('heavy_charge','assets/audio/heavy_charge.ogg');
         
 	},
 

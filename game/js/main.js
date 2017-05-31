@@ -31,6 +31,10 @@ var mainState = {
         var tempgrav2 ;
         var tempvely2 ;
         var tempvelx2 ;
+        
+        //Sounds
+        //var lightSound;
+        //var heavySound;
     },
 
 	create: function() {
@@ -122,6 +126,9 @@ var mainState = {
         this.hitter = 1;
         this.justhev = false;
 
+        //AG: sound tests
+        //lightSound = game.add.audio('light');
+        //heavySound = game.add.audio('heavy');
 	},
 
 	update: function() {

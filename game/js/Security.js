@@ -30,7 +30,10 @@ Security = function(game, key, x, y, playerNum){
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
     this.char.anchor.y = 1
-
+    
+    //AG: Heavy state shaking
+    this.char.xPosPreShake;
+    this.char.yPosPreShake;
 
     /*
     //body hitbox
@@ -211,7 +214,6 @@ Security.prototype.preState =function (){
     
 
     if (this.staggered && !this.action.block){
-        //this.char.loadTexture('security_stagger');
         this.char.animations.play('security_stagger');
     }
     
@@ -250,7 +252,6 @@ Security.prototype.preState =function (){
     //might need some changes here NH
     if (!this.timer.timerDone('downed') && this.action.down){
          //insert sprite change here
-         //this.char.loadTexture('security_downed');
          this.char.frame = this.downedFrame;
          //this.action.down = false;
     }
@@ -318,14 +319,12 @@ Security.prototype.downed = function(){
 
 Security.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
-    //this.char.loadTexture('security_A1'); //First animation frame
 
     if (!this.action.attacking){//(this.timer.timerDone('light2') && !this.action.attacking){ 
         this.fist.position.x = -300; //AG: Keeps fist offscreen
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
         this.projectile(); //launches projectile
-        //this.char.loadTexture('security_A2'); //Second animation frame
         this.char.animations.play('security_light');
         this.ui.alpha = 0;
     }
@@ -336,7 +335,6 @@ Security.prototype.lightAttack = function(){
     }*/
     
     if (this.timer.timerDone('light')){
-        //this.char.loadTexture('security_idle');
         this.char.frame = this.idleFrame;
         this.changeState(this.input);
         this.action.attacking = false;
@@ -373,6 +371,8 @@ Security.prototype.heavyAttack = function(){
             this.action.cancel = true;
             this.action.attacking = true;
             this.inHeavyAttack = true; //AG: Adding for knockback
+            this.char.xPosPreShake = this.char.position.x;
+            this.char.yPosPreShake = this.char.position.y;
         }
 
         if (this.action.cancel == true && game.input.keyboard.isDown(this.keyUp)){
@@ -383,8 +383,17 @@ Security.prototype.heavyAttack = function(){
             this.changeState(this.input);
             this.inHeavyAttack = false; //AG: Adding for knockback
         }
+        
+        if(!this.timer.timerDone('heavy_cast') && !this.action.dive){
+            this.char.position.x = this.char.xPosPreShake + game.rnd.between(-3,3);
+            this.char.position.y = this.char.yPosPreShake + game.rnd.between(-3,3);
+        }
 
         if (this.timer.timerDone('heavy_cast') && !this.action.dive){
+            //AG: Reset to positions before shaking
+            this.char.position.x = this.char.xPosPreShake;
+            this.char.position.y = this.char.yPosPreShake;
+            
             //can cancel out of attack NH
             //this.action.cancel = false;
             this.char.animations.play("security_heavy_attack");
@@ -607,7 +616,6 @@ Security.prototype.input = function(){
         //this.debugText.text = this.position.y;
 
         if(!this.introFinished){
-            //if(this.playerNum == 1) this.char.frame = 5;
             return;
         }
 
@@ -680,7 +688,6 @@ Security.prototype.input = function(){
         if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
             this.timer.startTimer('heavy_cast',1000);
             this.timer.startTimer('heavy',1500);
-            //this.timer.startTimer('heavy',1000);
             this.changeState(this.heavyAttack);
 
 
@@ -710,12 +717,10 @@ Security.prototype.input = function(){
             }else{
                 this.body.velocity.x = -1*this.maxSpeed;
             }
-            //this.char.animations.play('left');
 
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
             }else{
-                //this.char.loadTexture('security_idle');
                 this.char.frame = this.idleFrame;
             }
             
@@ -726,7 +731,6 @@ Security.prototype.input = function(){
                 if (this.prev_anim == 0){
                     //this.char.frame = 0;
                 }else{
-                    //this.char.frame = 5;
                     this.anim_lock = true;
                 }
                 this.body.velocity.x = 0;
@@ -753,12 +757,10 @@ Security.prototype.input = function(){
             }else{
                 this.body.velocity.x = this.maxSpeed;
             }
-            //this.char.animations.play('right');
 
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
             }else{
-                //this.char.loadTexture('security_idle');
                 this.char.frame = this.idleFrame;
             }
 
@@ -770,10 +772,8 @@ Security.prototype.input = function(){
             if (this.action.jump){
                 //this.char.loadTexture('scorpion_jump');
             }else if (this.action.block){
-                //this.char.loadTexture('security_block');
                 this.char.frame = this.blockFrame;
             }else{
-                //this.char.loadTexture('security_idle');
                 this.char.frame = this.idleFrame;
             }
             
@@ -783,7 +783,6 @@ Security.prototype.input = function(){
 
                 this.faceRIGHT = false;
             }else{
-                //this.char.frame = 5;
                 this.char.faceRIGHT = true;
             }
             this.body.velocity.x = 0;

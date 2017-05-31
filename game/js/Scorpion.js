@@ -169,9 +169,11 @@ Scorpion = function(game, key, x, y, playerNum){
     //misc.
     this.canLightAttack = true;
     
+    //Sounds
     this.lightSound = game.add.audio('light');
     this.heavySound = game.add.audio('heavy');
     this.heavySoundPlayed = false;
+    this.jump_sound = game.add.audio('jump_sound');
 }
 
 Scorpion.prototype = Object.create(Phaser.Sprite.prototype);
@@ -277,7 +279,7 @@ Scorpion.prototype.preState =function (){
         
         if (!this.staggered && !this.action.jump){
             this.changeState(this.downed);
-            this.timer.startTimer('downed', this.downFactor*2);
+            this.timer.startTimer('downed', this.downFactor*3);
             this.timer.startTimer('forcedDown', this.downFactor);
             this.downCount = 0;
         }
@@ -371,7 +373,7 @@ Scorpion.prototype.lightAttack = function(){
         //this.debugText.text = 'done';
         //this.projectile();
         //this.char.loadTexture('scorpion_idle');
-        this.char.frame= 7;//('Scorpion_Idle');
+        this.char.frame= 4;//('Scorpion_Idle');
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -430,7 +432,7 @@ Scorpion.prototype.heavyAttack = function(){
                 this.heavySoundPlayed = true;
             }
 
-            this.char.frame=10;//('Scorpion_HeavyAttack');
+            this.char.frame=12;//('Scorpion_HeavyAttack');
             
             this.fist.position.x = this.position.x; //AG: Brings fist back on screen
             this.fist.position.y = this.position.y -100;
@@ -685,6 +687,7 @@ Scorpion.prototype.input = function(){
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
         if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
             this.body.velocity.y = this.jumpHeight;
+            this.jump_sound.play();
         }
 
         //blocking NH
@@ -757,7 +760,7 @@ Scorpion.prototype.input = function(){
 
             if (this.action.jump && !this.staggered){
                 //this.char.setTexture('scorpion_jump');
-                this.char.frame= 4;//('Scorpion_Jump');
+                this.char.frame= 10;//('Scorpion_Jump');
             }else if(this.staggered) {
                 //this.char.setTexture('scorpion_stagger');
                 this.char.animation.play('scorpion_stagger');
@@ -809,7 +812,7 @@ Scorpion.prototype.input = function(){
 
             if (this.action.jump){
                 //this.char.setTexture('scorpion_jump');
-                this.char.frame= 4;//('Scorpion_Jump');
+                this.char.frame= 10;//('Scorpion_Jump');
             }else{
                 //this.char.loadTexture('scorpion_idle');
                 
@@ -826,7 +829,7 @@ Scorpion.prototype.input = function(){
 
             if (this.action.jump && !this.action.stagfall){
                 //this.char.setTexture('scorpion_jump');
-                this.char.frame=4;//('Scorpion_Jump');
+                this.char.frame=10;//('Scorpion_Jump');
             }else if (this.action.block){
                 //this.char.setTexture('scorpion_crouch');
                 //this.char.frame=('Scorpion_crouch');
@@ -836,7 +839,7 @@ Scorpion.prototype.input = function(){
                 this.char.animations.play('scorpion_stagger');
             }else {
                 //this.char.setTexture('scorpion_idle');
-                this.char.frame=7;//('Scorpion_Idle');
+                this.char.frame=4;//('Scorpion_Idle');
             }
 
          

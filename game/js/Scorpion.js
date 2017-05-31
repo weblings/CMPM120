@@ -830,11 +830,7 @@ Scorpion.prototype.input = function(){
                 this.char.frame=7;//('Scorpion_Idle');
             }
 
-            
-
-
-
-            
+         
             if (this.prev_anim == 0){
                 //this.char.frame = 0;
                 this.char.scale.x = this.scaleFactor;

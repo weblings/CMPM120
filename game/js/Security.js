@@ -10,7 +10,7 @@ Security = function(game, key, x, y, playerNum){
     this.speed = 25; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 420;
 
-    this.jumpHeight = -800; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
+    this.jumpHeight = -1250; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = game.world.height - 20;
 
     //Animations
@@ -53,7 +53,7 @@ Security = function(game, key, x, y, playerNum){
 
     //Physics
     game.physics.enable(this);
-    this.gravFactor = 888;
+    this.gravFactor = 2000;
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
     this.body.gravity.y = this.gravFactor;
@@ -268,7 +268,7 @@ Security.prototype.preState =function (){
 
     if (this.downCount >= 3){
         this.changeState(this.downed);
-        this.timer.startTimer('downed', this.downFactor*2);
+        this.timer.startTimer('downed', this.downFactor*3);
         this.timer.startTimer('forcedDown', this.downFactor);
         this.downCount = 0;
     }
@@ -730,7 +730,9 @@ Security.prototype.input = function(){
                 
                 if (this.prev_anim == 0){
                     //this.char.frame = 0;
+                    this.faceRIGHT = false;
                 }else{
+                    this.char.scale.x = -1*this.scaleFactor;
                     this.anim_lock = true;
                 }
                 this.body.velocity.x = 0;

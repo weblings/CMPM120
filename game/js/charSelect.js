@@ -72,6 +72,17 @@ var charSelect = {
 
         p1win = 0;
         p2win = 0;
+        round = 0;
+        
+        //musicVolume = 0.7;
+        
+        main_music = game.add.audio('local_forecast');
+        //solution for looping bug from http://www.html5gamedevs.com/topic/13947-audio-not-looping-in-chrome/
+        main_music.play('',0, 1, true);
+        //main_music.onLoop.add(playMainMusic, this);       
+        main_music.mute = false;  
+        main_music.loop = true;
+        main_music.volume = 0.7;
     },
     
     update: function(){
@@ -161,8 +172,12 @@ var charSelect = {
             }else{
                 duplicate = false;
             }
-        game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate);
+        main_music.mute = true;
+        game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
         }
-    }
+    },
+    
+    playMainMusic: function() {	main_music.play('', 0, 1, true);}
+
     
 };

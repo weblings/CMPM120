@@ -178,10 +178,17 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.jump_sound = game.add.audio('jump_sound');
     this.block_sound = game.add.audio('block');
     this.perfect_block_sound = game.add.audio('perfect_block');
-    
+
     this.heavyChargeSoundPlayed = false;
     this.heavySoundPlayed = false;
-
+    this.attackHit = false;
+    
+    this.hitVolume = .8;
+    this.missVolume = .4;
+    this.blockVolume = .05;
+    
+    this.lightSound.volume = this.missVolume;
+    this.heavySound.volume = this.missVolume;
 }
 
 Simon.prototype = Object.create(Phaser.Sprite.prototype);
@@ -237,6 +244,7 @@ Simon.prototype.preState =function (){
         //this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         //this.fist.position.y = this.position.y;
         this.body.gravity.y = this.gravFactor;
+        this.lightSoundPlayed = false;
     }
 
     if (this.state != this.heavyAttack){
@@ -379,11 +387,12 @@ Simon.prototype.lightAttack = function(){
             this.body.velocity.x = -700;
 
         }
+        if(!this.lightSoundPlayed){
+            if(!this.attackHit) this.lightSound.play();
+            this.lightSoundPlayed = true;
+        }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
-        this.lightSound.play();
-
-
     }
 
     if (dir){
@@ -481,7 +490,7 @@ Simon.prototype.heavyAttack = function(){
             if(!this.heavySoundPlayed){
                 this.heavyChargeSoundPlayed = false;
                 this.heavyChargeSound.stop();
-                this.heavySound.play('',0,1,false,false);
+                if(!this.attackHit) this.heavySound.play();
                 this.heavySoundPlayed = true;
             }
 

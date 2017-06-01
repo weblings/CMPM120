@@ -198,7 +198,7 @@ Security = function(game, key, x, y, playerNum,dup){
     this.heavySoundPlayed = false;
     this.attackHit = false;
     
-    this.missVolume = .4;
+    this.missVolume = .6;
     
     this.lightSound.volume = this.missVolume;
     this.heavySound.volume = this.missVolume;

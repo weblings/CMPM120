@@ -29,10 +29,26 @@ var charSelect = {
     
     create: function(){
         
-        var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
-        logo.scale.setTo(.7,.7);
+        //var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
+        //logo.scale.setTo(.7,.7);
+		
+		var rabbitID = game.add.sprite(150,220,"rabbit_ID");
+		rabbitID.scale.setTo(.5,.5);
+		var guardID = game.add.sprite(150,220,"guard_ID");
+		guardID.scale.setTo(.5,.5);
+		var scorpID = game.add.sprite(150,220,"scorp_ID");
+		scorpID.scale.setTo(.5,.5);
+
+		var rabbitID2 = game.add.sprite(670,220,"rabbit_ID");
+		rabbitID2.scale.setTo(.5,.5);
+		var guardID2 = game.add.sprite(670,220,"guard_ID");
+		guardID2.scale.setTo(.5,.5);
+		var scorpID2 = game.add.sprite(670,220,"scorp_ID");
+		scorpID2.scale.setTo(.5,.5);
         
-        characters = ["SIMON","LITERALLY A SCORPION","SECURITY"];//["THE TEMP","LITERALLY A SCORPION","SECURITY"];
+        characters = ["LITERALLY A SCORPION","SECURITY", "SIMON"];//["THE TEMP","LITERALLY A SCORPION","SECURITY"];
+		sprites = [scorpID, guardID, rabbitID];
+		sprites2 = [scorpID2, guardID2, rabbitID2];
 
         P1keyUp = Phaser.Keyboard.W;
         P1keyDown = Phaser.Keyboard.S;
@@ -49,9 +65,9 @@ var charSelect = {
         P2Chose = false;
         
         game.stage.backgroundColor = "#000";
-        P1Text = game.add.text(game.width/5,game.height/2,characters[P1index], {fontSize: '32px', fill: '#fff'});
+      //  P1Text = game.add.text(game.width/5,game.height/2,characters[P1index], {fontSize: '32px', fill: '#fff'});
         P1InstructionText = game.add.text(game.width/5,(3 * game.height)/4,"Select with E", {fontSize: '32px', fill: '#fff'});
-        P2Text = game.add.text((3 * game.width)/5,game.height/2,characters[P2index], {fontSize: '32px', fill: '#fff'});
+     //   P2Text = game.add.text((3 * game.width)/5,game.height/2,characters[P2index], {fontSize: '32px', fill: '#fff'});
         P2InstructionText = game.add.text(3 * game.width/5,(3 * game.height)/4,"Select with I", {fontSize: '32px', fill: '#fff'});
 
         p1win = 0;
@@ -63,17 +79,25 @@ var charSelect = {
         //P1 keys
         if(game.input.keyboard.justPressed(P1keyUp) && !P1Chose){
             if(P1index + 2 > characters.length){
-                P1index = 0;
+               sprites[P1index].alpha = 0;
+			   P1index = 0;
+			   sprites[P1index].alpha = 1;
             }else{
+				sprites[P1index].alpha = 0;
                 P1index++;
+				sprites[P1index].alpha = 1;
             }
         }
         
         if(game.input.keyboard.justPressed(P1keyDown) && !P1Chose){
             if(P1index - 1 < 0){
+				sprites[P1index].alpha = 0;
                 P1index = characters.length-1;
+				sprites[P1index].alpha = 1;
             }else{
+				sprites[P1index].alpha = 0;
                 P1index--;
+				sprites[P1index].alpha = 1;
             }
         }
         
@@ -90,17 +114,25 @@ var charSelect = {
         //P2 keys
         if(game.input.keyboard.justPressed(P2keyUp) && !P2Chose){
             if(P2index + 2 > characters.length){
+				sprites2[P2index].alpha = 0;
                 P2index = 0;
+				sprites2[P2index].alpha = 1;
             }else{
+				sprites2[P2index].alpha = 0;
                 P2index++;
+				sprites2[P2index].alpha = 1;
             }
         }
         
         if(game.input.keyboard.justPressed(P2keyDown) && !P2Chose){
             if(P2index - 1 < 0){
+				sprites2[P2index].alpha = 0;
                 P2index = characters.length-1;
+				sprites2[P2index].alpha = 1;
             }else{
+				sprites2[P2index].alpha = 0;
                 P2index--;
+				sprites2[P2index].alpha = 1;
             }
         }
         
@@ -115,9 +147,10 @@ var charSelect = {
         }
         
         //update Text
-        P1Text.text = characters[P1index];
-        P2Text.text = characters[P2index];
 
+       // P1Text.text = characters[P1index];
+        //P2Text.text = characters[P2index];
+		
 
         
         if(P1Chose && P2Chose){

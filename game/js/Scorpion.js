@@ -231,7 +231,7 @@ Scorpion.prototype.preState =function (){
     //cancel velocity when not in input
     //might be the reason why dive kick is so slow
     //also the reason why down does not move in x NH
-    if (this.state != this.input && this.state != this.downed){
+    if (this.state != this.input && this.state != this.downed && this.state != this.dead ){
         this.body.velocity.x = 0;
     }
 
@@ -293,6 +293,10 @@ Scorpion.prototype.preState =function (){
         
                    
     }
+
+    if (!this.alive){
+        this.changeState(this.dead);
+    }
     
     
 }
@@ -318,6 +322,15 @@ Scorpion.prototype.fisting = function(x,y){
     fist.scale.setTo(0.25,0.25);
     this.fists.add(fist);
 
+}
+
+Scorpion.prototype.dead = function(){
+    if (!this.staggered && !this.action.jump){
+        this.body.velocity.x = 0
+        this.body.velocity.y = 0
+    }
+    
+    this.char.frame = 2
 }
 
 Scorpion.prototype.downed = function(){

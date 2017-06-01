@@ -351,7 +351,7 @@ var mainState = {
     },
   
     heavyAttack: function(player,hitbox){
-        mainState.calcKnockBack(400,40,player.playerNum);
+        mainState.calcKnockBack(400,80,player.playerNum);
 
         player.takeDamage(15,200);
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){

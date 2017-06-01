@@ -165,8 +165,8 @@ var mainState = {
         this.transitionStarted = false;
 
         //Music
-        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock']
-        index = game.rnd.between(0,2);
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka'];
+        index = game.rnd.between(0,3);
         main_music = game.add.audio(fight_music_choices[index]);
         main_music.play('',0, 1, true);
         main_music.mute = false;  

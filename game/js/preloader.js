@@ -41,6 +41,7 @@ var preloaderState = {
         game.load.audio('block','assets/audio/hit2.ogg');
         game.load.audio('heavy_charge','assets/audio/heavy_charge.ogg');
         game.load.audio('perfect_block','assets/audio/block.ogg');
+        game.load.audio('throw','assets/audio/throw.ogg');
 	},
 
 	create: function(){

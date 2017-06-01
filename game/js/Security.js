@@ -474,6 +474,7 @@ Security.prototype.projectile = function(){
     var bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas');//water_bottle'); //'player');
     bullet.frame = this.bottleFrame;
     bullet.scale.setTo(1.3,1.3);
+    bullet.anchor.setTo(0.5,0.5);
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);
     bullet.startLocation = this.position.x;
@@ -481,9 +482,11 @@ Security.prototype.projectile = function(){
 
     if (this.faceRIGHT){
         bullet.body.velocity.x = projectileSpeed;
+        bullet.body.angularVelocity = 800;
         bullet.headingRight = true;
     }else{
         bullet.body.velocity.x = -projectileSpeed;
+        bullet.body.angularVelocity = -800;
         bullet.headingRight = false;
     }
 

@@ -34,6 +34,7 @@ var preloaderState = {
         */
         //changes needed: divekick, jump, heavyattack
         game.load.atlas('scorpion_atlas', 'assets/img/Scorpion/spritesheet.png','assets/img/Scorpion/sprites.json');
+        game.load.atlas('scorpion_atlas2', 'assets/img/Scorpion/alt/spritesheet.png','assets/img/Scorpion/sprites.json');
         game.load.image('scorpion_blood','assets/img/Scorpion/Scorpion_blood.png');
 
 		//insert assets to load here NH

@@ -1,11 +1,12 @@
-Simon = function(game, key, x, y, playerNum){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum);
+Simon = function(game, key, x, y, playerNum, dup){
+    Phaser.Sprite.call(this, game, x, y, key, playerNum, dup);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
 
     //Vars
     this.charName = "SIMON";
+    this.copy = dup;
     this.playerNum = playerNum; //Player number
     this.speed = 30; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 420;
@@ -14,9 +15,17 @@ Simon = function(game, key, x, y, playerNum){
     this.floorLevel = game.world.height - 20;
 
     //Animations
-    this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
-    //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
-    this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+    if (this.copy){
+        this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
+        //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
+        this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+
+    }else{
+        this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
+        this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+
+    }
+    
 
     this.scaleFactor = 0.32;
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);

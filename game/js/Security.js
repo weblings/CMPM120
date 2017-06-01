@@ -1,4 +1,4 @@
-Security = function(game, key, x, y, playerNum){
+Security = function(game, key, x, y, playerNum,dup){
     Phaser.Sprite.call(this, game, x, y, key, playerNum);
     
     this.alpha = 0;//0.5;

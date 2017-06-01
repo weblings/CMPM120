@@ -118,11 +118,17 @@ var charSelect = {
         P1Text.text = characters[P1index];
         P2Text.text = characters[P2index];
 
+
         
         if(P1Chose && P2Chose){
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
-        game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win);
+            if (P1CharChosen == P2CharChosen){
+                duplicate = true;
+            }else{
+                duplicate = false;
+            }
+        game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate);
         }
     }
     

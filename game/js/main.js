@@ -140,9 +140,23 @@ var mainState = {
         
         this.hitVolume = .8;
         this.blockVolume = .05;
+        
+        this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu');
+        this.menu.anchor.setTo(0.5,0.5);
+        this.menu.alpha = 0;
+        this.menu.scale.setTo(.5,.5);
+        
+        pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        pauseKey.onDown.add(mainState.unpause, self);
 	},
 
 	update: function() {
+        
+        //Pause button
+        if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
+            this.menu.alpha = 1;
+            game.paused = true;
+        }
         
         //AG: If a player has won
         if(!player1.alive || !player2.alive){    
@@ -546,8 +560,31 @@ var mainState = {
         tween2 = game.add.tween(introText2).to( { alpha: 0 }, 850, "Linear", true, 200);
         player1.introFinished = true;
         player2.introFinished = true;
+    },
+    
+    //From THESE BEAUTIFUL HUMAN BEINGS: http://www.html5gamedevs.com/topic/501-input-ondown-and-mouse-keyboard-touch/
+    unpause: function(event){
+        // Only act if paused
+        if(game.paused){
+                if (game.input.keyboard.isDown(Phaser.KeyCode.ESC)){
+                    //UNPAUSE
+                    game.paused = false;
+                    mainState.menu.alpha = 0;
+                }else if(game.input.keyboard.isDown(Phaser.KeyCode.ONE)){
+                    //RESTART ROUND
+                }else if(game.input.keyboard.isDown(Phaser.KeyCode.TWO)){
+                    //RESTART MATCH
+                }else if(game.input.keyboard.isDown(Phaser.KeyCode.THREE)){
+                    //CHARACTER SELECT
+                }else if(game.input.keyboard.isDown(Phaser.KeyCode.FOUR)){
+                    //CONTROLS
+                }else if(game.input.keyboard.isDown(Phaser.KeyCode.FIVE)){
+                    //MAIN MENU
+                }         
+        }
     }
     
 };
+
 
 

@@ -141,13 +141,26 @@ var mainState = {
         this.hitVolume = .8;
         this.blockVolume = .05;
         
+        //AG: Pause
         this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu');
         this.menu.anchor.setTo(0.5,0.5);
         this.menu.alpha = 0;
         this.menu.scale.setTo(.5,.5);
         
         pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        oneKey = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+        twoKey = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+        threeKey = game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+        fourKey = game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+        fiveKey = game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+        
         pauseKey.onDown.add(mainState.unpause, self);
+        oneKey.onDown.add(mainState.unpause, self);
+        twoKey.onDown.add(mainState.unpause, self);
+        threeKey.onDown.add(mainState.unpause, self);
+        fourKey.onDown.add(mainState.unpause, self);
+        fiveKey.onDown.add(mainState.unpause, self);
+
 	},
 
 	update: function() {
@@ -566,25 +579,46 @@ var mainState = {
     unpause: function(event){
         // Only act if paused
         if(game.paused){
-                if (game.input.keyboard.isDown(Phaser.KeyCode.ESC)){
-                    //UNPAUSE
-                    game.paused = false;
-                    mainState.menu.alpha = 0;
-                }else if(game.input.keyboard.isDown(Phaser.KeyCode.ONE)){
-                    //RESTART ROUND
-                }else if(game.input.keyboard.isDown(Phaser.KeyCode.TWO)){
-                    //RESTART MATCH
-                }else if(game.input.keyboard.isDown(Phaser.KeyCode.THREE)){
-                    //CHARACTER SELECT
-                }else if(game.input.keyboard.isDown(Phaser.KeyCode.FOUR)){
-                    //CONTROLS
-                }else if(game.input.keyboard.isDown(Phaser.KeyCode.FIVE)){
-                    //MAIN MENU
-                }         
+            if (game.input.keyboard.isDown(Phaser.KeyCode.ESC)){
+                //UNPAUSE
+                game.paused = false;
+                mainState.menu.alpha = 0;
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.ONE)){
+                //RESTART ROUND
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                game.paused = false;
+                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.TWO)){
+                //RESTART MATCH
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                p1win = 0;
+                p2win = 0;
+                game.paused = false;
+                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.THREE)){
+                //CHARACTER SELECT
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                game.paused = false;
+                game.state.start('charSelect');
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.FOUR)){
+                //CONTROLS
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                game.paused = false;
+                //game.state.start('controls');
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.FIVE)){
+                //MAIN MENU
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                game.paused = false;
+                game.state.start('title',false,false);
+            } 
         }
     }
     
 };
-
 
 

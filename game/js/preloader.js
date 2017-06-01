@@ -13,6 +13,7 @@ var preloaderState = {
 		game.load.image('scorp_ID','assets/img/Scorpion_Passport.png');
 		game.load.image('rabbit_ID','assets/img/Rabbit_Passport.png');
 		game.load.image('guard_ID','assets/img/SecurityGuard_Passport.png');
+        game.load.image('pause_menu','assets/img/menu_bg_temp');
         
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');

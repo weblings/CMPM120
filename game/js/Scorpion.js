@@ -1,5 +1,5 @@
 Scorpion = function(game, key, x, y, playerNum, dup){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum);
+    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -7,6 +7,7 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     //Vars
     this.charName = "LITERALLY A SCORPION";
     this.playerNum = playerNum; //Player number
+    this.copy = dup;
     this.speed = 30; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 420;
 
@@ -14,9 +15,16 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     this.floorLevel = game.world.height - 20;
 
     //Animations
-    this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas');
-    this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
-    this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
+    if (this.copy){
+        this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2');
+        this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
+        this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
+    }else{
+        this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas');
+        this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
+        this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
+    }
+
 
     this.scaleFactor = 0.4;
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
@@ -487,11 +495,11 @@ Scorpion.prototype.heavyAttack = function(){
             
             if (this.faceRIGHT){
                 this.fist.scale.x = 0.5;
-                this.fist.position.x += 100;
+                this.fist.position.x += 110;
 
             }else{
                 this.fist.scale.x = 0.5;
-                this.fist.position.x -= 100;
+                this.fist.position.x -= 110;
             }
             
         }

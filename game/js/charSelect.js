@@ -23,6 +23,8 @@ var charSelect = {
         
         var p1win;
         var p2win;
+
+        var duplicate;
     },
     
     create: function(){
@@ -44,7 +46,7 @@ var charSelect = {
 		var scorpID2 = game.add.sprite(670,220,"scorp_ID");
 		scorpID2.scale.setTo(.5,.5);
         
-        characters = ["LITERALLY A SCORPION","SECURITY", "RABBIT"];//["THE TEMP","LITERALLY A SCORPION","SECURITY"];
+        characters = ["LITERALLY A SCORPION","SECURITY", "SIMON"];//["THE TEMP","LITERALLY A SCORPION","SECURITY"];
 		sprites = [scorpID, guardID, rabbitID];
 		sprites2 = [scorpID2, guardID2, rabbitID2];
 
@@ -148,7 +150,6 @@ var charSelect = {
        // P1Text.text = characters[P1index];
         //P2Text.text = characters[P2index];
 		
-
         
         if(P1Chose && P2Chose){
             P1CharChosen = characters[P1index];

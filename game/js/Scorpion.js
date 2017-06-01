@@ -39,9 +39,12 @@ Scorpion = function(game, key, x, y, playerNum){
 
     //particle
     this.emitter = game.add.emitter(0, 0, 100);
-    this.emitter.makeParticles('player');
+    this.emitter.makeParticles('scorpion_blood');
+    //this.emitter.scale.setTo(0.1,0.1);
     game.physics.enable(this.emitter);
     this.emitter.enableBody = true;
+    this.emitter.blendMode = 2;
+    this.emitter.alpha = 0.8;
     //this.emitter.gravity = 400;
 
 
@@ -180,7 +183,14 @@ Scorpion = function(game, key, x, y, playerNum){
     
     this.heavyChargeSoundPlayed = false;
     this.heavySoundPlayed = false;
+    this.attackHit = false;
 
+    this.hitVolume = .8;
+    this.missVolume = .4;
+    this.blockVolume = .05;
+    
+    this.lightSound.volume = this.missVolume;
+    this.heavySound.volume = this.missVolume;
 }
 
 Scorpion.prototype = Object.create(Phaser.Sprite.prototype);
@@ -259,6 +269,7 @@ Scorpion.prototype.preState =function (){
         this.maxSpeed = 420;
     }
 
+    //may need to redo this NH
     if (!this.action.jump && this.action.down){
         this.body.velocity.x = 0;
     }
@@ -383,9 +394,7 @@ Scorpion.prototype.lightAttack = function(){
         }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
-        this.lightSound.play();
-
-
+        if(!this.attackHit) this.lightSound.play();
     }
     //this.debugText.text = this.position.x;
     
@@ -467,7 +476,7 @@ Scorpion.prototype.heavyAttack = function(){
             if(!this.heavySoundPlayed){
                 this.heavyChargeSoundPlayed = false;
                 this.heavyChargeSound.stop();
-                this.heavySound.play('',0,1,false,false);
+                if(!this.attackHit) this.heavySound.play();
                 this.heavySoundPlayed = true;
             }
 

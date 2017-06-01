@@ -1,55 +1,35 @@
-Security = function(game, key, x, y, playerNum){
+Simon = function(game, key, x, y, playerNum){
     Phaser.Sprite.call(this, game, x, y, key, playerNum);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
 
     //Vars
-    this.charName = "SECURITY";
+    this.charName = "SIMON";
     this.playerNum = playerNum; //Player number
-    this.speed = 25; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.speed = 30; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 420;
 
     this.jumpHeight = -1250; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = game.world.height - 20;
 
     //Animations
-    //this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
-    this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
-    this.idleFrame = 10;
-    this.downedFrame = 5;
-    this.blockFrame = 4;
-    this.bottleFrame = 2;
-    this.uiFrame = 3;
-    this.char.frame = this.idleFrame;
-    this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
-    this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
-    this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
-    this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
-    this.scaleFactor = 1;
+    this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
+    //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
+    this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+
+    this.scaleFactor = 0.32;
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
     this.char.anchor.y = 1
-    
-    //AG: Heavy state shaking
-    this.char.xPosPreShake;
-    this.char.yPosPreShake;
-
-    /*
-    //body hitbox
-    this.hitboxes = game.add.physicsGroup();
-    this.hitbox = game.add.sprite(this.position.x,this.position.y,'hitbox');
-    this.hitbox.scale.setTo(0.25,0.25);
-    //this.hitbox.anchor.x = 0.5;
-    //this.hitbox.anchor.y = 0.5;
-    this.hitboxes.add(this.hitbox);
-    */
 
     //particle
     this.emitter = game.add.emitter(0, 0, 100);
     this.emitter.makeParticles('player');
     game.physics.enable(this.emitter);
     this.emitter.enableBody = true;
+    //this.emitter.gravity = 400;
+
 
     //Physics
     game.physics.enable(this);
@@ -60,8 +40,7 @@ Security = function(game, key, x, y, playerNum){
     
     //AG: Scale to find character sizing
 
-    //this.scale.setTo(1.05,0.50);
-    this.scale.setTo(.5,.65);
+    this.scale.setTo(1,0.48);
     this.anchor.x = 0.5;
     //this.anchor.y = 0.5;
 
@@ -95,8 +74,6 @@ Security = function(game, key, x, y, playerNum){
     this.keyA; //AG: standard attack button 
     this.keyB; //AG: special attack button
     
-    this.uiX; //AG: Where UI element will go
-    
     //AG: set keys based on player number
     if(this.playerNum == 1){
         this.keyLeft = Phaser.Keyboard.A;
@@ -108,7 +85,6 @@ Security = function(game, key, x, y, playerNum){
         this.prev_anim =1;
         this.faceRIGHT = true; //for Spawning
         this.char.scale.x = -1*this.scaleFactor;
-        this.uiX = 10;
     }else if(this.playerNum == 2){ 
         this.keyLeft = Phaser.Keyboard.K;
         this.keyRight = Phaser.Keyboard.COLON;
@@ -117,18 +93,17 @@ Security = function(game, key, x, y, playerNum){
         this.keyA = Phaser.Keyboard.I;//Phaser.Keyboard.OPEN_BRACKET;
         this.keyB = Phaser.Keyboard.U;//Phaser.Keyboard.CLOSED_BRACKET;
         this.prev_anim =0;
-        this.uiX = this.game.world.width - 60;
     }
 
     //hitbox stuff
     this.fists = game.add.physicsGroup();
     this.fist = fist = game.add.sprite(this.position.x,this.position.y,'fist');
-    this.fist.scale.setTo(0.25,0.25);
+    this.fist.scale.setTo(0.6,0.6);
     this.fist.anchor.x = 0.5;
     this.fist.anchor.y = 0.5;
     this.fists.add(this.fist);
     this.fist.exists = false;
-    this.fist.alpha = 0;
+    this.fist.alpha = 0.8;
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
@@ -155,6 +130,7 @@ Security = function(game, key, x, y, playerNum){
     this.action.cancel = false;
     this.action.perfectguard =false;
 
+    this.action.predown = false;
     this.action.down = false;
     this.action.noCollide =false;
 
@@ -163,27 +139,25 @@ Security = function(game, key, x, y, playerNum){
     //down stuff NH
     this.downCount = 0;
     this.downFactor = 1000;
+
+
+
+
     
     //AG: Knockback stuff
     this.inLightAttack = false;
     this.inHeavyAttack = false;
-    this.touchLeftWallAt = 62.5;
-    this.touchRightWallAt = 1217.5;
+    this.touchLeftWallAt = 131.25;
+    this.touchRightWallAt = 1148.75;
     this.hitAgainstWall = false;
     
     this.introFinished = false; //AG: Intro in Main finished
 
     //misc.
     this.canLightAttack = true;
-    //this.loaded = true; //AG: can fire another projectile
-    
-    //ui light attack element
-    this.ui = game.add.sprite(this.uiX, 105, 'security_atlas');
-    this.ui.frame = this.uiFrame;
-    this.ui.scale.setTo(.5,.5);
     
     //Sounds
-    this.lightSound = game.add.audio('throw'); //AG: TO-DO: Get throwing sound
+    this.lightSound = game.add.audio('light');
     this.heavySound = game.add.audio('heavy');
     this.heavyChargeSound = game.add.audio('heavy_charge');
     this.jump_sound = game.add.audio('jump_sound');
@@ -192,20 +166,15 @@ Security = function(game, key, x, y, playerNum){
     
     this.heavyChargeSoundPlayed = false;
     this.heavySoundPlayed = false;
-    this.attackHit = false;
-    
-    this.missVolume = .4;
-    
-    this.lightSound.volume = this.missVolume;
-    this.heavySound.volume = this.missVolume;
+
 }
 
-Security.prototype = Object.create(Phaser.Sprite.prototype);
-Security.prototype.constructor = Player;
+Simon.prototype = Object.create(Phaser.Sprite.prototype);
+Simon.prototype.constructor = Player;
 
 //state to clear state stuff NH
 //basically reset stuff every frame
-Security.prototype.preState =function (){
+Simon.prototype.preState =function (){
 
 
     //reset hitbox
@@ -214,13 +183,13 @@ Security.prototype.preState =function (){
     this.hitbox.position.y = this.position.y +70;
     */
     this.char.position.x = this.position.x ;
-    this.char.position.y= this.position.y+50;//18; //AG: Trying to lower character
+    this.char.position.y= this.position.y+10;
 
     //this value needs to be changed when art is finalized NH
     if (!this.action.attacking){
         this.fist.exists = false;
         this.fist.position.x = this.position.x;
-        this.fist.position.y = this.position.y-50;
+        this.fist.position.y = this.position.y-70;
     }
     
     
@@ -228,40 +197,46 @@ Security.prototype.preState =function (){
     if (this.position.y > this.floorLevel){
         this.position.y = this.floorLevel;
     }
-    
 
-    if (this.staggered && !this.action.block){
-        this.char.animations.play('security_stagger');
-    }
+    //stagger sprite change
+
     
+    if (this.staggered && !this.action.block){
+        //this.char.loadTexture('scorpion_stagger');
+        this.char.animations.play('rabbit_stagger');
+    }
+
     //cancel velocity when not in input
     //might be the reason why dive kick is so slow
     //also the reason why down does not move in x NH
-    if (this.state != this.input && this.state != this.downed){
+    if (this.state != this.input && this.state != this.downed && this.state != this.dead && this.state != this.lightAttack){
         this.body.velocity.x = 0;
     }
+
     if (this.state != this.lightAttack){
         //light attack reset
-        this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
-        this.fist.position.y = this.position.y;
+        //this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
+        //this.fist.position.y = this.position.y;
         this.body.gravity.y = this.gravFactor;
     }
 
     if (this.state != this.heavyAttack){
-        this.fist.scale.x = 0.25;
+        this.fist.scale.x = 0.60;
     }
 
     //check if in air
-     if (this.position.y != this.floorLevel){
+    //if (!this.body.touching.down){
+
+    if (this.position.y != this.floorLevel){
         this.action.jump = true;
-         this.maxSpeed = 120;
+        this.maxSpeed = 120;
+
     }else{
         this.action.jump = false;
-        //this.canLightAttack = true;
+        this.canLightAttack = true;
         this.maxSpeed = 420;
     }
-    
-    //AG: Pasted from Scorpion for downed state
+
     if (!this.action.jump && this.action.down){
         this.body.velocity.x = 0;
     }
@@ -269,7 +244,8 @@ Security.prototype.preState =function (){
     //might need some changes here NH
     if (!this.timer.timerDone('downed') && this.action.down){
          //insert sprite change here
-         this.char.frame = this.downedFrame;
+         //this.char.loadTexture('scorpion_down');
+         this.char.frame = 3;//'Simon_Down';
          //this.action.down = false;
     }
 
@@ -284,37 +260,50 @@ Security.prototype.preState =function (){
     }
 
     if (this.downCount >= 3){
-        this.changeState(this.downed);
-        this.timer.startTimer('downed', this.downFactor*3);
-        this.timer.startTimer('forcedDown', this.downFactor);
-        this.downCount = 0;
+        
+        
+        if (!this.staggered && !this.action.jump){
+            this.changeState(this.downed);
+            this.timer.startTimer('downed', this.downFactor*3);
+            this.timer.startTimer('forcedDown', this.downFactor);
+            this.downCount = 0;
+        }
+        
+                   
     }
+
+    if (!this.alive){
+        this.changeState(this.dead);
+    }
+    
+    
 }
 
 
 // function to change states e.g. this.changeState(this.otherState)
-Security.prototype.changeState = function(currentState){
+Simon.prototype.changeState = function(currentState){
     this.state = currentState;
 }
 
 
-Security.prototype.update = function(){
+Simon.prototype.update = function(){
     //reset some stuff
     this.preState();
     //current state NH
     this.state();
 }
 
-
-//unneeded probably safe to delete NH
-Security.prototype.fisting = function(x,y){
-    var fist = game.add.sprite(x,y,'fist');
-    fist.scale.setTo(0.25,0.25);
-    this.fists.add(fist);
-
+Simon.prototype.dead = function(){
+    if (!this.staggered && !this.action.jump){
+        this.body.velocity.x = 0
+        this.body.velocity.y = 0
+    }
+    
+    this.char.frame = 3
 }
 
-Security.prototype.downed = function(){
+Simon.prototype.downed = function(){
+
      this.action.down = true;
      this.action.attacking = false;
      this.action.dive = false;
@@ -323,39 +312,72 @@ Security.prototype.downed = function(){
      //this.timer.startTimer('downed', 2500);
  
      if ((game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
-         game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
-         game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
-         this.action.down = false;
-         this.changeState(this.input);
+        game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
+        game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
+        this.action.down = false;
+        this.changeState(this.input);
      }
  
      
 }
 
-//--States--//
-
-Security.prototype.lightAttack = function(){
+//states
+Simon.prototype.lightAttack = function(){
     dir = this.faceRIGHT;
+    
+    //insert attack animation here
+    //this.char.loadTexture('scorpion_A');
+    this.char.frame= 0;//('Simon_LightAttack');
 
-    if (!this.action.attacking){//(this.timer.timerDone('light2') && !this.action.attacking){ 
-        this.fist.position.x = -300; //AG: Keeps fist offscreen
+    this.fist.exists = true;
+    this.fist.position.x = this.position.x;
+    this.fist.position.y = this.position.y-110;
+
+    if (this.action.jump ){
+        this.body.gravity.y = 0;
+        this.body.velocity.y =0 ;
+    }
+    
+
+    if (!this.action.attacking){
+
+        if (dir){
+            //var fist = game.add.sprite(this.position.x+50,this.position.y,'fist');
+            //fist.scale.setTo(0.25,0.25);
+            //this.fists.add(fist);
+            //this.fist.position.x += 50;
+            //this.fist.position.x +=  150; 
+            this.body.velocity.x = 700;
+
+        } else{
+            //var fist = game.add.sprite(this.position.x-50,this.position.y,'fist');
+            //fist.scale.setTo(0.25,0.25);
+            //this.fists.add(fist);
+            //this.fist.position.x -= 50;
+            //this.fist.position.x -= 150; //AG: Brings fist back on screen
+            this.body.velocity.x = -700;
+
+        }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
-        this.projectile(); //launches projectile
-        this.char.animations.play('security_light');
-        this.ui.alpha = 0;
-        if(!this.attackHit){
-            this.lightSound.play();
-        }
+        this.lightSound.play();
+
+
     }
 
-    
-    /*if (this.timer.timerDone('light2')){
-        this.char.loadTexture('security_A2'); //Second animation frame
-    }*/
+    if (dir){
+        this.fist.position.x = this.position.x+20;
+    }else{
+        this.fist.position.x = this.position.x-20;
+    }
+
+    //this.debugText.text = this.position.x;
     
     if (this.timer.timerDone('light')){
-        this.char.frame = this.idleFrame;
+        //this.debugText.text = 'done';
+        //this.projectile();
+        //this.char.loadTexture('scorpion_idle');
+        this.char.frame= 0;//('Simon_Idle');
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -364,14 +386,17 @@ Security.prototype.lightAttack = function(){
         
 }
 
-Security.prototype.heavyAttack = function(){
-    this.fist.exists = true;
+Simon.prototype.heavyAttack = function(){
+    //this.fist.exists = true;
+    //this.char.loadTexture('scorpion_B1');
+    this.char.frame=0;//('Simon_HeavyAttackCharge');
 
     if (this.action.jump || (this.position.y < this.floorLevel)){
         //dive kick
-
+        this.fist.exists = false;
+        this.char.frame = 11;
         
-        this.body.velocity.y = 1200; //750
+        this.body.velocity.y = 1200;
         if (this.faceRIGHT){
             this.body.velocity.x = 250;
         }else{
@@ -383,12 +408,13 @@ Security.prototype.heavyAttack = function(){
         
     }else{
         //reset velocity
+        
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
         if (!this.action.attacking && !this.action.dive){
-            this.char.animations.play('security_heavy_cast');
             this.action.cancel = true;
+            this.fist.exists = true;
             this.action.attacking = true;
             this.inHeavyAttack = true; //AG: Adding for knockback
             this.char.xPosPreShake = this.char.position.x;
@@ -402,6 +428,8 @@ Security.prototype.heavyAttack = function(){
             this.body.velocity.y = this.jumpHeight;
             this.changeState(this.input);
             this.inHeavyAttack = false; //AG: Adding for knockback
+            this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+            this.heavyChargeSound.stop();
         }
         
         if(!this.timer.timerDone('heavy_cast') && !this.action.dive){
@@ -421,29 +449,26 @@ Security.prototype.heavyAttack = function(){
             
             //can cancel out of attack NH
             //this.action.cancel = false;
-            this.char.animations.play("security_heavy_attack");
+            //this.char.loadTexture('scorpion_B2');
             if(!this.heavySoundPlayed){
                 this.heavyChargeSoundPlayed = false;
                 this.heavyChargeSound.stop();
-                if(!this.attackHit) this.heavySound.play();
+                this.heavySound.play('',0,1,false,false);
                 this.heavySoundPlayed = true;
             }
+
+            this.char.frame=0;//('Simon_HeavyAttack');
             
             this.fist.position.x = this.position.x; //AG: Brings fist back on screen
-            var fistYScale = 1;
-            var fistXScale = .4;
-            var fistYPosOffset = 150;
+            this.fist.position.y = this.position.y -100;
             
             if (this.faceRIGHT){
-                this.fist.scale.x = fistXScale;//1;
-                this.fist.scale.y = fistYScale;
-                this.fist.position.x += 125;//250;
-                this.fist.position.y -= fistYPosOffset;
+                this.fist.scale.x = 0.5;
+                this.fist.position.x += 100;
+
             }else{
-                this.fist.scale.x = fistXScale;//1;
-                this.fist.scale.y = fistYScale;
-                this.fist.position.x -= 125;//250;
-                this.fist.position.y -= fistYPosOffset;
+                this.fist.scale.x = 0.5;
+                this.fist.position.x -= 100;
             }
             
         }
@@ -470,41 +495,38 @@ Security.prototype.heavyAttack = function(){
 }
 
 //projectile
-Security.prototype.projectile = function(){
-    var bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas');//water_bottle'); //'player');
-    bullet.frame = this.bottleFrame;
-    bullet.scale.setTo(1.3,1.3);
+Simon.prototype.projectile = function(){
+    var bullet = game.add.sprite(this.position.x, this.position.y-75, 'player');
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);
     bullet.startLocation = this.position.x;
-    var projectileSpeed = 400;
+
 
     if (this.faceRIGHT){
-        bullet.body.velocity.x = projectileSpeed;
+        bullet.body.velocity.x = 200;
         bullet.headingRight = true;
     }else{
-        bullet.body.velocity.x = -projectileSpeed;
+        bullet.body.velocity.x = -200;
         bullet.headingRight = false;
     }
 
     
 }
 
-Security.prototype.killBullets = function(b){
-    var killLocation = 600;
+Simon.prototype.killBullets = function(b){
     if (b.headingRight){
-        if (b.position.x - b.startLocation > killLocation){
+        if (b.position.x - b.startLocation > 500){
             b.kill();
         }
     }else{
-        if (b.startLocation - b.position.x > killLocation){
+        if (b.startLocation - b.position.x > 500){
             b.kill();
         }
     }
 }
 
 //Should make player take Damage
-Security.prototype.takeDamage = function(damage,staggerLength){
+Simon.prototype.takeDamage = function(damage,staggerLength){
     var def = 1;
     if(!this.shamed){
         if (this.action.block){
@@ -515,6 +537,9 @@ Security.prototype.takeDamage = function(damage,staggerLength){
                 def = 0.2;
                 this.block_sound.play();
             }
+            
+        }else if (this.action.down){
+            def = 0;
         }
         if(this.health - damage*def < 0){
             this.health = 0;
@@ -522,16 +547,17 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         }else this.damage(damage*def);
         this.shamed = true;
         this.staggered = true;
-        
+
         //count for down NH
-        if (!this.action.block){
+        if (!this.action.block && !this.action.down){
             this.timer.startTimer('downWindow',2000);
             this.downCount++;
+            console.log(this.downCount);
             this.emitter.x = this.position.x;
-            this.emitter.y = this.position.y-200;
+            this.emitter.y = this.position.y-75;
             this.emitter.start(true, 2000, null, 10);
+
         }
-        
         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged
             this.healthBarScaleMaster = 1 - ((damage*def)/100);
@@ -605,7 +631,7 @@ Security.prototype.takeDamage = function(damage,staggerLength){
     this.timer.startTimer('staggered',staggerLength);
 }
 
-Security.prototype.applyKnockBack = function(x,y){
+Simon.prototype.applyKnockBack = function(x,y){
 
     var x1 = x;
     var y1 = y;
@@ -613,13 +639,20 @@ Security.prototype.applyKnockBack = function(x,y){
         x1 *= 0.2;
         y1 = 0.1;
     }
-    //Added for downed state NH
+    /*
+    if (this.action.jump && this.downCount>=3){
+            y1 = -2*y;
+    }
+    */
+
+
     if (this.action.down && this.action.jump){
         y1 = -100*y;
         x1 = 50*x;
+        
     }else if(this.staggered && this.downCount >= 3){
         y1 *= 10;
-        x1 *= 10;    
+        x1 *= 10; 
     }else if (this.action.down){
         y1=0.1;
         x1=0;
@@ -628,7 +661,7 @@ Security.prototype.applyKnockBack = function(x,y){
     this.body.velocity.y = y1;
 }
 
-Security.prototype.wallKnockBack = function(x,y,wallFrames){
+Simon.prototype.wallKnockBack = function(x,y,wallFrames){
     
     if(this.hitAgainstWall) return;
     
@@ -636,7 +669,7 @@ Security.prototype.wallKnockBack = function(x,y,wallFrames){
     var y1 = y;
     if (this.action.block){
         x1 *= 0.2;
-        y1 = 0;
+        y1 = 0.1;
     }
     this.body.velocity.x = x1;
     this.body.velocity.y = y1;
@@ -645,22 +678,16 @@ Security.prototype.wallKnockBack = function(x,y,wallFrames){
 }
 
 //Handles player input and change state accordingly NH
-Security.prototype.input = function(){
+Simon.prototype.input = function(){
 
 
         //this.debugText.text = this.position.y;
 
         if(!this.introFinished){
+            //if(this.playerNum == 1) this.char.frame = 5;
             return;
         }
 
-        //AG: Reload
-        if(this.timer.timerDone('reload')){
-            this.canLightAttack = true;
-            //this.debugText.text = "loaded";
-            this.ui.alpha = 1;
-        }
-    
         //AG: Turn off shamed
         if(this.timer.timerDone('shamed')){
             this.shamed = false;
@@ -670,7 +697,7 @@ Security.prototype.input = function(){
         if(this.timer.timerDone('wall')){
             this.hitAgainstWall = false;
         }
-        
+    
         //AG: Keeps heavy_cast sound from continuing if heavy is cancelled
         if(!this.action.heavyAttack){
             this.heavyChargeSoundPlayed = false; //AG: Sound stuff
@@ -681,6 +708,10 @@ Security.prototype.input = function(){
         if(this.staggered == true && !this.timer.timerDone('staggered')){
             return;
         }else{
+            if (this.action.jump && this.staggered == true){
+                this.action.stagfall = true;
+            }
+            
             this.staggered = false;
         }
     
@@ -698,6 +729,7 @@ Security.prototype.input = function(){
                 this.timer.startTimer('perfectguard',250);
                 this.action.perfectguard = true;
             }
+            
         }else{
             //possibly have a millisecond of un guarding? NH
             this.action.block = false;
@@ -711,11 +743,7 @@ Security.prototype.input = function(){
         //light attack NH
         if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
             //set timer for half a second
-            this.timer.startTimer('light',400); //AG: done light attacking
-            this.timer.startTimer('light2',200); //AG: Triggers second animation frame
-            this.timer.startTimer('reload',1500); //AG: Allows player to throw again
-            //this.debugText.text = "empty";
-            //this.loaded = false;
+            this.timer.startTimer('light',666);
 
             //this line might be redundant NH
             this.body.velocity.x = 0
@@ -728,8 +756,9 @@ Security.prototype.input = function(){
         //heavy attack NH
         
         if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
-            this.timer.startTimer('heavy_cast',1000);
-            this.timer.startTimer('heavy',1500);
+            this.timer.startTimer('heavy_cast',500);
+            this.timer.startTimer('heavy',1000);
+            //this.timer.startTimer('heavy',1000);
             this.changeState(this.heavyAttack);
 
 
@@ -759,11 +788,19 @@ Security.prototype.input = function(){
             }else{
                 this.body.velocity.x = -1*this.maxSpeed;
             }
+            //this.char.animations.play('left');
 
-            if (this.action.jump){
-                //this.char.loadTexture('scorpion_jump');
-            }else{
-                this.char.frame = this.idleFrame;
+            if (this.action.jump && !this.staggered){
+                //this.char.setTexture('scorpion_jump');
+                this.char.frame= 0;//('Simon_Jump');
+            }else if(this.staggered) {
+                //this.char.setTexture('scorpion_stagger');
+                this.char.animation.play('rabbit_stagger');
+            }else {
+                //this.char.loadTexture('scorpion_idle');
+                //this.char.setTexture('scorp_walk');
+                //this.char.animations.add('scorpion_walk',[0,1], 10, true);
+                this.char.frame = 0;
             }
             
             
@@ -772,8 +809,10 @@ Security.prototype.input = function(){
                 
                 if (this.prev_anim == 0){
                     //this.char.frame = 0;
+
                     this.faceRIGHT = false;
                 }else{
+                    //this.char.frame = 5;
                     this.char.scale.x = -1*this.scaleFactor;
                     this.anim_lock = true;
                 }
@@ -801,11 +840,18 @@ Security.prototype.input = function(){
             }else{
                 this.body.velocity.x = this.maxSpeed;
             }
+            //this.char.animations.play('right');
 
             if (this.action.jump){
-                //this.char.loadTexture('scorpion_jump');
+                //this.char.setTexture('scorpion_jump');
+                this.char.frame= 0;//('Simon_Jump');
             }else{
-                this.char.frame = this.idleFrame;
+                //this.char.loadTexture('scorpion_idle');
+                
+                //this.char.setTexture('scorp_walk');
+                //this.char.animations.add('scorpion_walk',[0,1], 10, true);
+                //this.char.animations.play('scorpion_walk');
+                this.char.frame= 0;
             }
 
             this.prev_anim = 1;
@@ -813,23 +859,38 @@ Security.prototype.input = function(){
 
         }else{
             this.body.velocity.x = 0;
-            if (this.action.jump){
-                //this.char.loadTexture('scorpion_jump');
+
+            if (this.action.jump && !this.action.stagfall){
+                //this.char.setTexture('scorpion_jump');
+                this.char.frame=0;//('Simon_Jump');
             }else if (this.action.block){
-                this.char.frame = this.blockFrame;
-            }else{
-                this.char.frame = this.idleFrame;
+                //this.char.setTexture('scorpion_crouch');
+                //this.char.frame=('Simon_crouch');
+                this.char.frame=2;
+            }else if(this.action.stagfall) {
+                //this.char.setTexture('scorpion_stagger');
+                this.char.animations.play('rabbit_stagger');
+            }else {
+                //this.char.setTexture('scorpion_idle');
+                this.char.frame=0;//('Simon_Idle');
             }
-            
+
+         
             if (this.prev_anim == 0){
                 //this.char.frame = 0;
-                //this.char.scale.x = this.scaleFactor;
+                this.char.scale.x = this.scaleFactor;
 
                 this.faceRIGHT = false;
             }else{
+                //this.char.frame = 5;
+                this.char.scale.x = -1*this.scaleFactor;
                 this.char.faceRIGHT = true;
             }
             this.body.velocity.x = 0;
+        }
+
+        if (this.action.stagfall && !this.action.jump){
+            this.action.stagfall = false;
         }
 
 };

@@ -14,6 +14,9 @@ var preloaderState = {
 		game.load.image('rabbit_ID','assets/img/Rabbit_Passport.png');
 		game.load.image('guard_ID','assets/img/SecurityGuard_Passport.png');
         
+        //simon
+        game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');
+
         //Scorpion
         /*
         game.load.image('scorpion_idle','assets/img/Scorpion/Scorpion_Idle.png');
@@ -30,6 +33,7 @@ var preloaderState = {
         */
         //changes needed: divekick, jump, heavyattack
         game.load.atlas('scorpion_atlas', 'assets/img/Scorpion/spritesheet.png','assets/img/Scorpion/sprites.json');
+        game.load.image('scorpion_blood','assets/img/Scorpion/Scorpion_blood.png');
 
 		//insert assets to load here NH
         
@@ -44,6 +48,7 @@ var preloaderState = {
         game.load.audio('block','assets/audio/hit2.ogg');
         game.load.audio('heavy_charge','assets/audio/heavy_charge.ogg');
         game.load.audio('perfect_block','assets/audio/block.ogg');
+        game.load.audio('throw','assets/audio/throw.ogg');
 	},
 
 	create: function(){

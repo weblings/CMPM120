@@ -50,8 +50,8 @@ var mainState = {
 		var bg = game.add.sprite(0,0,'bg');
 		bg.scale.setTo(0.8);
         
-        if(P1CharChosen == "THE TEMP"){
-	       player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+        if(P1CharChosen == "SIMON"){
+	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
         }else if(P1CharChosen == "LITERALLY A SCORPION"){
             player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
         }else{
@@ -59,8 +59,8 @@ var mainState = {
         }
 	    game.add.existing(player1);
 	    
-        if(P2CharChosen == "THE TEMP"){
-	       player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+        if(P2CharChosen == "SIMON"){
+	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
         }else if(P2CharChosen == "LITERALLY A SCORPION"){
             player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
         }else{
@@ -129,12 +129,17 @@ var mainState = {
 
         gamerun = true;
 
-        //AG: sound tests
-        //lightSound = game.add.audio('light');
-        //heavySound = game.add.audio('heavy');
+        //AG: Sound
+        this.heavySound = game.add.audio('heavy');
         this.diveSound = game.add.audio('dive');
-        this.diveSoundPlayed = false;
         this.lightSound = game.add.audio('light');
+        
+        this.heavySoundPlayed = false;
+        this.diveSoundPlayed = false;
+        this.lightSoundPlayed = false;
+        
+        this.hitVolume = .8;
+        this.blockVolume = .05;
 	},
 
 	update: function() {
@@ -161,8 +166,17 @@ var mainState = {
             }
         }
         
+        //AG: Allows sounds to play again
+        if (this.timer.timerDone('heavySound')){
+            this.heavySoundPlayed = false;
+        }
+        
         if (this.timer.timerDone('diveSound')){
             this.diveSoundPlayed = false;
+        }
+        
+        if (this.timer.timerDone('lightSound')){
+            this.lightSoundPlayed = false;
         }
         
 	    game.physics.arcade.collide(players,platforms);
@@ -194,7 +208,6 @@ var mainState = {
         }
 
         //Light and heavy attacks
-
         game.physics.arcade.overlap(player1,fist2,mainState.determineAttack, null, this);
         game.physics.arcade.overlap(player2,fist1,mainState.determineAttack, null, this);
 
@@ -307,8 +320,20 @@ var mainState = {
             attackingPlayer = player1;
         }
         
+        attackingPlayer.attackHit = true;
+        
         //AG: Determines which attack they did
         if(attackingPlayer.inHeavyAttack || attackingPlayer.action.dive){
+            
+            //AG: Sound handling
+            if(!this.heavySoundPlayed){
+                if(hitPlayer.action.block) this.heavySound.volume = this.blockVolume;
+                else this.heavySound.volume = this.hitVolume;
+                this.heavySound.play();
+                this.heavySoundPlayed = true;
+                this.timer.startTimer('heavySound',500);
+            }
+            
             if(attackingPlayer.charName == "SECURITY"){
                 mainState.SecurityHeavyAttack(player,hitbox);
             }else{ //AG: Every other character's stuff is here rn (Should change by final)
@@ -318,12 +343,23 @@ var mainState = {
             if(attackingPlayer.charName == "SECURITY"){
                 attackingPlayer.bullets.removeAll(); //AG: If bullet hits opponent, destroy it
                 if(hitPlayer.action.block){ //AG: If opponent is blocking
+                    this.lightSound.volume = this.blockVolume;
+                    this.lightSound.play();
                     mainState.SecurityLightAttack(player,hitbox,false);
                 }else{
+                    this.lightSound.volume = this.hitVolume;
                     this.lightSound.play();
                     mainState.SecurityLightAttack(player,hitbox,true);
                 }
             }else{
+                //AG: Sound handling
+                if(!this.lightSoundPlayed){
+                    if(hitPlayer.action.block) this.lightSound.volume = this.blockVolume;
+                    else this.lightSound.volume = this.hitVolume;
+                    this.lightSound.play();
+                    this.lightSoundPlayed = true;
+                    this.timer.startTimer('lightSound',500);
+                }
                 mainState.lightAttack(player,hitbox);
             }
         }else{
@@ -331,8 +367,11 @@ var mainState = {
             if(attackingPlayer.charName == "SECURITY"){
                 attackingPlayer.bullets.removeAll();
                 if(hitPlayer.action.block){
+                    this.lightSound.volume = this.blockVolume;
+                    this.lightSound.play();
                     mainState.SecurityLightAttack(player,hitbox,false);
                 }else{
+                    this.lightSound.volume = this.hitVolume;
                     this.lightSound.play();
                     mainState.SecurityLightAttack(player,hitbox,true);
                 }            

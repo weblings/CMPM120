@@ -16,6 +16,7 @@ var preloaderState = {
         
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');
+        game.load.atlas('rabbit_atlas2','assets/img/simon/alt/spritesheet.png','assets/img/simon/sprites.json');
 
         //Scorpion
         /*

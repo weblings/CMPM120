@@ -51,20 +51,20 @@ var mainState = {
 		bg.scale.setTo(0.8);
         
         if(P1CharChosen == "SIMON"){
-	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
         }else if(P1CharChosen == "LITERALLY A SCORPION"){
-            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
         }else{
-            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
         }
 	    game.add.existing(player1);
 	    
         if(P2CharChosen == "SIMON"){
-	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate);
         }else if(P2CharChosen == "LITERALLY A SCORPION"){
-            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate);
         }else{
-            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate);
         }
 	    game.add.existing(player2);
 

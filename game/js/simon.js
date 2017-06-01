@@ -175,7 +175,8 @@ Simon = function(game, key, x, y, playerNum, dup){
     
     this.heavyChargeSoundPlayed = false;
     this.heavySoundPlayed = false;
-
+    
+    this.attackHit = false;
 }
 
 Simon.prototype = Object.create(Phaser.Sprite.prototype);
@@ -227,6 +228,7 @@ Simon.prototype.preState =function (){
         //this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         //this.fist.position.y = this.position.y;
         this.body.gravity.y = this.gravFactor;
+        this.lightSoundPlayed = false;
     }
 
     if (this.state != this.heavyAttack){
@@ -367,11 +369,12 @@ Simon.prototype.lightAttack = function(){
             this.body.velocity.x = -700;
 
         }
+        if(!this.lightSoundPlayed){
+            if(!this.attackHit) this.lightSound.play();
+            this.lightSoundPlayed = true;
+        }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
-        this.lightSound.play();
-
-
     }
 
     if (dir){
@@ -462,7 +465,7 @@ Simon.prototype.heavyAttack = function(){
             if(!this.heavySoundPlayed){
                 this.heavyChargeSoundPlayed = false;
                 this.heavyChargeSound.stop();
-                this.heavySound.play('',0,1,false,false);
+                if(!this.attackHit) this.heavySound.play();
                 this.heavySoundPlayed = true;
             }
 

@@ -344,6 +344,7 @@ Scorpion.prototype.fisting = function(x,y){
 }
 
 Scorpion.prototype.dead = function(){
+    this.heavyChargeSound.mute = true;
     if (!this.staggered && !this.action.jump){
         this.body.velocity.x = 0
         this.body.velocity.y = 0

@@ -52,6 +52,12 @@ var preloaderState = {
         game.load.audio('heavy_charge','assets/audio/heavy_charge.ogg');
         game.load.audio('perfect_block','assets/audio/block.ogg');
         game.load.audio('throw','assets/audio/throw.ogg');
+        
+        //music
+        game.load.audio('local_forecast','assets/audio/Local_Forecast.ogg');
+        game.load.audio('exit_the_premises', 'assets/audio/Exit_the_Premises.ogg');
+        game.load.audio('ouroboros', 'assets/audio/Ouroboros.ogg');
+        game.load.audio('kick_shock', 'assets/audio/Kick_Shock.ogg');
 	},
 
 	create: function(){

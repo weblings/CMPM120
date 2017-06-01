@@ -164,6 +164,14 @@ var mainState = {
         //Transition
         this.transitionStarted = false;
 
+        //Music
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock']
+        index = game.rnd.between(0,2);
+        main_music = game.add.audio(fight_music_choices[index]);
+        main_music.play('',0, 1, true);
+        main_music.mute = false;  
+        main_music.loop = true;
+        main_music.volume = .7;
 	},
 
 	update: function() {
@@ -200,6 +208,8 @@ var mainState = {
         //AG: Allows sounds to play again
         if (this.timer.timerDone('heavySound')){
             this.heavySoundPlayed = false;
+            player1.attackHit = false;
+            player2.attackHit = false;
         }
         
         if (this.timer.timerDone('diveSound')){
@@ -208,6 +218,8 @@ var mainState = {
         
         if (this.timer.timerDone('lightSound')){
             this.lightSoundPlayed = false;
+            player1.attackHit = false;
+            player2.attackHit = false;
         }
         
 	    game.physics.arcade.collide(players,platforms);
@@ -331,6 +343,7 @@ var mainState = {
                     if(this.timer.timerDone('endMatch')){
                         game.time.slowMotion = 1;
                         this.game.world.removeAll();
+                        main_music.mute = true;
                         game.state.start('charSelect',false,false);
                     }
                 }else if ((!player1.alive || !player2.alive) && !this.transitionStarted){
@@ -340,6 +353,7 @@ var mainState = {
                     if(this.timer.timerDone('nextRound')){
                     game.time.slowMotion = 1;
                     this.game.world.removeAll();
+                    main_music.mute = true;
                     game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
                     }
                 }
@@ -605,6 +619,7 @@ var mainState = {
                 game.time.slowMotion = 1;
                 this.game.world.removeAll();
                 game.paused = false;
+                main_music.mute = true;
                 game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.TWO)){
                 //RESTART MATCH
@@ -613,24 +628,28 @@ var mainState = {
                 p1win = 0;
                 p2win = 0;
                 game.paused = false;
+                main_music.mute = true;
                 game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.THREE)){
                 //CHARACTER SELECT
                 game.time.slowMotion = 1;
                 this.game.world.removeAll();
                 game.paused = false;
+                main_music.mute = true;
                 game.state.start('charSelect');
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.FOUR)){
                 //CONTROLS
                 game.time.slowMotion = 1;
                 this.game.world.removeAll();
                 game.paused = false;
+                main_music.mute = true;
                 //game.state.start('controls');
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.FIVE)){
                 //MAIN MENU
                 game.time.slowMotion = 1;
                 this.game.world.removeAll();
                 game.paused = false;
+                main_music.mute = true;
                 game.state.start('title',false,false);
             } 
         }

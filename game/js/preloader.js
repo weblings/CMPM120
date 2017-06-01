@@ -63,6 +63,10 @@ var preloaderState = {
         game.load.audio('exit_the_premises', 'assets/audio/Exit_the_Premises.ogg');
         game.load.audio('ouroboros', 'assets/audio/Ouroboros.ogg');
         game.load.audio('kick_shock', 'assets/audio/Kick_Shock.ogg');
+        game.load.audio('ultra_polka', 'assets/audio/Ultra_Polka.ogg');
+        game.load.audio('pariasian', 'assets/audio/Parisian.ogg');
+        game.load.audio('shoegazer','assets/audio/Shoegazer.ogg');
+
 	},
 
 	create: function(){

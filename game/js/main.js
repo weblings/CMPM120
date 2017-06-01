@@ -165,13 +165,17 @@ var mainState = {
         this.transitionStarted = false;
 
         //Music
-        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock']
-        index = game.rnd.between(0,2);
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka'];
+        index = game.rnd.between(0,3);
         main_music = game.add.audio(fight_music_choices[index]);
         main_music.play('',0, 1, true);
         main_music.mute = false;  
         main_music.loop = true;
         main_music.volume = .7;
+        
+        deathSound = game.add.audio('shoegazer');
+        deathSound.volume = .7;
+        deathSound.mute = false;
         
         //Rounds won UI
         p2wins1 = game.add.sprite(game.world.width/2+135,60,'round_unresolved');
@@ -210,13 +214,17 @@ var mainState = {
         	p2win++;
         	gamerun = false;
             round++;
+            deathSound.play();
         }else if(player1.alive && !player2.alive && gamerun){
         	p1win++;
         	gamerun = false;
             round++;
+            deathSound.play();
         }
 
-        if(!player1.alive || !player2.alive){    
+        if(!player1.alive || !player2.alive){
+            main_music.fadeOut(500);
+            
             if(!player1.alive && !player2.alive){
                 introText2.text = "YOU'RE BOTH DETAINED"
             }else if(!player1.alive){
@@ -373,23 +381,25 @@ var mainState = {
         if(player1.introFinished){
             if(game.time.slowMotion == 4){
                 if ((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && !this.transitionStarted){
-                    this.timer.startTimer('endMatch',4000);
+                    this.timer.startTimer('endMatch',6000);
                     this.transitionStarted = true;
                 }else if((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && this.transitionStarted){
                     if(this.timer.timerDone('endMatch')){
                         game.time.slowMotion = 1;
                         this.game.world.removeAll();
                         main_music.mute = true;
+                        deathSound.mute = true;
                         game.state.start('charSelect',false,false);
                     }
                 }else if ((!player1.alive || !player2.alive) && !this.transitionStarted){
-                    this.timer.startTimer('nextRound',4000);
+                    this.timer.startTimer('nextRound',6000);
                     this.transitionStarted = true;
                 }else if ((!player1.alive || !player2.alive) && this.transitionStarted){
                     if(this.timer.timerDone('nextRound')){
                     game.time.slowMotion = 1;
                     this.game.world.removeAll();
                     main_music.mute = true;
+                    deathSound.mute = true;
                     game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
                     }
                 }
@@ -666,6 +676,7 @@ var mainState = {
                 this.game.world.removeAll();
                 game.paused = false;
                 main_music.mute = true;
+                deathSound.mute = true;
                 game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.TWO)){
                 //RESTART MATCH
@@ -675,6 +686,7 @@ var mainState = {
                 p2win = 0;
                 game.paused = false;
                 main_music.mute = true;
+                deathSound.mute = true;
                 game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.THREE)){
                 //CHARACTER SELECT
@@ -682,6 +694,7 @@ var mainState = {
                 this.game.world.removeAll();
                 game.paused = false;
                 main_music.mute = true;
+                deathSound.mute = true;
                 game.state.start('charSelect');
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.FOUR)){
                 //CONTROLS
@@ -689,6 +702,7 @@ var mainState = {
                 this.game.world.removeAll();
                 game.paused = false;
                 main_music.mute = true;
+                deathSound.mute = true;
                 //game.state.start('controls');
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.FIVE)){
                 //MAIN MENU
@@ -696,6 +710,7 @@ var mainState = {
                 this.game.world.removeAll();
                 game.paused = false;
                 main_music.mute = true;
+                deathSound.mute = true;
                 game.state.start('title',false,false);
             } 
         }

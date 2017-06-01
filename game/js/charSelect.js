@@ -72,6 +72,7 @@ var charSelect = {
 
         p1win = 0;
         p2win = 0;
+        round = 0;
         
         //musicVolume = 0.7;
         
@@ -172,7 +173,7 @@ var charSelect = {
                 duplicate = false;
             }
         main_music.mute = true;
-        game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate);
+        game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
         }
     },
     

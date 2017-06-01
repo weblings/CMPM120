@@ -183,18 +183,30 @@ var mainState = {
         }
         
         //AG: If a player has won
+        if(!player1.alive && player2.alive && gamerun ){
+        	p2win++;
+        	gamerun = false;
+            round++;
+        }else if(player1.alive && !player2.alive && gamerun){
+        	p1win++;
+        	gamerun = false;
+            round++;
+        }
+
         if(!player1.alive || !player2.alive){    
             if(!player1.alive && !player2.alive){
                 introText2.text = "YOU'RE BOTH DETAINED"
             }else if(!player1.alive){
                 introText1.text = player2.charName
                 introText1.fontSize = 64;
-                introText2.text = "GETS TO KEEP THEIR SEAT"
+                if(p2win < 2) introText2.text = "WINS ROUND "+round;
+                else introText2.text = "GETS TO KEEP THEIR SEAT"
                 introText1.alpha = 1;
             }else{ //player2 dead
                 introText1.text = player1.charName
                 introText1.fontSize = 64;
-                introText2.text = "GETS TO KEEP THEIR SEAT"
+                if(p1win < 2) introText2.text = "WINS ROUND "+round;
+                else introText2.text = "GETS TO KEEP THEIR SEAT"
                 introText1.alpha = 1;
             }
             introText2.alpha = 1; //make text visible
@@ -322,16 +334,7 @@ var mainState = {
         	}
         	
         }
-
-        //press space to restart
-        
-        if(!player1.alive && player2.alive && gamerun ){
-        	p2win++;
-        	gamerun = false;
-        }else if(player1.alive && !player2.alive && gamerun){
-        	p1win++;
-        	gamerun = false;
-        }
+    
         
         //AG: Transitions
         if(player1.introFinished){
@@ -354,7 +357,7 @@ var mainState = {
                     game.time.slowMotion = 1;
                     this.game.world.removeAll();
                     main_music.mute = true;
-                    game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
+                    game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
                     }
                 }
             }
@@ -409,7 +412,7 @@ var mainState = {
                     this.lightSound.play();
                     mainState.SecurityLightAttack(player,hitbox,true);
                 }
-            }else{
+            }else if(attackingPlayer.charName == "LITERALLY A SCORPION"){
                 //AG: Sound handling
                 if(!this.lightSoundPlayed){
                     if(hitPlayer.action.block) this.lightSound.volume = this.blockVolume;
@@ -417,6 +420,16 @@ var mainState = {
                     this.lightSound.play();
                     this.lightSoundPlayed = true;
                     this.timer.startTimer('lightSound',500);
+                }
+                mainState.lightAttack(player,hitbox);
+            }else{
+                //AG: Sound handling
+                if(!this.lightSoundPlayed){
+                    if(hitPlayer.action.block) this.lightSound.volume = this.blockVolume;
+                    else this.lightSound.volume = this.hitVolume;
+                    this.lightSound.play();
+                    this.lightSoundPlayed = true;
+                    this.timer.startTimer('lightSound',1000);
                 }
                 mainState.lightAttack(player,hitbox);
             }
@@ -620,7 +633,7 @@ var mainState = {
                 this.game.world.removeAll();
                 game.paused = false;
                 main_music.mute = true;
-                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
+                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.TWO)){
                 //RESTART MATCH
                 game.time.slowMotion = 1;
@@ -629,7 +642,7 @@ var mainState = {
                 p2win = 0;
                 game.paused = false;
                 main_music.mute = true;
-                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
+                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.THREE)){
                 //CHARACTER SELECT
                 game.time.slowMotion = 1;

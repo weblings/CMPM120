@@ -172,11 +172,17 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.jump_sound = game.add.audio('jump_sound');
     this.block_sound = game.add.audio('block');
     this.perfect_block_sound = game.add.audio('perfect_block');
-    
+
     this.heavyChargeSoundPlayed = false;
     this.heavySoundPlayed = false;
-    
     this.attackHit = false;
+    
+    this.hitVolume = .8;
+    this.missVolume = .4;
+    this.blockVolume = .05;
+    
+    this.lightSound.volume = this.missVolume;
+    this.heavySound.volume = this.missVolume;
 }
 
 Simon.prototype = Object.create(Phaser.Sprite.prototype);

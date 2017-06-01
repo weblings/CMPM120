@@ -160,6 +160,9 @@ var mainState = {
         threeKey.onDown.add(mainState.unpause, self);
         fourKey.onDown.add(mainState.unpause, self);
         fiveKey.onDown.add(mainState.unpause, self);
+        
+        //Transition
+        this.transitionStarted = false;
 
 	},
 
@@ -192,6 +195,7 @@ var mainState = {
                 game.time.slowMotion += 1;
             }
         }
+        
         
         //AG: Allows sounds to play again
         if (this.timer.timerDone('heavySound')){
@@ -316,17 +320,30 @@ var mainState = {
         	p1win++;
         	gamerun = false;
         }
-
-
-        if ((!player1.alive || !player2.alive) && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && (p1win>=2 || p2win>=2)){
-        	game.time.slowMotion = 1;
-        	this.game.world.removeAll();
-        	game.state.start('charSelect',false,false);
-
-        }else if ((!player1.alive || !player2.alive) && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
-        	game.time.slowMotion = 1;
-        	this.game.world.removeAll();
-        	game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
+        
+        //AG: Transitions
+        if(player1.introFinished){
+            if(game.time.slowMotion == 4){
+                if ((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && !this.transitionStarted){
+                    this.timer.startTimer('endMatch',4000);
+                    this.transitionStarted = true;
+                }else if((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && this.transitionStarted){
+                    if(this.timer.timerDone('endMatch')){
+                        game.time.slowMotion = 1;
+                        this.game.world.removeAll();
+                        game.state.start('charSelect',false,false);
+                    }
+                }else if ((!player1.alive || !player2.alive) && !this.transitionStarted){
+                    this.timer.startTimer('nextRound',4000);
+                    this.transitionStarted = true;
+                }else if ((!player1.alive || !player2.alive) && this.transitionStarted){
+                    if(this.timer.timerDone('nextRound')){
+                    game.time.slowMotion = 1;
+                    this.game.world.removeAll();
+                    game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
+                    }
+                }
+            }
         }
 
         

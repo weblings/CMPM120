@@ -23,6 +23,8 @@ var charSelect = {
         
         var p1win;
         var p2win;
+
+        var duplicate;
     },
     
     create: function(){
@@ -30,7 +32,7 @@ var charSelect = {
         var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
         logo.scale.setTo(.7,.7);
         
-        characters = ["LITERALLY A SCORPION","SECURITY"];//["THE TEMP","LITERALLY A SCORPION","SECURITY"];
+        characters = ["SIMON","LITERALLY A SCORPION","SECURITY"];//["THE TEMP","LITERALLY A SCORPION","SECURITY"];
 
         P1keyUp = Phaser.Keyboard.W;
         P1keyDown = Phaser.Keyboard.S;
@@ -115,6 +117,7 @@ var charSelect = {
         //update Text
         P1Text.text = characters[P1index];
         P2Text.text = characters[P2index];
+
         
         if(P1Chose && P2Chose){
             P1CharChosen = characters[P1index];

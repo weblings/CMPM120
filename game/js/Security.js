@@ -9,6 +9,7 @@ Security = function(game, key, x, y, playerNum,dup){
     this.playerNum = playerNum; //Player number
     this.speed = 25; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 420;
+    this.diveLimit = 400;
 
     this.jumpHeight = -1250; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = game.world.height - 20;
@@ -47,9 +48,11 @@ Security = function(game, key, x, y, playerNum,dup){
 
     //particle
     this.emitter = game.add.emitter(0, 0, 100);
-    this.emitter.makeParticles('player');
+    this.emitter.makeParticles('security_blood');
     game.physics.enable(this.emitter);
     this.emitter.enableBody = true;
+    this.emitter.blendMode = 2;
+    this.emitter.alpha = 0.8;
 
     //Physics
     game.physics.enable(this);
@@ -151,6 +154,7 @@ Security = function(game, key, x, y, playerNum,dup){
     this.action.jump = false;
     this.action.block = false;
     this.action.attacking = false;
+    this.action.divable = false;
     this.action.dive = false;
     this.action.cancel = false;
     this.action.perfectguard =false;
@@ -216,6 +220,10 @@ Security.prototype.preState =function (){
     this.char.position.x = this.position.x ;
     this.char.position.y= this.position.y+50;//18; //AG: Trying to lower character
 
+    if (this.state == this.input){
+        this.action.attacking = false;
+    }
+
     //this value needs to be changed when art is finalized NH
     if (!this.action.attacking){
         this.fist.exists = false;
@@ -237,7 +245,7 @@ Security.prototype.preState =function (){
     //cancel velocity when not in input
     //might be the reason why dive kick is so slow
     //also the reason why down does not move in x NH
-    if (this.state != this.input && this.state != this.downed){
+    if (this.state != this.input && this.state != this.downed && this.state != this.dead ){
         this.body.velocity.x = 0;
     }
     if (this.state != this.lightAttack){
@@ -284,11 +292,18 @@ Security.prototype.preState =function (){
     }
 
     if (this.downCount >= 3){
-        this.changeState(this.downed);
-        this.timer.startTimer('downed', this.downFactor*3);
-        this.timer.startTimer('forcedDown', this.downFactor);
-        this.downCount = 0;
+        if (!this.staggered && !this.action.jump){
+            this.changeState(this.downed);
+            this.timer.startTimer('downed', this.downFactor*3);
+            this.timer.startTimer('forcedDown', this.downFactor);
+            this.downCount = 0;
+        }
     }
+
+    if (!this.alive){
+        this.changeState(this.dead);
+    }
+    
 }
 
 
@@ -312,6 +327,15 @@ Security.prototype.fisting = function(x,y){
     fist.scale.setTo(0.25,0.25);
     this.fists.add(fist);
 
+}
+
+Security.prototype.dead = function(){
+    if (!this.staggered && !this.action.jump){
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+    }
+    
+    this.char.frame = 5;
 }
 
 Security.prototype.downed = function(){
@@ -367,18 +391,25 @@ Security.prototype.lightAttack = function(){
 Security.prototype.heavyAttack = function(){
     this.fist.exists = true;
 
-    if (this.action.jump || (this.position.y < this.floorLevel)){
+     if (this.action.jump){
         //dive kick
+        if ( this.action.divable){
+            this.fist.exists = false;
+            this.char.frame = 11;
 
         
-        this.body.velocity.y = 1200; //750
-        if (this.faceRIGHT){
-            this.body.velocity.x = 250;
+            this.body.velocity.y = 1200;
+            if (this.faceRIGHT){
+                this.body.velocity.x = 250;
+            }else{
+                this.body.velocity.x = -250;
+            }
+            this.action.attacking = true;
+            this.action.dive = true;
+
         }else{
-            this.body.velocity.x = -250;
+            this.changeState(this.input);
         }
-        this.action.attacking = true;
-        this.action.dive = true;
         //this.action.noCollide = true;
         
     }else{
@@ -463,6 +494,7 @@ Security.prototype.heavyAttack = function(){
             this.action.cancel = false;
             this.changeState(this.input);
             this.inHeavyAttack = false; //AG: Adding for knockback
+            this.action.divable = false;
         }
         
     }
@@ -733,6 +765,9 @@ Security.prototype.input = function(){
         if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
             this.timer.startTimer('heavy_cast',1000);
             this.timer.startTimer('heavy',1500);
+            if (this.position.y < this.diveLimit){
+                this.action.divable = true;
+            }
             this.changeState(this.heavyAttack);
 
 

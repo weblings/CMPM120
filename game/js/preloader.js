@@ -17,6 +17,7 @@ var preloaderState = {
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');
         game.load.atlas('rabbit_atlas2','assets/img/simon/alt/spritesheet.png','assets/img/simon/sprites.json');
+        game.load.image('rabbit_blood','assets/img/simon/FrozenRabbit_blood.png');
 
         //Scorpion
         /*
@@ -41,6 +42,7 @@ var preloaderState = {
         
         //Security
         game.load.atlas('security_atlas', 'assets/img/Security/security_spritesheet.png','assets/img/Security/security_spritesheet.json');
+        game.load.image('security_blood','assets/img/Security/securityguard_blood.png');
 
         //audio 
         game.load.audio('jump_sound', ['assets/audio/jump.wav']);

@@ -183,7 +183,7 @@ Security = function(game, key, x, y, playerNum){
     this.ui.scale.setTo(.5,.5);
     
     //Sounds
-    //this.lightSound = game.add.audio('light'); //AG: TO-DO: Get throwing sound
+    this.lightSound = game.add.audio('throw'); //AG: TO-DO: Get throwing sound
     this.heavySound = game.add.audio('heavy');
     this.heavyChargeSound = game.add.audio('heavy_charge');
     this.jump_sound = game.add.audio('jump_sound');
@@ -192,6 +192,12 @@ Security = function(game, key, x, y, playerNum){
     
     this.heavyChargeSoundPlayed = false;
     this.heavySoundPlayed = false;
+    this.attackHit = false;
+    
+    this.missVolume = .4;
+    
+    this.lightSound.volume = this.missVolume;
+    this.heavySound.volume = this.missVolume;
 }
 
 Security.prototype = Object.create(Phaser.Sprite.prototype);
@@ -338,7 +344,9 @@ Security.prototype.lightAttack = function(){
         this.projectile(); //launches projectile
         this.char.animations.play('security_light');
         this.ui.alpha = 0;
-        //this.lightSound.play();
+        if(!this.attackHit){
+            this.lightSound.play();
+        }
     }
 
     
@@ -363,7 +371,7 @@ Security.prototype.heavyAttack = function(){
         //dive kick
 
         
-        this.body.velocity.y = 550; //750
+        this.body.velocity.y = 1200; //750
         if (this.faceRIGHT){
             this.body.velocity.x = 250;
         }else{
@@ -417,7 +425,7 @@ Security.prototype.heavyAttack = function(){
             if(!this.heavySoundPlayed){
                 this.heavyChargeSoundPlayed = false;
                 this.heavyChargeSound.stop();
-                this.heavySound.play('',0,1,false,false);
+                if(!this.attackHit) this.heavySound.play();
                 this.heavySoundPlayed = true;
             }
             

@@ -183,7 +183,14 @@ Scorpion = function(game, key, x, y, playerNum){
     
     this.heavyChargeSoundPlayed = false;
     this.heavySoundPlayed = false;
+    this.attackHit = false;
 
+    this.hitVolume = .8;
+    this.missVolume = .4;
+    this.blockVolume = .05;
+    
+    this.lightSound.volume = this.missVolume;
+    this.heavySound.volume = this.missVolume;
 }
 
 Scorpion.prototype = Object.create(Phaser.Sprite.prototype);
@@ -387,9 +394,7 @@ Scorpion.prototype.lightAttack = function(){
         }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
-        this.lightSound.play();
-
-
+        if(!this.attackHit) this.lightSound.play();
     }
     //this.debugText.text = this.position.x;
     
@@ -471,7 +476,7 @@ Scorpion.prototype.heavyAttack = function(){
             if(!this.heavySoundPlayed){
                 this.heavyChargeSoundPlayed = false;
                 this.heavyChargeSound.stop();
-                this.heavySound.play('',0,1,false,false);
+                if(!this.attackHit) this.heavySound.play();
                 this.heavySoundPlayed = true;
             }
 

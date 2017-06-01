@@ -50,8 +50,8 @@ var mainState = {
 		var bg = game.add.sprite(0,0,'bg');
 		bg.scale.setTo(0.8);
         
-        if(P1CharChosen == "THE TEMP"){
-	       player1 = new Player(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+        if(P1CharChosen == "SIMON"){
+	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
         }else if(P1CharChosen == "LITERALLY A SCORPION"){
             player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
         }else{
@@ -59,8 +59,8 @@ var mainState = {
         }
 	    game.add.existing(player1);
 	    
-        if(P2CharChosen == "THE TEMP"){
-	       player2 = new Player(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+        if(P2CharChosen == "SIMON"){
+	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
         }else if(P2CharChosen == "LITERALLY A SCORPION"){
             player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
         }else{

@@ -10,6 +10,9 @@ var preloaderState = {
         game.load.image('health_empty','assets/img/health_empty.png');
         game.load.image('health_damage','assets/img/health_damage.png');
         game.load.image('logo','assets/img/Logo.png');
+		game.load.image('scorp_ID','assets/img/Scorpion_Passport.png');
+		game.load.image('rabbit_ID','assets/img/Rabbit_Passport.png');
+		game.load.image('guard_ID','assets/img/SecurityGuard_Passport.png');
         
         //Scorpion
         /*

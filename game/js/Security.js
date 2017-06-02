@@ -324,6 +324,13 @@ Security.prototype.preState =function (){
     if (!this.alive){
         this.changeState(this.dead);
     }
+
+    if (game.input.gamepad.supported && game.input.gamepad.active && this.pad1.connected){
+        this.padControl = true;
+    }
+    else{
+        this.padControl = false;
+    }
     
 }
 

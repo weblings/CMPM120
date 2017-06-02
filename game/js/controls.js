@@ -143,7 +143,7 @@ var controlState = {
 		
 		P2Heavy = game.add.text(725, 640,"HEAVY ATTACK/DIVEKICK: ", {fontSize: '32px', fill: '#fff'});
 		P2HeavyButton = game.add.text(1155, 640,"U", {fontSize: '32px', fill: '#fff'});
-	   
+	            
     },
     
     update: function(){

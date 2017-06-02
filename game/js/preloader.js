@@ -21,8 +21,19 @@ var preloaderState = {
 		game.load.image('arrow','assets/img/Arrow.png');
 		game.load.image('selectBox','assets/img/selectBox.png');
 		game.load.image('selectBox2','assets/img/selectBox2.png');
-        game.load.image('controller','assets/img/controller.png');
         
+        //Xbox
+        game.load.image('controller','assets/img/controller.png');
+        game.load.image('A','assets/img/Xbox_Controls/A_Button.png');
+        game.load.image('B','assets/img/Xbox_Controls/B_Button.png');
+        game.load.image('Y','assets/img/Xbox_Controls/Y_Button.png');
+        game.load.image('X','assets/img/Xbox_Controls/X_Button.png');
+        game.load.image('Joystick_Left','assets/img/Xbox_Controls/Joystick_Left.png');
+        game.load.image('Joystick_Right','assets/img/Xbox_Controls/Joystick_Right.png');
+        game.load.image('Joystick_Up','assets/img/Xbox_Controls/Joystick_Up.png');
+        game.load.image('Joystick_Down','assets/img/Xbox_Controls/Joystick_Down.png');
+
+
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');
         game.load.atlas('rabbit_atlas2','assets/img/simon/alt/spritesheet.png','assets/img/simon/sprites.json');

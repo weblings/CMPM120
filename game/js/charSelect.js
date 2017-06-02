@@ -104,6 +104,32 @@ var charSelect = {
         pad2 = game.input.gamepad.pad2;
 
         timer = new setTime();
+        
+        //Xbox Input Images
+        p1AButton = game.add.sprite(game.width/5+175,(3 * game.height)/4-5,'A');
+        p1AButton.scale.setTo(.1, .1);
+        p1AButton.alpha = 0;
+        
+        p1BButton = game.add.sprite(game.width/5+210,(3 * game.height)/4-5,'B');
+        p1BButton.scale.setTo(.1, .1);
+        p1BButton.alpha = 0;
+        
+        p2AButton = game.add.sprite(3 * game.width/5+175,(3 * game.height)/4-5,'A');
+        p2AButton.scale.setTo(.1, .1);
+        p2AButton.alpha = 0;
+        
+        p2BButton = game.add.sprite(game.width/5+210,(3 * game.height)/4-5,'B');
+        p2BButton.scale.setTo(.1, .1);
+        p2BButton.alpha = 0;
+        
+        JoyStickUp = game.add.sprite(610,425,'Joystick_Up');
+        JoyStickUp.scale.setTo(.2,.2);
+        JoyStickUp.anchor.setTo(.5,.5);
+        JoyStickUp.alpha = 0;
+        JoyStickDown = game.add.sprite(610,275,'Joystick_Down');
+        JoyStickDown.scale.setTo(.2,.2);
+        JoyStickDown.anchor.setTo(.5,.5);
+        JoyStickDown.alpha = 0;
     },
     
     update: function(){
@@ -152,11 +178,15 @@ var charSelect = {
             if(pad1.isDown(Phaser.Gamepad.XBOX360_A) && !P1Chose){
                 P1Chose = true;
                 P1InstructionText.text = "Deselect with B";
+                p1AButton.alpha = 0;
+                p1BButton.alpha = 1;
             }
             
             if(pad1.isDown(Phaser.Gamepad.XBOX360_B) && P1Chose){
                 P1Chose = false;
                 P1InstructionText.text = "Select with A";
+                p1AButton.alpha = 1;
+                p1BButton.alpha = 0;
             }
         }else{
             
@@ -227,11 +257,15 @@ var charSelect = {
             if(pad2.isDown(Phaser.Gamepad.XBOX360_A) && !P2Chose){
                 P2Chose = true;
                 P2InstructionText.text = "Deselect with B";
+                p2AButton.alpha = 0;
+                p2BButton.alpha = 1;
             }
             
             if(pad2.isDown(Phaser.Gamepad.XBOX360_B) && P2Chose){
                 P2Chose = false;
                 P2InstructionText.text = "Select with A";
+                p2AButton.alpha = 1;
+                p2BButton.alpha = 0;
             }
 
         }else{
@@ -275,7 +309,13 @@ var charSelect = {
        // P1Text.text = characters[P1index];
         //P2Text.text = characters[P2index];
 		
-
+        if(padControl1 && padControl2){
+            JoyStickDown.alpha = 1;
+            JoyStickUp.alpha = 1;
+        }else{
+            JoyStickUp.alpha = 0;
+            JoyStickDown.alpha = 0;
+        }
         
         if(P1Chose && P2Chose){
             P1CharChosen = characters[P1index];

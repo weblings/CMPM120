@@ -55,31 +55,31 @@ var preloaderState = {
         game.load.atlas('security_atlas', 'assets/img/Security/security_spritesheet.png','assets/img/Security/security_spritesheet.json');
         game.load.atlas('security_atlas2','assets/img/Security/security_alt_spritesheet.png','assets/img/Security/security_alt_spritesheet.json');
         game.load.image('security_blood','assets/img/Security/securityguard_blood.png');
-
+        
         //audio 
-        game.load.audio('jump_sound', ['assets/audio/jump.wav']);
-        game.load.audio('light','assets/audio/hit8.ogg');
-        game.load.audio('heavy','assets/audio/hit18.ogg');
-        game.load.audio('dive','assets/audio/hit9.ogg');
-        game.load.audio('block','assets/audio/hit2.ogg');
-        game.load.audio('heavy_charge','assets/audio/heavy_charge.ogg');
-        game.load.audio('perfect_block','assets/audio/block.ogg');
-        game.load.audio('throw','assets/audio/throw.ogg');
+        game.load.audio('jump_sound', ['assets/audio/jump.mp3','assets/audio/jump.ogg']); 
+        game.load.audio('light',['assets/audio/hit8.mp3','assets/audio/hit8.ogg']);
+        game.load.audio('heavy',['assets/audio/hit18.mp3','assets/audio/hit18.ogg']);
+        game.load.audio('dive',['assets/audio/hit9.mp3','assets/audio/hit9.ogg']);
+        game.load.audio('block',['assets/audio/hit2.mp3','assets/audio/hit2.ogg']);
+        game.load.audio('heavy_charge',['assets/audio/heavy_charge.mp3','assets/audio/heavy_charge.ogg']);
+        game.load.audio('perfect_block',['assets/audio/block.mp3','assets/audio/block.ogg']);
+        game.load.audio('throw',['assets/audio/throw.mp3','assets/audio/throw.ogg']);
         
         //music
-        game.load.audio('local_forecast','assets/audio/Local_Forecast.ogg');
-        game.load.audio('exit_the_premises', 'assets/audio/Exit_the_Premises.ogg');
-        game.load.audio('ouroboros', 'assets/audio/Ouroboros.ogg');
-        game.load.audio('kick_shock', 'assets/audio/Kick_Shock.ogg');
-        game.load.audio('ultra_polka', 'assets/audio/Ultra_Polka.ogg');
-        game.load.audio('pariasian', 'assets/audio/Parisian.ogg');
-        game.load.audio('shoegazer','assets/audio/Shoegazer.ogg');
+        game.load.audio('local_forecast',['assets/audio/Local_Forecast.mp3','assets/audio/Local_Forecast.ogg']);
+        game.load.audio('exit_the_premises',['assets/audio/Exit_the_Premises.mp3','assets/audio/Exit_the_Premises.ogg']);
+        game.load.audio('ouroboros',['assets/audio/Ouroboros.mp3','assets/audio/Ouroboros.ogg']);
+        game.load.audio('kick_shock',['assets/audio/Kick_Shock.mp3','assets/audio/Kick_Shock.ogg']);
+        game.load.audio('ultra_polka',['assets/audio/Ultra_Polka.mp3','assets/audio/Ultra_Polka.ogg']);
+        game.load.audio('pariasian',['assets/audio/Parisian.mp3','assets/audio/Parisian.ogg']);
+        game.load.audio('shoegazer',['assets/audio/Shoegazer.mp3','assets/audio/Shoegazer.ogg']);
 
 	},
 
 	create: function(){
 		//game.state.start('main');
-        game.state.start('controls');
+        game.state.start('charSelect');
 	}
 
 };

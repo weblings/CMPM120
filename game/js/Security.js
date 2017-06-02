@@ -196,6 +196,7 @@ Security = function(game, key, x, y, playerNum,dup){
     //AG: Knockback stuff
     this.inLightAttack = false;
     this.inHeavyAttack = false;
+    this.inSpecial = false;
     this.touchLeftWallAt = 62.5;
     this.touchRightWallAt = 1217.5;
     this.hitAgainstWall = false;
@@ -538,6 +539,16 @@ Security.prototype.heavyAttack = function(){
         
     }
     
+}
+
+Security.prototype.chained = function(location){
+    //this.action.chained = false;
+    if (!this.action.block){
+        this.position.x = location;
+
+    }
+    
+
 }
 
 //projectile

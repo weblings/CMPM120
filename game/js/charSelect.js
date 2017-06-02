@@ -25,6 +25,12 @@ var charSelect = {
         var p2win;
 
         var duplicate;
+
+        var pad1;
+        var pad2;
+        var padControl1;
+        var padControl2;
+        var timer;
     },
     
     create: function(){
@@ -92,80 +98,178 @@ var charSelect = {
         main_music.mute = false;  
         main_music.loop = true;
         main_music.volume = 0.7;
+
+        game.input.gamepad.start();
+        pad1 = game.input.gamepad.pad1;
+        pad2 = game.input.gamepad.pad2;
+
+        timer = new setTime();
     },
     
     update: function(){
+
+        if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
+            padControl1 = true;
+        }
+        else{
+            padControl1 = false;
+        }
+
+        if (game.input.gamepad.supported && game.input.gamepad.active && pad2.connected){
+            padControl2 = true;
+        }
+        else{
+            padControl2 = false;
+        }
+
+        if (padControl1){
+            if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && !P1Chose && timer.timerDone('selectLock1')){
+                timer.startTimer('selectLock1',200);
+                if(P1index + 2 > characters.length){
+                   sprites[P1index].alpha = 0;
+                   P1index = 0;
+                   sprites[P1index].alpha = 1;
+                }else{
+                    sprites[P1index].alpha = 0;
+                    P1index++;
+                    sprites[P1index].alpha = 1;
+                }
+            }
             
-        //P1 keys
-        if(game.input.keyboard.justPressed(P1keyUp) && !P1Chose){
-            if(P1index + 2 > characters.length){
-               sprites[P1index].alpha = 0;
-			   P1index = 0;
-			   sprites[P1index].alpha = 1;
-            }else{
-				sprites[P1index].alpha = 0;
-                P1index++;
-				sprites[P1index].alpha = 1;
+            if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && !P1Chose && timer.timerDone('selectLock1')){
+                timer.startTimer('selectLock1',200);
+                if(P1index - 1 < 0){
+                    sprites[P1index].alpha = 0;
+                    P1index = characters.length-1;
+                    sprites[P1index].alpha = 1;
+                }else{
+                    sprites[P1index].alpha = 0;
+                    P1index--;
+                    sprites[P1index].alpha = 1;
+                }
+            }
+            
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_A) && !P1Chose){
+                P1Chose = true;
+                P1InstructionText.text = "Deselect with B";
+            }
+            
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_B) && P1Chose){
+                P1Chose = false;
+                P1InstructionText.text = "Select with A";
+            }
+        }else{
+            
+            //P1 keys
+            if(game.input.keyboard.justPressed(P1keyUp) && !P1Chose){
+                if(P1index + 2 > characters.length){
+                   sprites[P1index].alpha = 0;
+    			   P1index = 0;
+    			   sprites[P1index].alpha = 1;
+                }else{
+    				sprites[P1index].alpha = 0;
+                    P1index++;
+    				sprites[P1index].alpha = 1;
+                }
+            }
+            
+            if(game.input.keyboard.justPressed(P1keyDown) && !P1Chose){
+                if(P1index - 1 < 0){
+    				sprites[P1index].alpha = 0;
+                    P1index = characters.length-1;
+    				sprites[P1index].alpha = 1;
+                }else{
+    				sprites[P1index].alpha = 0;
+                    P1index--;
+    				sprites[P1index].alpha = 1;
+                }
+            }
+            
+            if(game.input.keyboard.justPressed(P1keyA) && !P1Chose){
+                P1Chose = true;
+                P1InstructionText.text = "Deselect with R";
+            }
+            
+            if(game.input.keyboard.justPressed(P1keyB) && P1Chose){
+                P1Chose = false;
+                P1InstructionText.text = "Select with E";
             }
         }
-        
-        if(game.input.keyboard.justPressed(P1keyDown) && !P1Chose){
-            if(P1index - 1 < 0){
-				sprites[P1index].alpha = 0;
-                P1index = characters.length-1;
-				sprites[P1index].alpha = 1;
-            }else{
-				sprites[P1index].alpha = 0;
-                P1index--;
-				sprites[P1index].alpha = 1;
+
+        if (padControl2){
+            //P2 keys
+            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && !P2Chose && timer.timerDone('selectLock2')){
+                timer.startTimer('selectLock2',200);
+                if(P2index + 2 > characters.length){
+                    sprites2[P2index].alpha = 0;
+                    P2index = 0;
+                    sprites2[P2index].alpha = 1;
+                }else{
+                    sprites2[P2index].alpha = 0;
+                    P2index++;
+                    sprites2[P2index].alpha = 1;
+                }
+            }
+            
+            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && !P2Chose && timer.timerDone('selectLock2')){
+                timer.startTimer('selectLock2',200);
+                if(P2index - 1 < 0){
+                    sprites2[P2index].alpha = 0;
+                    P2index = characters.length-1;
+                    sprites2[P2index].alpha = 1;
+                }else{
+                    sprites2[P2index].alpha = 0;
+                    P2index--;
+                    sprites2[P2index].alpha = 1;
+                }
+            }
+            
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_A) && !P2Chose){
+                P2Chose = true;
+                P2InstructionText.text = "Deselect with B";
+            }
+            
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_B) && P2Chose){
+                P2Chose = false;
+                P2InstructionText.text = "Select with A";
+            }
+
+        }else{
+            //P2 keys
+            if(game.input.keyboard.justPressed(P2keyUp) && !P2Chose){
+                if(P2index + 2 > characters.length){
+    				sprites2[P2index].alpha = 0;
+                    P2index = 0;
+    				sprites2[P2index].alpha = 1;
+                }else{
+    				sprites2[P2index].alpha = 0;
+                    P2index++;
+    				sprites2[P2index].alpha = 1;
+                }
+            }
+            
+            if(game.input.keyboard.justPressed(P2keyDown) && !P2Chose){
+                if(P2index - 1 < 0){
+    				sprites2[P2index].alpha = 0;
+                    P2index = characters.length-1;
+    				sprites2[P2index].alpha = 1;
+                }else{
+    				sprites2[P2index].alpha = 0;
+                    P2index--;
+    				sprites2[P2index].alpha = 1;
+                }
+            }
+            
+            if(game.input.keyboard.justPressed(P2keyA) && !P2Chose){
+                P2Chose = true;
+                P2InstructionText.text = "Deselect with U";
+            }
+            
+            if(game.input.keyboard.justPressed(P2keyB) && P2Chose){
+                P2Chose = false;
+                P2InstructionText.text = "Select with I";
             }
         }
-        
-        if(game.input.keyboard.justPressed(P1keyA) && !P1Chose){
-            P1Chose = true;
-            P1InstructionText.text = "Deselect with R";
-        }
-        
-        if(game.input.keyboard.justPressed(P1keyB) && P1Chose){
-            P1Chose = false;
-            P1InstructionText.text = "Select with E";
-        }
-        
-        //P2 keys
-        if(game.input.keyboard.justPressed(P2keyUp) && !P2Chose){
-            if(P2index + 2 > characters.length){
-				sprites2[P2index].alpha = 0;
-                P2index = 0;
-				sprites2[P2index].alpha = 1;
-            }else{
-				sprites2[P2index].alpha = 0;
-                P2index++;
-				sprites2[P2index].alpha = 1;
-            }
-        }
-        
-        if(game.input.keyboard.justPressed(P2keyDown) && !P2Chose){
-            if(P2index - 1 < 0){
-				sprites2[P2index].alpha = 0;
-                P2index = characters.length-1;
-				sprites2[P2index].alpha = 1;
-            }else{
-				sprites2[P2index].alpha = 0;
-                P2index--;
-				sprites2[P2index].alpha = 1;
-            }
-        }
-        
-        if(game.input.keyboard.justPressed(P2keyA) && !P2Chose){
-            P2Chose = true;
-            P2InstructionText.text = "Deselect with U";
-        }
-        
-        if(game.input.keyboard.justPressed(P2keyB) && P2Chose){
-            P2Chose = false;
-            P2InstructionText.text = "Select with I";
-        }
-        
         //update Text
 
        // P1Text.text = characters[P1index];

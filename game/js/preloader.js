@@ -13,7 +13,7 @@ var preloaderState = {
 		game.load.image('scorp_ID','assets/img/Scorpion_Passport.png');
 		game.load.image('rabbit_ID','assets/img/Rabbit_Passport.png');
 		game.load.image('guard_ID','assets/img/SecurityGuard_Passport.png');
-        game.load.image('pause_menu','assets/img/menu_bg_temp');
+        game.load.image('pause_menu','assets/img/menu_bg_temp.png');
         game.load.image('round_unresolved','assets/img/round_unresolved.png');
         game.load.image('round_won','assets/img/round_won.png')
         
@@ -46,6 +46,7 @@ var preloaderState = {
         
         //Security
         game.load.atlas('security_atlas', 'assets/img/Security/security_spritesheet.png','assets/img/Security/security_spritesheet.json');
+        game.load.atlas('security_atlas2','assets/img/Security/security_alt_spritesheet.png','assets/img/Security/security_alt_spritesheet.json');
         game.load.image('security_blood','assets/img/Security/securityguard_blood.png');
 
         //audio 

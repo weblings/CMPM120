@@ -343,6 +343,9 @@ var mainState = {
         if(player1.charName == "SECURITY"){
             game.physics.arcade.overlap(player2,bullets1,mainState.determineAttack, null, this);
         }
+        if(player1.charName == "SECURITY" && player2.charName == "SECURITY"){
+            game.physics.arcade.overlap(bullets1,bullets2,mainState.projectileClash, null, this);
+        }
         
         //Dive kicks
         if(player1.action.dive){
@@ -547,6 +550,12 @@ var mainState = {
             }
     	}
 
+    },
+    
+    projectileClash: function(bullets1,bullets2){
+        player1.bullets.removeAll();
+        player2.bullets.removeAll();
+        player1.perfect_block_sound.play();
     },
     
     //--Security's Attacks--//

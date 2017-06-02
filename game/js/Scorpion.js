@@ -382,6 +382,7 @@ Scorpion.prototype.dead = function(){
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
     }
+    this.fist.exists = false;
     
     this.char.frame = 2;
 }

@@ -8,8 +8,8 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.charName = "SIMON";
     this.copy = dup;
     this.playerNum = playerNum; //Player number
-    this.speed = 30; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
-    this.maxSpeed = 420;
+    this.speed = 60; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.maxSpeed = 720;
     this.diveLimit = 400;
 
     this.jumpHeight = -1550; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
@@ -269,12 +269,12 @@ Simon.prototype.preState =function (){
 
     if (this.position.y != this.floorLevel){
         this.action.jump = true;
-        this.maxSpeed = 120;
+        this.maxSpeed = 300;
 
     }else{
         this.action.jump = false;
         this.canLightAttack = true;
-        this.maxSpeed = 420;
+        this.maxSpeed = 720;
     }
 
     if (!this.action.jump && this.action.down){
@@ -345,7 +345,7 @@ Simon.prototype.dead = function(){
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
     }
-    
+    this.fist.exists = false;
     this.char.frame = 3;
 }
 
@@ -394,15 +394,18 @@ Simon.prototype.lightAttack = function(){
             //this.fists.add(fist);
             //this.fist.position.x += 50;
             //this.fist.position.x +=  150; 
-            this.body.velocity.x = 700;
-
+            
+            this.body.velocity.x = 1000;
+            
         } else{
             //var fist = game.add.sprite(this.position.x-50,this.position.y,'fist');
             //fist.scale.setTo(0.25,0.25);
             //this.fists.add(fist);
             //this.fist.position.x -= 50;
             //this.fist.position.x -= 150; //AG: Brings fist back on screen
-            this.body.velocity.x = -700;
+            
+            this.body.velocity.x = -1000;
+            
 
         }
         if(!this.lightSoundPlayed){
@@ -411,10 +414,15 @@ Simon.prototype.lightAttack = function(){
         }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
+    }else{
+        this.char.position.x += game.rnd.between(-5,5);
+        this.char.position.y += game.rnd.between(-5,5);
+
     }
 
     if (dir){
         this.fist.position.x = this.position.x+20;
+
     }else{
         this.fist.position.x = this.position.x-20;
     }
@@ -519,12 +527,12 @@ Simon.prototype.heavyAttack = function(){
             this.fist.position.y = this.position.y -130;
             
             if (this.faceRIGHT){
-                this.fist.scale.x = 0.75;
+                this.fist.scale.x = 0.80;
                 this.fist.scale.y = 0.75;
                 this.char.body.angularVelocity = 800;
 
             }else{
-                this.fist.scale.x = 0.75;
+                this.fist.scale.x = 0.80;
                 this.fist.scale.y = 0.75;
                 this.char.body.angularVelocity = -800;
             }

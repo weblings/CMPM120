@@ -344,7 +344,14 @@ var mainState = {
             game.physics.arcade.overlap(player2,bullets1,mainState.determineAttack, null, this);
         }
         if(player1.charName == "SECURITY" && player2.charName == "SECURITY"){
-            game.physics.arcade.overlap(bullets1,bullets2,mainState.projectileClash, null, this);
+            //game.physics.arcade.overlap(bullets1,bullets2,mainState.projectileClash, null, this);
+            //console.log("Player1 bullets:"+bullets1.children.length);
+            for(let i=0; i< bullets1.children.length; i++){
+                for(let j=0; j<bullets2.children.length; j++){
+                    //console.log("i:"+i+", j:"+j);
+                    game.physics.arcade.overlap(bullets1.children[i],bullets2.children[j],mainState.projectileClash, null, this);
+                }
+            }
         }
         
         //Dive kicks
@@ -552,10 +559,13 @@ var mainState = {
 
     },
     
-    projectileClash: function(bullets1,bullets2){
-        player1.bullets.removeAll();
-        player2.bullets.removeAll();
+    projectileClash: function(bullet1,bullet2){
+        bullet1.kill();
+        bullet2.kill();
+        //console.log("bullet1: "+bullet1.position.x+" and bullet 2: "+bullet2.position.x);
+        player1.perfect_block_sound.volume = .3;
         player1.perfect_block_sound.play();
+        player1.perfect_block_sound.volume = .7;
     },
     
     //--Security's Attacks--//

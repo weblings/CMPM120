@@ -422,6 +422,10 @@ var mainState = {
         if(player1.introFinished){
             if(game.time.slowMotion == 4){
                 if ((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && !this.transitionStarted){
+                      player1.heavyChargeSoundPlayed = false;
+                      player1.heavyChargeSound.stop();
+                      player2.heavyChargeSoundPlayed = false;
+                      player2.heavyChargeSound.stop();
                     this.timer.startTimer('endMatch',6000);
                     this.transitionStarted = true;
                 }else if((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && this.transitionStarted){
@@ -430,6 +434,10 @@ var mainState = {
                         this.game.world.removeAll();
                         main_music.mute = true;
                         deathSound.mute = true;
+                        player1.heavyChargeSoundPlayed = false;
+                        player1.heavyChargeSound.stop();
+                        player2.heavyChargeSoundPlayed = false;
+                        player2.heavyChargeSound.stop();
                         game.state.start('charSelect',false,false);
                     }
                 }else if ((!player1.alive || !player2.alive) && !this.transitionStarted){
@@ -441,6 +449,10 @@ var mainState = {
                     this.game.world.removeAll();
                     main_music.mute = true;
                     deathSound.mute = true;
+                    player1.heavyChargeSoundPlayed = false;
+                    player1.heavyChargeSound.stop();
+                    player2.heavyChargeSoundPlayed = false;
+                    player2.heavyChargeSound.stop();
                     game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
                     }
                 }
@@ -748,7 +760,10 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
-                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
+                player1.heavyChargeSoundPlayed = false;
+                player1.heavyChargeSound.stop();
+                player2.heavyChargeSoundPlayed = false;
+                player2.heavyChargeSound.stop(); game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.TWO)){
                 //RESTART MATCH
                 game.time.slowMotion = 1;
@@ -758,7 +773,10 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
-                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
+                player1.heavyChargeSoundPlayed = false;
+                player1.heavyChargeSound.stop();
+                player2.heavyChargeSoundPlayed = false;
+                player2.heavyChargeSound.stop(); game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.THREE)){
                 //CHARACTER SELECT
                 game.time.slowMotion = 1;
@@ -766,6 +784,10 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
+                player1.heavyChargeSoundPlayed = false;
+                player1.heavyChargeSound.stop();
+                player2.heavyChargeSoundPlayed = false;
+                player2.heavyChargeSound.stop();
                 game.state.start('charSelect');
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.FOUR)){
                 //CONTROLS
@@ -774,6 +796,10 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
+                player1.heavyChargeSoundPlayed = false;
+                player1.heavyChargeSound.stop();
+                player2.heavyChargeSoundPlayed = false;
+                player2.heavyChargeSound.stop();
                 game.state.start('controls');
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.FIVE)){
                 //MAIN MENU
@@ -782,6 +808,10 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
+                player1.heavyChargeSoundPlayed = false;
+                player1.heavyChargeSound.stop();
+                player2.heavyChargeSoundPlayed = false;
+                player2.heavyChargeSound.stop();
                 game.state.start('title',false,false);
             } 
         }

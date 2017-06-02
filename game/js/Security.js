@@ -333,6 +333,8 @@ Security.prototype.preState =function (){
     }
 
     if (!this.alive){
+        this.heavyChargeSoundPlayed = false;
+        this.heavyChargeSound.stop();
         this.changeState(this.dead);
     }
 

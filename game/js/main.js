@@ -558,11 +558,11 @@ var mainState = {
     },
     
     SecurityHeavyAttack: function(player,hitbox){
-        mainState.calcKnockBack(300,100,player.playerNum);
+        mainState.calcKnockBack(500,250,player.playerNum);
         player.takeDamage(10,1000); 
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.005, 100);
-    	  }
+    	}
     },
     
     //AG: Should figure out which direction to apply knockback

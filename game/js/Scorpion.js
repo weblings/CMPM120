@@ -697,7 +697,7 @@ Scorpion.prototype.applyKnockBack = function(x,y){
     */
 
 
-    if (this.action.down && this.action.jump){
+    if (this.downCount >= 3 && this.action.jump){
         y1 = -100*y;
         x1 = 50*x;
         

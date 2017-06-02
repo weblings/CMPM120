@@ -649,7 +649,7 @@ Security.prototype.applyKnockBack = function(x,y){
         y1 = 0.1;
     }
     //Added for downed state NH
-    if (this.action.down && this.action.jump){
+    if (this.downCount >= 3 && this.action.jump){
         y1 = -100*y;
         x1 = 50*x;
     }else if(this.staggered && this.downCount >= 3){

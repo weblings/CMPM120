@@ -78,7 +78,7 @@ var preloaderState = {
 
 	create: function(){
 		//game.state.start('main');
-        game.state.start('controls');
+        game.state.start('charSelect');
 	}
 
 };

@@ -37,7 +37,12 @@ Scorpion = function(game, key, x, y, playerNum, dup){
 
     //gamepad
     game.input.gamepad.start();
-    this.pad1 = game.input.gamepad.pad1;
+    if (this.playerNum==1){
+        this.pad1 = game.input.gamepad.pad1;
+    }else{
+        this.pad1 = game.input.gamepad.pad2;
+    }
+    
 
     
 
@@ -796,6 +801,8 @@ Scorpion.prototype.input = function(){
     
         //AG: if touching ground can jump (Altered code from tutorial)
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
+
+
         if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
             this.body.velocity.y = this.jumpHeight;
             this.jump_sound.play();
@@ -810,13 +817,11 @@ Scorpion.prototype.input = function(){
             }
             
         }else{
-            //possibly have a millisecond of un guarding? NH
+
             this.action.block = false;
             this.action.perfectguard = false;
 
         }
-
-        //test combat inputs
 
 
         //light attack NH
@@ -846,17 +851,59 @@ Scorpion.prototype.input = function(){
 
         }
 
-        //projectile 
-
-        this.bullets.forEachAlive(this.killBullets,this);
         
-
-
-
-
         //fixed your shit NH
         
         if(this.padControl){
+
+            if(this.pad1.justPressed(Phaser.Gamepad.XBOX360_A) && this.body.touching.down && !this.action.block ){
+                this.body.velocity.y = this.jumpHeight;
+                this.jump_sound.play();
+            }
+
+            //blocking NH
+            if (this.pad1.isDown(Phaser.Gamepad.XBOX360_Y)){
+                this.action.block = true;
+                if (!this.action.perfectguard){
+                    this.timer.startTimer('perfectguard',250);
+                    this.action.perfectguard = true;
+                }
+                
+            }else{
+                
+                this.action.block = false;
+                this.action.perfectguard = false;
+
+            }
+
+
+            //light attack NH
+            if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_X) && !this.action.block && this.canLightAttack){
+                //set timer for half a second
+                this.timer.startTimer('light',500);
+
+                //this line might be redundant NH
+                this.body.velocity.x = 0
+                //this.debugText.text = 'attack facing right';
+                this.changeState(this.lightAttack);
+
+                
+            }
+
+            //heavy attack NH
+            
+            if (this.pad1.isDown(Phaser.Gamepad.XBOX360_B) && !this.action.block){
+                this.timer.startTimer('heavy_cast',500);
+                this.timer.startTimer('heavy',1000);
+                //this.timer.startTimer('heavy',1000);
+                if (this.position.y < this.diveLimit){
+                    this.action.divable = true;
+                }
+                this.changeState(this.heavyAttack);
+
+
+            }
+
             if(this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 && !this.action.block ){
                 this.char.scale.x = this.scaleFactor;
 
@@ -969,6 +1016,54 @@ Scorpion.prototype.input = function(){
             }
 
         }else{
+
+            if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
+                this.body.velocity.y = this.jumpHeight;
+                this.jump_sound.play();
+            }
+
+            //blocking NH
+            if (game.input.keyboard.isDown(this.keyDown)){
+                this.action.block = true;
+                if (!this.action.perfectguard){
+                    this.timer.startTimer('perfectguard',250);
+                    this.action.perfectguard = true;
+                }
+                
+            }else{
+                
+                this.action.block = false;
+                this.action.perfectguard = false;
+
+            }
+
+
+            //light attack NH
+            if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
+                //set timer for half a second
+                this.timer.startTimer('light',500);
+
+                //this line might be redundant NH
+                this.body.velocity.x = 0
+                //this.debugText.text = 'attack facing right';
+                this.changeState(this.lightAttack);
+
+                
+            }
+
+            //heavy attack NH
+            
+            if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
+                this.timer.startTimer('heavy_cast',500);
+                this.timer.startTimer('heavy',1000);
+                //this.timer.startTimer('heavy',1000);
+                if (this.position.y < this.diveLimit){
+                    this.action.divable = true;
+                }
+                this.changeState(this.heavyAttack);
+
+
+            }
     
         //AG: Left controls
             if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){

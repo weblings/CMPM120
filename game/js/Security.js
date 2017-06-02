@@ -554,6 +554,8 @@ Security.prototype.takeDamage = function(damage,staggerLength){
                 def = 0.2;
                 this.block_sound.play();
             }
+        }else if (this.action.down){
+            def = 0;
         }
         if(this.health - damage*def < 0){
             this.health = 0;
@@ -563,7 +565,7 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         this.staggered = true;
         
         //count for down NH
-        if (!this.action.block){
+        if (!this.action.block && !this.action.down){
             this.timer.startTimer('downWindow',2000);
             this.downCount++;
             this.emitter.x = this.position.x;

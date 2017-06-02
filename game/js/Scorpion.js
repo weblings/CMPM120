@@ -1,5 +1,4 @@
 Scorpion = function(game, key, x, y, playerNum, dup){
-
     Phaser.Sprite.call(this, game, x, y, key, playerNum,dup);
     
     this.alpha = 0;//0.5;
@@ -9,17 +8,12 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     this.charName = "LITERALLY A SCORPION";
     this.playerNum = playerNum; //Player number
     this.copy = dup;
-    this.speed = 60; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
-    this.maxSpeed = 720;
+    this.speed = 30; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.maxSpeed = 420;
     this.diveLimit = 400;
 
-    this.jumpHeight = -1550; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
+    this.jumpHeight = -1250; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = game.world.height - 20;
-
-    this.specialEmitter = game.add.emitter(0, 0, 100);
-    this.specialEmitter.makeParticles('scorpion_curse');
-    game.physics.enable(this.specialEmitter);
-    this.specialEmitter.enableBody = true;
 
     //Animations
     if (this.copy){
@@ -40,18 +34,6 @@ Scorpion = function(game, key, x, y, playerNum, dup){
 
     //this.scorpwalk = game.add.sprite(15, 30, 'scorp_walk');
    // this.scorpwalk.animations.add('scorpion_walk',[0,1],10,true);
-
-    //gamepad
-    game.input.gamepad.start();
-    if (this.playerNum==1){
-        this.pad1 = game.input.gamepad.pad1;
-    }else{
-        this.pad1 = game.input.gamepad.pad2;
-    }
-    
-
-    
-
 
 
     /*
@@ -77,7 +59,7 @@ Scorpion = function(game, key, x, y, playerNum, dup){
 
     //Physics
     game.physics.enable(this);
-    this.gravFactor = 3000;
+    this.gravFactor = 2000;
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
     this.body.gravity.y = this.gravFactor;
@@ -151,16 +133,7 @@ Scorpion = function(game, key, x, y, playerNum, dup){
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
-
-    //special
-    this.chain = game.add.sprite(this.position.x, this.position.y, 'scorpion_chain');
-    this.chain.scale.setTo(0.7,0.7);
-    this.chain.animations.add('scorpion_special',Phaser.Animation.generateFrameNames('scorpion_special',1,8,'',2), 20, false,false);
-    this.chain.anchor.setTo(1,1);
-    this.chain.exists = false;
-
-    this.specialstart = false;
-    this.chainHit = false;
+    
 
 
 
@@ -201,7 +174,6 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     //AG: Knockback stuff
     this.inLightAttack = false;
     this.inHeavyAttack = false;
-    this.inSpecial = false;
     this.touchLeftWallAt = 131.25;
     this.touchRightWallAt = 1148.75;
     this.hitAgainstWall = false;
@@ -283,7 +255,7 @@ Scorpion.prototype.preState =function (){
     //cancel velocity when not in input
     //might be the reason why dive kick is so slow
     //also the reason why down does not move in x NH
-    if (this.state != this.input && this.state != this.downed && this.state != this.dead && this.state == this.lightAttack && !this.action.jump){
+    if (this.state != this.input && this.state != this.downed && this.state != this.dead ){
         this.body.velocity.x = 0;
     }
 
@@ -291,13 +263,7 @@ Scorpion.prototype.preState =function (){
         //light attack reset
         //this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         //this.fist.position.y = this.position.y;
-        if (this.position.y < this.diveLimit){
-            this.body.gravity.y = this.gravFactor*2;
-        }else {
-            this.body.gravity.y = this.gravFactor;
-        }
-        this.lightSoundPlayed = false;
-        
+        this.body.gravity.y = this.gravFactor;
     }
 
     if (this.state != this.heavyAttack){
@@ -311,12 +277,12 @@ Scorpion.prototype.preState =function (){
 
     if (this.position.y != this.floorLevel){
         this.action.jump = true;
-        this.maxSpeed = 240;
+        this.maxSpeed = 120;
 
     }else{
         this.action.jump = false;
         this.canLightAttack = true;
-        this.maxSpeed = 720;
+        this.maxSpeed = 420;
     }
 
     //may need to redo this NH
@@ -356,14 +322,9 @@ Scorpion.prototype.preState =function (){
     }
 
     if (!this.alive){
+        this.heavyChargeSoundPlayed = false;
+        this.heavyChargeSound.stop();
         this.changeState(this.dead);
-    }
-
-    if (game.input.gamepad.supported && game.input.gamepad.active && this.pad1.connected){
-        this.padControl = true;
-    }
-    else{
-        this.padControl = false;
     }
     
     
@@ -398,7 +359,6 @@ Scorpion.prototype.dead = function(){
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
     }
-    this.fist.exists = false;
     
     this.char.frame = 2;
 }
@@ -439,29 +399,21 @@ Scorpion.prototype.lightAttack = function(){
 
     if (!this.action.attacking){
         if (dir){
-            if(this.action.jump){
-                this.body.velocity.x = 700;
-            }
-            this.fist.position.x = this.position.x + 150; 
+            //var fist = game.add.sprite(this.position.x+50,this.position.y,'fist');
+            //fist.scale.setTo(0.25,0.25);
+            //this.fists.add(fist);
+            //this.fist.position.x += 50;
+            this.fist.position.x +=  150; 
         } else{
-            if(this.action.jump){
-                this.body.velocity.x = -700;
-            }
-            
-            this.fist.position.x = this.position.x - 150; //AG: Brings fist back on screen
+            //var fist = game.add.sprite(this.position.x-50,this.position.y,'fist');
+            //fist.scale.setTo(0.25,0.25);
+            //this.fists.add(fist);
+            //this.fist.position.x -= 50;
+            this.fist.position.x -= 150; //AG: Brings fist back on screen
         }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
         if(!this.attackHit) this.lightSound.play();
-    }else{
-        if (this.action.jump){
-            if (dir){
-                this.fist.position.x = this.position.x + 150;
-            }else{
-                this.fist.position.x = this.position.x - 150
-            }
-        }
-
     }
     //this.debugText.text = this.position.x;
     
@@ -593,65 +545,6 @@ Scorpion.prototype.heavyAttack = function(){
         
     }
     
-}
-
-Scorpion.prototype.special = function(){
-
-    this.inSpecial = true;
-    this.chain.exists = true;
-    this.chain.position.x = this.position.x;
-    this.chain.position.y = this.position.y;
-    this.fist.exists = true;
-    this.action.attacking = true;
-    if (this.faceRIGHT){
-        this.chain.scale.x = -0.7;
-        var mir = 1;
-    }else{
-        this.chain.scale.x = 0.7;
-        var mir = -1;
-    }
-
-    if (this.specialstart){
-        this.chain.play('scorpion_special');
-        this.specialEmitter.x = this.position.x;
-        this.specialEmitter.y = this.position.y-75;
-        this.specialEmitter.start(true, 2000, null, 10);
-        this.specialstart = false;
-    }else{
-        if(this.faceRIGHT){
-            if (this.fist.position.x - this.position.x < 735){
-                this.fist.position.x += (mir*35);
-            }
-
-        }else{
-            if (this.position.x - this.fist.position.x < 735){
-                this.fist.position.x += (mir*40);
-            }
-
-        }
-
-        
-    }
-
-    if (this.timer.timerDone('spec') || this.chainHit){
-        this.changeState(this.input);
-        this.chain.exists = false;
-        this.action.attacking = false;
-        this.fist.exists = false;
-        this.chainHit = false;
-        this.inSpecial = false;
-    }
-    
-}
-
-Scorpion.prototype.chained = function(location){
-    //this.action.chained = false;
-    if (!this.action.block){
-        this.position.x = location;
-
-    }
-    
-
 }
 
 //projectile
@@ -806,7 +699,7 @@ Scorpion.prototype.applyKnockBack = function(x,y){
     */
 
 
-    if (this.downCount >= 3 && this.action.jump){
+    if (this.action.down && this.action.jump){
         y1 = -100*y;
         x1 = 50*x;
         
@@ -877,8 +770,6 @@ Scorpion.prototype.input = function(){
     
         //AG: if touching ground can jump (Altered code from tutorial)
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
-
-
         if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
             this.body.velocity.y = this.jumpHeight;
             this.jump_sound.play();
@@ -893,11 +784,13 @@ Scorpion.prototype.input = function(){
             }
             
         }else{
-
+            //possibly have a millisecond of un guarding? NH
             this.action.block = false;
             this.action.perfectguard = false;
 
         }
+
+        //test combat inputs
 
 
         //light attack NH
@@ -927,344 +820,128 @@ Scorpion.prototype.input = function(){
 
         }
 
+        //projectile 
+
+        this.bullets.forEachAlive(this.killBullets,this);
         
+
+
+
+
         //fixed your shit NH
         
-        if(this.padControl){
 
-            if(this.pad1.justPressed(Phaser.Gamepad.XBOX360_A) && this.body.touching.down && !this.action.block ){
-                this.body.velocity.y = this.jumpHeight;
-                this.jump_sound.play();
-            }
-
-            //blocking NH
-            if (this.pad1.isDown(Phaser.Gamepad.XBOX360_Y)){
-                this.action.block = true;
-                if (!this.action.perfectguard){
-                    this.timer.startTimer('perfectguard',250);
-                    this.action.perfectguard = true;
-                }
-                
-            }else{
-                
-                this.action.block = false;
-                this.action.perfectguard = false;
-
-            }
-
-
-            //light attack NH
-            if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_X) && !this.action.block && this.canLightAttack){
-                //set timer for half a second
-                this.timer.startTimer('light',500);
-
-                //this line might be redundant NH
-                this.body.velocity.x = 0
-                //this.debugText.text = 'attack facing right';
-                this.changeState(this.lightAttack);
-
-                
-            }
-
-            //heavy attack NH
-            
-            if (this.pad1.isDown(Phaser.Gamepad.XBOX360_B) && !this.action.block){
-                this.timer.startTimer('heavy_cast',500);
-                this.timer.startTimer('heavy',1000);
-                //this.timer.startTimer('heavy',1000);
-                if (this.position.y < this.diveLimit){
-                    this.action.divable = true;
-                }
-                this.changeState(this.heavyAttack);
-
-
-            }
-
-            if(this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 && !this.action.block ){
-                this.char.scale.x = this.scaleFactor;
-
-                if (this.body.velocity.x > 0){
-                    this.body.velocity.x = 0;
-                }
-                if (this.body.velocity.x > -1*this.maxSpeed){
-                    this.body.velocity.x -= this.speed;      
-                }else{
-                    this.body.velocity.x = -1*this.maxSpeed;
-                }
-                //this.char.animations.play('left');
-
-                if (this.action.jump && !this.staggered){
-                    //this.char.setTexture('scorpion_jump');
-                    this.char.frame= 10;//('Scorpion_Jump');
-                }else if(this.staggered) {
-                    //this.char.setTexture('scorpion_stagger');
-                    this.char.animation.play('scorpion_stagger');
-                }else {
-                    //this.char.loadTexture('scorpion_idle');
-                    //this.char.setTexture('scorp_walk');
-                    //this.char.animations.add('scorpion_walk',[0,1], 10, true);
-                    this.char.animations.play('scorpion_walk');
-                }
-                
-                
-                //stop that animation shit  NH
-                if(this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1 && !this.action.block){
-                    
-                    if (this.prev_anim == 0){
-                        //this.char.frame = 0;
-
-                        this.faceRIGHT = false;
-                    }else{
-                        //this.char.frame = 5;
-                        this.char.scale.x = -1*this.scaleFactor;
-                        this.anim_lock = true;
-                    }
-                    this.body.velocity.x = 0;
-                }
-
-                //for frame changes NH
-                if (!this.anim_lock){
-                    this.prev_anim = 0;
-                    this.faceRIGHT = false;
-                }
-                this.anim_lock = false;
-                
-                
-
-            //AG: Right controls
-            }else if(this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1  && !this.action.block){
-                this.char.scale.x = -1*this.scaleFactor;
-
-                if (this.body.velocity.x < 0){
-                    this.body.velocity.x = 0;
-                }
-                if (this.body.velocity.x < this.maxSpeed){
-                    this.body.velocity.x += this.speed;        
-                }else{
-                    this.body.velocity.x = this.maxSpeed;
-                }
-                //this.char.animations.play('right');
-
-                if (this.action.jump){
-                    //this.char.setTexture('scorpion_jump');
-                    this.char.frame= 10;//('Scorpion_Jump');
-                }else{
-                    //this.char.loadTexture('scorpion_idle');
-                    
-                    //this.char.setTexture('scorp_walk');
-                    //this.char.animations.add('scorpion_walk',[0,1], 10, true);
-                    this.char.animations.play('scorpion_walk');
-                }
-
-                this.prev_anim = 1;
-                this.faceRIGHT = true;
-
-            }else{
-                this.body.velocity.x = 0;
-
-                if (this.action.jump && !this.action.stagfall){
-                    //this.char.setTexture('scorpion_jump');
-                    this.char.frame=10;//('Scorpion_Jump');
-                }else if (this.action.block){
-                    //this.char.setTexture('scorpion_crouch');
-                    //this.char.frame=('Scorpion_crouch');
-                    this.char.frame=1;
-                }else if(this.action.stagfall) {
-                    //this.char.setTexture('scorpion_stagger');
-                    this.char.animations.play('scorpion_stagger');
-                }else {
-                    //this.char.setTexture('scorpion_idle');
-                    this.char.frame=4;//('Scorpion_Idle');
-                }
-
-             
-                if (this.prev_anim == 0){
-                    //this.char.frame = 0;
-                    this.char.scale.x = this.scaleFactor;
-
-                    this.faceRIGHT = false;
-                }else{
-                    //this.char.frame = 5;
-                    this.char.scale.x = -1*this.scaleFactor;
-                    this.char.faceRIGHT = true;
-                }
-                this.body.velocity.x = 0;
-            }
-
-        }else{
-
-            if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
-                this.body.velocity.y = this.jumpHeight;
-                this.jump_sound.play();
-            }
-
-            //blocking NH
-            if (game.input.keyboard.isDown(this.keyDown)){
-                this.action.block = true;
-                if (!this.action.perfectguard){
-                    this.timer.startTimer('perfectguard',250);
-                    this.action.perfectguard = true;
-                }
-                
-            }else{
-                
-                this.action.block = false;
-                this.action.perfectguard = false;
-
-            }
-
-
-            //light attack NH
-            if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
-                //set timer for half a second
-                this.timer.startTimer('light',500);
-
-                //this line might be redundant NH
-                this.body.velocity.x = 0
-                //this.debugText.text = 'attack facing right';
-                this.changeState(this.lightAttack);
-
-                
-            }
-
-            //heavy attack NH
-            
-            if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
-                this.timer.startTimer('heavy_cast',500);
-                this.timer.startTimer('heavy',1000);
-                //this.timer.startTimer('heavy',1000);
-                if (this.position.y < this.diveLimit){
-                    this.action.divable = true;
-                }
-                this.changeState(this.heavyAttack);
-
-
-            }
-            /*
-            if (game.input.keyboard.justPressed(this.keyB) && game.input.keyboard.justPressed(this.keyA) && !this.action.block){
-                //this.timer.startTimer('heavy_cast',500);
-                this.timer.startTimer('spec',1000);
-                this.specialstart = true;
-                
-
-                this.changeState(this.special);
-
-
-            }
-            */
     
         //AG: Left controls
-            if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
-                this.char.scale.x = this.scaleFactor;
+        if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
+            this.char.scale.x = this.scaleFactor;
 
-                if (this.body.velocity.x > 0){
-                    this.body.velocity.x = 0;
-                }
-                if (this.body.velocity.x > -1*this.maxSpeed){
-                    this.body.velocity.x -= this.speed;      
-                }else{
-                    this.body.velocity.x = -1*this.maxSpeed;
-                }
-                //this.char.animations.play('left');
-
-                if (this.action.jump && !this.staggered){
-                    //this.char.setTexture('scorpion_jump');
-                    this.char.frame= 10;//('Scorpion_Jump');
-                }else if(this.staggered) {
-                    //this.char.setTexture('scorpion_stagger');
-                    this.char.animation.play('scorpion_stagger');
-                }else {
-                    //this.char.loadTexture('scorpion_idle');
-                    //this.char.setTexture('scorp_walk');
-                    //this.char.animations.add('scorpion_walk',[0,1], 10, true);
-                    this.char.animations.play('scorpion_walk');
-                }
-                
-                
-                //stop that animation shit  NH
-                if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
-                    
-                    if (this.prev_anim == 0){
-                        //this.char.frame = 0;
-
-                        this.faceRIGHT = false;
-                    }else{
-                        //this.char.frame = 5;
-                        this.char.scale.x = -1*this.scaleFactor;
-                        this.anim_lock = true;
-                    }
-                    this.body.velocity.x = 0;
-                }
-
-                //for frame changes NH
-                if (!this.anim_lock){
-                    this.prev_anim = 0;
-                    this.faceRIGHT = false;
-                }
-                this.anim_lock = false;
-                
-                
-
-            //AG: Right controls
-            }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
-                this.char.scale.x = -1*this.scaleFactor;
-
-                if (this.body.velocity.x < 0){
-                    this.body.velocity.x = 0;
-                }
-                if (this.body.velocity.x < this.maxSpeed){
-                    this.body.velocity.x += this.speed;        
-                }else{
-                    this.body.velocity.x = this.maxSpeed;
-                }
-                //this.char.animations.play('right');
-
-                if (this.action.jump){
-                    //this.char.setTexture('scorpion_jump');
-                    this.char.frame= 10;//('Scorpion_Jump');
-                }else{
-                    //this.char.loadTexture('scorpion_idle');
-                    
-                    //this.char.setTexture('scorp_walk');
-                    //this.char.animations.add('scorpion_walk',[0,1], 10, true);
-                    this.char.animations.play('scorpion_walk');
-                }
-
-                this.prev_anim = 1;
-                this.faceRIGHT = true;
-
-            }else{
+            if (this.body.velocity.x > 0){
                 this.body.velocity.x = 0;
+            }
+            if (this.body.velocity.x > -1*this.maxSpeed){
+                this.body.velocity.x -= this.speed;      
+            }else{
+                this.body.velocity.x = -1*this.maxSpeed;
+            }
+            //this.char.animations.play('left');
 
-                if (this.action.jump && !this.action.stagfall){
-                    //this.char.setTexture('scorpion_jump');
-                    this.char.frame=10;//('Scorpion_Jump');
-                }else if (this.action.block){
-                    //this.char.setTexture('scorpion_crouch');
-                    //this.char.frame=('Scorpion_crouch');
-                    this.char.frame=1;
-                }else if(this.action.stagfall) {
-                    //this.char.setTexture('scorpion_stagger');
-                    this.char.animations.play('scorpion_stagger');
-                }else {
-                    //this.char.setTexture('scorpion_idle');
-                    this.char.frame=4;//('Scorpion_Idle');
-                }
-
-             
+            if (this.action.jump && !this.staggered){
+                //this.char.setTexture('scorpion_jump');
+                this.char.frame= 10;//('Scorpion_Jump');
+            }else if(this.staggered) {
+                //this.char.setTexture('scorpion_stagger');
+                this.char.animation.play('scorpion_stagger');
+            }else {
+                //this.char.loadTexture('scorpion_idle');
+                //this.char.setTexture('scorp_walk');
+                //this.char.animations.add('scorpion_walk',[0,1], 10, true);
+                this.char.animations.play('scorpion_walk');
+            }
+            
+            
+            //stop that animation shit  NH
+            if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
+                
                 if (this.prev_anim == 0){
                     //this.char.frame = 0;
-                    this.char.scale.x = this.scaleFactor;
 
                     this.faceRIGHT = false;
                 }else{
                     //this.char.frame = 5;
                     this.char.scale.x = -1*this.scaleFactor;
-                    this.char.faceRIGHT = true;
+                    this.anim_lock = true;
                 }
                 this.body.velocity.x = 0;
             }
 
+            //for frame changes NH
+            if (!this.anim_lock){
+                this.prev_anim = 0;
+                this.faceRIGHT = false;
+            }
+            this.anim_lock = false;
+            
+            
+
+        //AG: Right controls
+        }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
+            this.char.scale.x = -1*this.scaleFactor;
+
+            if (this.body.velocity.x < 0){
+                this.body.velocity.x = 0;
+            }
+            if (this.body.velocity.x < this.maxSpeed){
+                this.body.velocity.x += this.speed;        
+            }else{
+                this.body.velocity.x = this.maxSpeed;
+            }
+            //this.char.animations.play('right');
+
+            if (this.action.jump){
+                //this.char.setTexture('scorpion_jump');
+                this.char.frame= 10;//('Scorpion_Jump');
+            }else{
+                //this.char.loadTexture('scorpion_idle');
+                
+                //this.char.setTexture('scorp_walk');
+                //this.char.animations.add('scorpion_walk',[0,1], 10, true);
+                this.char.animations.play('scorpion_walk');
+            }
+
+            this.prev_anim = 1;
+            this.faceRIGHT = true;
+
+        }else{
+            this.body.velocity.x = 0;
+
+            if (this.action.jump && !this.action.stagfall){
+                //this.char.setTexture('scorpion_jump');
+                this.char.frame=10;//('Scorpion_Jump');
+            }else if (this.action.block){
+                //this.char.setTexture('scorpion_crouch');
+                //this.char.frame=('Scorpion_crouch');
+                this.char.frame=1;
+            }else if(this.action.stagfall) {
+                //this.char.setTexture('scorpion_stagger');
+                this.char.animations.play('scorpion_stagger');
+            }else {
+                //this.char.setTexture('scorpion_idle');
+                this.char.frame=4;//('Scorpion_Idle');
+            }
+
+         
+            if (this.prev_anim == 0){
+                //this.char.frame = 0;
+                this.char.scale.x = this.scaleFactor;
+
+                this.faceRIGHT = false;
+            }else{
+                //this.char.frame = 5;
+                this.char.scale.x = -1*this.scaleFactor;
+                this.char.faceRIGHT = true;
+            }
+            this.body.velocity.x = 0;
         }
 
         if (this.action.stagfall && !this.action.jump){

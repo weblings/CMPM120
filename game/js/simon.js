@@ -117,7 +117,7 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.fist.anchor.y = 0.5;
     this.fists.add(this.fist);
     this.fist.exists = false;
-    this.fist.alpha = 0;
+    this.fist.alpha = 0.8;
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');

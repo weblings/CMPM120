@@ -188,25 +188,25 @@ var mainState = {
         deathSound.mute = false;
         
         //Rounds won UI
-        p2wins1 = game.add.sprite(game.world.width/2+135,60,'round_unresolved');
+        p2wins1 = game.add.sprite(game.world.width/2+225,102,'round_unresolved');
         p2wins1.scale.setTo(.3,.3);
-        p2wins2 = game.add.sprite(game.world.width/2+95,60,'round_unresolved');
+        p2wins2 = game.add.sprite(game.world.width/2+185,102,'round_unresolved');
         p2wins2.scale.setTo(.3,.3);        
-        p1wins1 = game.add.sprite(game.world.width/2-165,60,'round_unresolved');
+        p1wins1 = game.add.sprite(game.world.width/2-255,102,'round_unresolved');
         p1wins1.scale.setTo(.3,.3);
-        p1wins2 = game.add.sprite(game.world.width/2-125,60,'round_unresolved');
+        p1wins2 = game.add.sprite(game.world.width/2-215,102,'round_unresolved');
         p1wins2.scale.setTo(.3,.3);
         
-        p2won1 = game.add.sprite(game.world.width/2+135,60,'round_won');
+        p2won1 = game.add.sprite(game.world.width/2+225,102,'round_won');
         p2won1.scale.setTo(.3,.3);
         if(p2win < 1) p2won1.alpha = 0;
-        p2won2 = game.add.sprite(game.world.width/2+95,60,'round_won');
+        p2won2 = game.add.sprite(game.world.width/2+185,102,'round_won');
         p2won2.scale.setTo(.3,.3);
         p2won2.alpha = 0;
-        p1won1 = game.add.sprite(game.world.width/2-165,60,'round_won');
+        p1won1 = game.add.sprite(game.world.width/2-255,102,'round_won');
         p1won1.scale.setTo(.3,.3);
         if(p1win < 1) p1won1.alpha = 0;
-        p1won2 = game.add.sprite(game.world.width/2-125,60,'round_won');
+        p1won2 = game.add.sprite(game.world.width/2-215,102,'round_won');
         p1won2.scale.setTo(.3,.3);
         p1won2.alpha = 0;
 	},

@@ -17,8 +17,8 @@ var preloaderState = {
 		game.load.image('control2','assets/img/controls.png');
         game.load.image('pause_menu','assets/img/menu_bg_temp.png');
 
-        game.load.image('round_unresolved','assets/img/round_unresolved.png');
-        game.load.image('round_won','assets/img/round_won.png');
+        game.load.image('round_unresolved','assets/img/round_unresolved5.png');
+        game.load.image('round_won','assets/img/round_won5.png');
 		game.load.image('arrow','assets/img/Arrow.png');
 		game.load.image('selectBox','assets/img/selectBox.png');
 		game.load.image('selectBox2','assets/img/selectBox2.png');

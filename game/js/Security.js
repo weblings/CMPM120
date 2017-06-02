@@ -1,5 +1,5 @@
 Security = function(game, key, x, y, playerNum,dup){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum);
+    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -7,6 +7,7 @@ Security = function(game, key, x, y, playerNum,dup){
     //Vars
     this.charName = "SECURITY";
     this.playerNum = playerNum; //Player number
+    this.copy = dup;
     this.speed = 25; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 420;
     this.diveLimit = 400;
@@ -15,18 +16,34 @@ Security = function(game, key, x, y, playerNum,dup){
     this.floorLevel = game.world.height - 20;
 
     //Animations
+    
     //this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
-    this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
-    this.idleFrame = 10;
-    this.downedFrame = 5;
-    this.blockFrame = 4;
-    this.bottleFrame = 2;
-    this.uiFrame = 3;
-    this.char.frame = this.idleFrame;
-    this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
-    this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
-    this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
-    this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
+    if(!this.copy){
+        this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
+        this.idleFrame = 10;
+        this.downedFrame = 5;
+        this.blockFrame = 4;
+        //this.bottleFrame = 2;
+        this.uiFrame = 3;
+        this.char.frame = this.idleFrame;
+        this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
+        this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
+        this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
+        this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
+    }else{
+        this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
+        this.idleFrame = 0;
+        this.downedFrame = 8;
+        //this.blockFrame = 6;
+        this.bottleFrame = 2;
+        this.uiFrame = 3;
+        this.char.frame = this.idleFrame;
+        this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
+        this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
+        this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
+        this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
+    }
+
     this.scaleFactor = 1;
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
@@ -507,8 +524,15 @@ Security.prototype.heavyAttack = function(){
 
 //projectile
 Security.prototype.projectile = function(){
-    var bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas');//water_bottle'); //'player');
-    bullet.frame = this.bottleFrame;
+    var choice = game.rnd.between(0,1);
+    var bullet;
+    if(choice == 0){
+        bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas');//water_bottle'); //'player');
+        bullet.frame = 2;
+    }else if(choice == 1){
+        bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas2');//water_bottle'); //'player');
+        bullet.frame = 5;
+    }
     bullet.scale.setTo(1.3,1.3);
     bullet.anchor.setTo(0.5,0.5);
     this.bullets.add(bullet);

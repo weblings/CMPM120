@@ -8,6 +8,7 @@ game.state.add('title', titleState);
 game.state.add('credits', creditState);
 game.state.add('main', mainState);
 game.state.add('charSelect',charSelect);
+game.state.add('controls', controlState);
 
 
 //start preload NH

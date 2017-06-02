@@ -32,17 +32,26 @@ var charSelect = {
         //var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
         //logo.scale.setTo(.7,.7);
 		
+		var upArrow = game.add.sprite(585,275,"arrow");
+		upArrow.scale.setTo(.25, .25);
+		var downArrow = game.add.sprite(585,425,"arrow");
+		downArrow.scale.setTo(.25, -.25);
+		
 		var rabbitID = game.add.sprite(150,220,"rabbit_ID");
 		rabbitID.scale.setTo(.5,.5);
+		rabbitID.alpha = 0;
 		var guardID = game.add.sprite(150,220,"guard_ID");
 		guardID.scale.setTo(.5,.5);
+		guardID.alpha = 0;
 		var scorpID = game.add.sprite(150,220,"scorp_ID");
 		scorpID.scale.setTo(.5,.5);
 
 		var rabbitID2 = game.add.sprite(670,220,"rabbit_ID");
 		rabbitID2.scale.setTo(.5,.5);
+		rabbitID2.alpha = 0;
 		var guardID2 = game.add.sprite(670,220,"guard_ID");
 		guardID2.scale.setTo(.5,.5);
+		guardID2.alpha = 0;
 		var scorpID2 = game.add.sprite(670,220,"scorp_ID");
 		scorpID2.scale.setTo(.5,.5);
         

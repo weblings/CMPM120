@@ -354,8 +354,8 @@ var mainState = {
 
         
         if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player2.action.dive && player1.alive && !player2.action.attacking){
-        	player2.body.velocity.y -= 300;
+        	&& !player2.action.dive && player1.alive && !player2.action.attacking && !player1.staggered){
+        	//player2.body.velocity.y -= 300;
         	if (player2.faceRIGHT){
         		player2.position.x +=50;
         	}else{
@@ -366,8 +366,8 @@ var mainState = {
         }
 
         if (player2.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player1.action.dive && player2.alive && !player1.action.attacking){
-        	player1.body.velocity.y -= 300;
+        	&& !player1.action.dive && player2.alive && !player1.action.attacking && !player2.staggered){
+        	//player1.body.velocity.y -= 300;
         	if (player1.faceRIGHT){
         		player1.position.x +=50;
         	}else{

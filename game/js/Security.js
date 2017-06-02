@@ -11,7 +11,7 @@ Security = function(game, key, x, y, playerNum,dup){
     this.maxSpeed = 420;
     this.diveLimit = 400;
 
-    this.jumpHeight = -1250; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
+    this.jumpHeight = -1550; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = game.world.height - 20;
 
     //Animations
@@ -56,7 +56,7 @@ Security = function(game, key, x, y, playerNum,dup){
 
     //Physics
     game.physics.enable(this);
-    this.gravFactor = 2000;
+    this.gravFactor = 3000;
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
     this.body.gravity.y = this.gravFactor;
@@ -252,7 +252,11 @@ Security.prototype.preState =function (){
         //light attack reset
         this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         this.fist.position.y = this.position.y;
-        this.body.gravity.y = this.gravFactor;
+        if (this.position.y < this.diveLimit){
+            this.body.gravity.y = this.gravFactor*2;
+        }else {
+            this.body.gravity.y = this.gravFactor;
+        }
     }
 
     if (this.state != this.heavyAttack){

@@ -23,6 +23,7 @@ Security = function(game, key, x, y, playerNum,dup){
         this.idleFrame = 10;
         this.downedFrame = 5;
         this.blockFrame = 4;
+        this.diveFrame = 11;
         //this.bottleFrame = 2;
         //this.uiFrame = 3;
         this.char.frame = this.idleFrame;
@@ -35,6 +36,7 @@ Security = function(game, key, x, y, playerNum,dup){
         this.idleFrame = 0;
         this.downedFrame = 8;
         this.blockFrame = 7;
+        this.diveFrame = 1;
         //this.bottleFrame = 2;
         //this.uiFrame = 3;
         this.char.frame = this.idleFrame;
@@ -51,6 +53,7 @@ Security = function(game, key, x, y, playerNum,dup){
     }else{
         this.pad1 = game.input.gamepad.pad2;
     }
+    this.padControl = false;
 
     this.scaleFactor = 1;
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
@@ -230,6 +233,8 @@ Security = function(game, key, x, y, playerNum,dup){
     
     this.lightSound.volume = this.missVolume;
     this.heavySound.volume = this.missVolume;
+
+
 }
 
 Security.prototype = Object.create(Phaser.Sprite.prototype);
@@ -388,12 +393,24 @@ Security.prototype.downed = function(){
      //set timer down max down time
      //this.timer.startTimer('downed', 2500);
  
-     if ((game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
-         game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
-         game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
-         this.action.down = false;
-         this.changeState(this.input);
-     }
+     if (this.padControl){
+        if ((this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1 || this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)
+            || this.pad1.isDown(Phaser.Gamepad.XBOX360_X) || this.pad1.isDown(Phaser.Gamepad.XBOX360_Y) ||
+            this.pad1.isDown(Phaser.Gamepad.XBOX360_A) || this.pad1.isDown(Phaser.Gamepad.XBOX360_B) && this.timer.timerDone('forcedDown')){
+            this.action.down = false;
+            this.changeState(this.input);
+        }
+
+
+     }else{
+ 
+         if ((game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
+            game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
+            game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
+            this.action.down = false;
+            this.changeState(this.input);
+         }
+    }
  
      
 }
@@ -437,14 +454,14 @@ Security.prototype.heavyAttack = function(){
         //dive kick
         if ( this.action.divable){
             this.fist.exists = false;
-            this.char.frame = 11;
+            this.char.frame = this.diveFrame;
 
         
-            this.body.velocity.y = 1200;
+            this.body.velocity.y = 1500;
             if (this.faceRIGHT){
-                this.body.velocity.x = 250;
+                this.body.velocity.x = 750;
             }else{
-                this.body.velocity.x = -250;
+                this.body.velocity.x = -750;
             }
             this.action.attacking = true;
             this.action.dive = true;

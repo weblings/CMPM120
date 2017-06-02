@@ -50,7 +50,7 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     }
     
 
-    
+    this.padControl = false;
 
 
 
@@ -413,13 +413,25 @@ Scorpion.prototype.downed = function(){
      
      //set timer down max down time
      //this.timer.startTimer('downed', 2500);
+
+     if (this.padControl){
+        if ((this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1 || this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)
+            || this.pad1.isDown(Phaser.Gamepad.XBOX360_X) || this.pad1.isDown(Phaser.Gamepad.XBOX360_Y) ||
+            this.pad1.isDown(Phaser.Gamepad.XBOX360_A) || this.pad1.isDown(Phaser.Gamepad.XBOX360_B) && this.timer.timerDone('forcedDown')){
+            this.action.down = false;
+            this.changeState(this.input);
+        }
+
+
+     }else{
  
-     if ((game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
-        game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
-        game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
-        this.action.down = false;
-        this.changeState(this.input);
-     }
+         if ((game.input.keyboard.isDown(this.keyUp) || game.input.keyboard.isDown(this.keyDown) ||
+            game.input.keyboard.isDown(this.keyLeft) || game.input.keyboard.isDown(this.keyRight) ||
+            game.input.keyboard.isDown(this.keyA) || game.input.keyboard.isDown(this.keyB)) && this.timer.timerDone('forcedDown')){
+            this.action.down = false;
+            this.changeState(this.input);
+         }
+    }
  
      
 }
@@ -492,11 +504,11 @@ Scorpion.prototype.heavyAttack = function(){
             this.char.frame = 11;
 
         
-            this.body.velocity.y = 1200;
+            this.body.velocity.y = 1550;
             if (this.faceRIGHT){
-                this.body.velocity.x = 250;
+                this.body.velocity.x = 900;
             }else{
-                this.body.velocity.x = -250;
+                this.body.velocity.x = -900;
             }
             this.action.attacking = true;
             this.action.dive = true;

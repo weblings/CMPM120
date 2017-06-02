@@ -2,7 +2,6 @@ var controlState = {
 
     
     create: function(){
-		console.log("Press ESC to go to CharSelect");
 		//PLAYER 1 SELECT
 		var layoutSelect = game.add.sprite(70, 40, "selectBox");
 		
@@ -68,16 +67,8 @@ var controlState = {
 	   controls1_2.alpha = 0;
 	   var controls2_2 = game.add.sprite(730,50,"control2");
 	   
-	   var controller1 = game.add.sprite(105,60,"controller");
-	   controller1.scale.setTo(.75,.75);
-	   controller1.alpha = 0;
-	   
-	   var controller2 = game.add.sprite(755,60,"controller");
-	   controller2.scale.setTo(.75,.75);
-	   controller2.alpha = 0;
-	   
-	   sprites = [controls1, controls2, controller1];
-	   sprites2 = [controls1_2, controls2_2, controller2];
+	   sprites = [controls1, controls2];
+	   sprites2 = [controls1_2, controls2_2];
 	   selectBoxes = [layoutSelect, jumpSelect1, leftSelect1, rightSelect1, guardSelect1, lightAttackSelect1, heavyAttackSelect1];
 	   selectBoxes2 = [layoutSelect2, jumpSelect2, leftSelect2, rightSelect2, guardSelect2, lightAttackSelect2, heavyAttackSelect2];
 	   
@@ -102,47 +93,21 @@ var controlState = {
         P2index = 0;
         P2Chose = false;
 		
-		ESCKey = Phaser.Keyboard.ESC;
-		
 		P1 = game.add.text(145, 365,"PLAYER 1", {fontSize: '35px', fill: '#fff'});
-		
 		P1Jump = game.add.text(50, 415,"JUMP: ", {fontSize: '32px', fill: '#fff'});
-		P1JumpButton = game.add.text(160, 415,"W", {fontSize: '32px', fill: '#fff'});
-		
 		P1Left = game.add.text(50, 460,"LEFT: ", {fontSize: '32px', fill: '#fff'});
-		P1LeftButton = game.add.text(155, 460,"A", {fontSize: '32px', fill: '#fff'});
-		
 		P1Right = game.add.text(50, 505,"RIGHT: ", {fontSize: '32px', fill: '#fff'});
-		P1RightButton = game.add.text(165, 505,"D", {fontSize: '32px', fill: '#fff'});
-		
 		P1Guard = game.add.text(50, 550,"GUARD: ", {fontSize: '32px', fill: '#fff'});
-		P1GuardButton = game.add.text(185, 550,"S", {fontSize: '32px', fill: '#fff'});
-		
 		P1Light = game.add.text(50, 595,"LIGHT ATTACK: ", {fontSize: '32px', fill: '#fff'});
-		P1LightButton = game.add.text(300, 595,"E", {fontSize: '32px', fill: '#fff'});
-		
 		P1Heavy = game.add.text(50, 640,"HEAVY ATTACK/DIVEKICK: ", {fontSize: '32px', fill: '#fff'});
-		P1HeavyButton = game.add.text(480, 640,"R", {fontSize: '32px', fill: '#fff'});
 		
 		P2 = game.add.text(800, 365,"PLAYER 2", {fontSize: '35px', fill: '#fff'});
-		
 		P2Jump = game.add.text(725, 415,"JUMP: ", {fontSize: '32px', fill: '#fff'});
-		P2JumpButton = game.add.text(835, 415,"O", {fontSize: '32px', fill: '#fff'});
-		
 		P2Left = game.add.text(725, 460,"LEFT: ", {fontSize: '32px', fill: '#fff'});
-		P2LeftButton = game.add.text(830, 460,"K", {fontSize: '32px', fill: '#fff'});
-		
 		P2Right = game.add.text(725, 505,"RIGHT: ", {fontSize: '32px', fill: '#fff'});
-		P2RightButton = game.add.text(840, 505,";", {fontSize: '32px', fill: '#fff'});
-		
 		P2Guard = game.add.text(725, 550,"GUARD: ", {fontSize: '32px', fill: '#fff'});
-		P2GuardButton = game.add.text(860, 550,"L", {fontSize: '32px', fill: '#fff'});
-		
 		P2Light = game.add.text(725, 595,"LIGHT ATTACK: ", {fontSize: '32px', fill: '#fff'});
-		P2LightButton = game.add.text(975, 595,"I", {fontSize: '32px', fill: '#fff'});
-		
 		P2Heavy = game.add.text(725, 640,"HEAVY ATTACK/DIVEKICK: ", {fontSize: '32px', fill: '#fff'});
-		P2HeavyButton = game.add.text(1155, 640,"U", {fontSize: '32px', fill: '#fff'});
 	   
     },
     
@@ -171,55 +136,14 @@ var controlState = {
 				selectBoxes[P1index].alpha = 1;
             }
         }
-		
-		if(game.input.keyboard.justPressed(P1keyA)){
-			//P1Chose = true;
-			console.log("Im selected!");
-			if(sprites[0].alpha == 1){ //switch to 1 hand
-				sprites[0].alpha = 0;
-				sprites[1].alpha = 1;
-				sprites[2].alpha = 0;
-			
-				P1JumpButton.text = "W";
-				P1LeftButton.text = "A";
-				P1RightButton.text = "D";
-				P1GuardButton.text = "S";
-				P1LightButton.text = "E";
-				P1HeavyButton.text = "R";
-				
-			}else if(sprites[2].alpha == 1){ //switch to 2 hands
-				sprites[0].alpha = 1;
-				sprites[1].alpha = 0;
-				sprites[2].alpha = 0;
-				
-				P1JumpButton.text = "W";
-				P1LeftButton.text = "A";
-				P1RightButton.text = "D";
-				P1GuardButton.text = "S";
-				P1LightButton.text = "E";
-				P1HeavyButton.text = "Q";
-			}else if(sprites[1].alpha == 1){ //switch to controller
-				sprites[0].alpha = 0;
-				sprites[1].alpha = 0;
-				sprites[2].alpha = 1;
-				
-				P1JumpButton.text = "A";
-				P1LeftButton.text = "JOYSTICK L";
-				P1RightButton.text = "JOYSTICK R";
-				P1GuardButton.text = "Y";
-				P1LightButton.text = "X";
-				P1HeavyButton.text = "B";
-			}
-		}
-
         
         
         //P2 keys
         if(game.input.keyboard.justPressed(P2keyDown)){
             if(P2index + 2 > selectBoxes2.length){
-               selectBoxes2[P2index].alpha = 0;
-			   P2index = 0;
-			   selectBoxes2[P2index].alpha = 1;
+				selectBoxes2[P2index].alpha = 0;
+                P2index = 0;
+				selectBoxes2[P2index].alpha = 1;
             }else{
 				selectBoxes2[P2index].alpha = 0;
                 P2index++;
@@ -238,53 +162,8 @@ var controlState = {
 				selectBoxes2[P2index].alpha = 1;
             }
         }
-		
-		if(game.input.keyboard.justPressed(P2keyA)){
-			//P1Chose = true;
-			console.log("Im selected!");
-			if(sprites2[0].alpha == 1){ //switch to 1 hand
-				sprites2[0].alpha = 0;
-				sprites2[1].alpha = 1;
-				sprites2[2].alpha = 0;
-			
-				P2JumpButton.text = "O";
-				P2LeftButton.text = "K";
-				P2RightButton.text = ";";
-				P2GuardButton.text = "L";
-				P2LightButton.text = "I";
-				P2HeavyButton.text = "P";
-				
-			}else if(sprites2[2].alpha == 1){ //switch to 2 hands
-				sprites2[0].alpha = 1;
-				sprites2[1].alpha = 0;
-				sprites2[2].alpha = 0;
-				
-				P2JumpButton.text = "O";
-				P2LeftButton.text = "K";
-				P2RightButton.text = ";";
-				P2GuardButton.text = "L";
-				P2LightButton.text = "I";
-				P2HeavyButton.text = "U";
-			}else if(sprites2[1].alpha == 1){ //switch to controller
-				sprites2[0].alpha = 0;
-				sprites2[1].alpha = 0;
-				sprites2[2].alpha = 1;
-				
-				P2JumpButton.text = "A";
-				P2LeftButton.text = "JOYSTICK L";
-				P2RightButton.text = "JOYSTICK R";
-				P2GuardButton.text = "Y";
-				P2LightButton.text = "X";
-				P2HeavyButton.text = "B";
-			}
-		}
         
         
-		if(game.input.keyboard.justPressed(ESCKey)){
-			
-			game.state.start('charSelect');
-			
-		}
         
         //update Text
        // P1Text.text = characters[P1index];

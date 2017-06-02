@@ -145,7 +145,7 @@ var mainState = {
         this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu');
         this.menu.anchor.setTo(0.5,0.5);
         this.menu.alpha = 0;
-        this.menu.scale.setTo(.5,.5);
+        this.menu.scale.setTo(.8,.8);
         
         pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         oneKey = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
@@ -722,7 +722,7 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
-                //game.state.start('controls');
+                game.state.start('controls');
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.FIVE)){
                 //MAIN MENU
                 game.time.slowMotion = 1;

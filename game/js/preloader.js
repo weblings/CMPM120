@@ -21,7 +21,6 @@ var preloaderState = {
 		game.load.image('arrow','assets/img/Arrow.png');
 		game.load.image('selectBox','assets/img/selectBox.png');
 		game.load.image('selectBox2','assets/img/selectBox2.png');
-		game.load.image('controller','assets/img/controller.png');
 
         
         //simon
@@ -79,7 +78,7 @@ var preloaderState = {
 
 	create: function(){
 		//game.state.start('main');
-        game.state.start('controls');
+        game.state.start('charSelect');
 	}
 
 };

@@ -621,8 +621,8 @@ var mainState = {
     },
     
     SecurityHeavyAttack: function(player,hitbox){
-        mainState.calcKnockBack(500,250,player.playerNum);
-        player.takeDamage(10,1000); 
+        mainState.calcKnockBack(1200,300,player.playerNum);
+        player.takeDamage(15,400); 
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.005, 100);
     	}

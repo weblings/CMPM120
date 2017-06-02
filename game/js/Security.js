@@ -8,8 +8,8 @@ Security = function(game, key, x, y, playerNum,dup){
     this.charName = "SECURITY";
     this.playerNum = playerNum; //Player number
     this.copy = dup;
-    this.speed = 25; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
-    this.maxSpeed = 420;
+    this.speed = 50; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
+    this.maxSpeed = 550;
     this.diveLimit = 400;
 
     this.jumpHeight = -1550; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
@@ -191,7 +191,7 @@ Security = function(game, key, x, y, playerNum,dup){
 
     //down stuff NH
     this.downCount = 0;
-    this.downFactor = 1000;
+    this.downFactor = 700;
     
     //AG: Knockback stuff
     this.inLightAttack = false;
@@ -294,11 +294,11 @@ Security.prototype.preState =function (){
     //check if in air
      if (this.position.y != this.floorLevel){
         this.action.jump = true;
-         this.maxSpeed = 100;
+         this.maxSpeed = 200;
     }else{
         this.action.jump = false;
         //this.canLightAttack = true;
-        this.maxSpeed = 320;
+        this.maxSpeed = 550;
     }
     
     //AG: Pasted from Scorpion for downed state
@@ -326,7 +326,7 @@ Security.prototype.preState =function (){
     if (this.downCount >= 3){
         if (!this.staggered && !this.action.jump){
             this.changeState(this.downed);
-            this.timer.startTimer('downed', this.downFactor*3);
+            this.timer.startTimer('downed', this.downFactor*2);
             this.timer.startTimer('forcedDown', this.downFactor);
             this.downCount = 0;
         }
@@ -620,7 +620,12 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         //count for down NH
         if (!this.action.block && !this.action.down){
             this.timer.startTimer('downWindow',2000);
-            this.downCount++;
+            if (!this.inHeavyAttack){
+                this.downCount++;
+            }else{
+                this.staggered = false;
+            }
+            
             this.emitter.x = this.position.x;
             this.emitter.y = this.position.y-200;
             this.emitter.start(true, 2000, null, 10);

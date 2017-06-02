@@ -34,7 +34,7 @@ Security = function(game, key, x, y, playerNum,dup){
         this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
         this.idleFrame = 0;
         this.downedFrame = 8;
-        this.blockFrame = 6;
+        this.blockFrame = 7;
         //this.bottleFrame = 2;
         //this.uiFrame = 3;
         this.char.frame = this.idleFrame;
@@ -333,6 +333,8 @@ Security.prototype.preState =function (){
     }
 
     if (!this.alive){
+        this.heavyChargeSoundPlayed = false;
+        this.heavyChargeSound.stop();
         this.changeState(this.dead);
     }
 

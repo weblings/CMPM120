@@ -31,6 +31,9 @@ var charSelect = {
         var padControl1;
         var padControl2;
         var timer;
+        
+        var padControls1Shown;
+        var padControls2Shown;
     },
     
     create: function(){
@@ -118,7 +121,7 @@ var charSelect = {
         p2AButton.scale.setTo(.1, .1);
         p2AButton.alpha = 0;
         
-        p2BButton = game.add.sprite(game.width/5+210,(3 * game.height)/4-5,'B');
+        p2BButton = game.add.sprite(3 * game.width/5+210,(3 * game.height)/4-5,'B');
         p2BButton.scale.setTo(.1, .1);
         p2BButton.alpha = 0;
         
@@ -130,6 +133,9 @@ var charSelect = {
         JoyStickDown.scale.setTo(.2,.2);
         JoyStickDown.anchor.setTo(.5,.5);
         JoyStickDown.alpha = 0;
+        
+        padControls1Shown = false;
+        padControls2Shown = false;
     },
     
     update: function(){
@@ -149,6 +155,13 @@ var charSelect = {
         }
 
         if (padControl1){
+            
+            if(!padControls1Shown){
+                p1AButton.alpha = 1;
+                p1BButton.alpha = 0;
+                padControls1Shown = true;                
+            }
+            
             if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && !P1Chose && timer.timerDone('selectLock1')){
                 timer.startTimer('selectLock1',200);
                 if(P1index + 2 > characters.length){
@@ -227,6 +240,13 @@ var charSelect = {
         }
 
         if (padControl2){
+            
+            if(!padControls2Shown){
+                p2AButton.alpha = 1;
+                p2BButton.alpha = 0;
+                padControls2Shown = true;                
+            }
+            
             //P2 keys
             if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && !P2Chose && timer.timerDone('selectLock2')){
                 timer.startTimer('selectLock2',200);

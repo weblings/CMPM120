@@ -34,8 +34,11 @@ var mainState = {
 
         var gamerun
 
-        
-        
+        //Controllers
+        var pad1;
+        var pad2;
+        var padControl1;
+        var padControl2; 
     },
 
 	create: function() {
@@ -145,7 +148,12 @@ var mainState = {
         this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu');
         this.menu.anchor.setTo(0.5,0.5);
         this.menu.alpha = 0;
-        this.menu.scale.setTo(.5,.5);
+        this.menu.scale.setTo(.8,.8);
+        
+        /*this.menuC = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu_controller');
+        this.menuC.anchor.setTo(0.5,0.5);
+        this.menuC.alpha = 0;
+        this.menuC.scale.setTo(.8,.8);*/
         
         pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         oneKey = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
@@ -153,6 +161,8 @@ var mainState = {
         threeKey = game.input.keyboard.addKey(Phaser.Keyboard.THREE);
         fourKey = game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
         fiveKey = game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+        
+        //startKey = game.input.gamepad.pad1.onDown(Phaser.Gamepad.XBOX360_START);
         
         pauseKey.onDown.add(mainState.unpause, self);
         oneKey.onDown.add(mainState.unpause, self);
@@ -203,10 +213,31 @@ var mainState = {
 
 	update: function() {
         
+        if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
+            padControl1 = true;
+        }
+        else{
+            padControl1 = false;
+        }
+
+        if (game.input.gamepad.supported && game.input.gamepad.active && pad2.connected){
+            padControl2 = true;
+        }
+        else{
+            padControl2 = false;
+        }
+        
         //Pause button
         if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
             this.menu.alpha = 1;
             game.paused = true;
+        }
+        
+        if(padControl1){
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
+                this.menu.alpha = 1;
+                game.paused = true;
+            }
         }
         
         //AG: If a player has won
@@ -344,7 +375,14 @@ var mainState = {
             game.physics.arcade.overlap(player2,bullets1,mainState.determineAttack, null, this);
         }
         if(player1.charName == "SECURITY" && player2.charName == "SECURITY"){
-            game.physics.arcade.overlap(bullets1,bullets2,mainState.projectileClash, null, this);
+            //game.physics.arcade.overlap(bullets1,bullets2,mainState.projectileClash, null, this);
+            //console.log("Player1 bullets:"+bullets1.children.length);
+            for(let i=0; i< bullets1.children.length; i++){
+                for(let j=0; j<bullets2.children.length; j++){
+                    //console.log("i:"+i+", j:"+j);
+                    game.physics.arcade.overlap(bullets1.children[i],bullets2.children[j],mainState.projectileClash, null, this);
+                }
+            }
         }
         
         //Dive kicks
@@ -357,8 +395,8 @@ var mainState = {
 
         
         if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player2.action.dive && player1.alive && !player2.action.attacking){
-        	player2.body.velocity.y -= 300;
+        	&& !player2.action.dive && player1.alive && !player2.action.attacking && !player1.staggered){
+        	//player2.body.velocity.y -= 300;
         	if (player2.faceRIGHT){
         		player2.position.x +=50;
         	}else{
@@ -369,8 +407,8 @@ var mainState = {
         }
 
         if (player2.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player1.action.dive && player2.alive && !player1.action.attacking){
-        	player1.body.velocity.y -= 300;
+        	&& !player1.action.dive && player2.alive && !player1.action.attacking && !player2.staggered){
+        	//player1.body.velocity.y -= 300;
         	if (player1.faceRIGHT){
         		player1.position.x +=50;
         	}else{
@@ -384,10 +422,6 @@ var mainState = {
         if(player1.introFinished){
             if(game.time.slowMotion == 4){
                 if ((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && !this.transitionStarted){
-                    player1.heavyChargeSoundPlayed = false;
-                    player1.heavyChargeSound.stop();
-                    player2.heavyChargeSoundPlayed = false;
-                    player2.heavyChargeSound.stop();
                     this.timer.startTimer('endMatch',6000);
                     this.transitionStarted = true;
                 }else if((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && this.transitionStarted){
@@ -396,10 +430,6 @@ var mainState = {
                         this.game.world.removeAll();
                         main_music.mute = true;
                         deathSound.mute = true;
-                        player1.heavyChargeSoundPlayed = false;
-                        player1.heavyChargeSound.stop();
-                        player2.heavyChargeSoundPlayed = false;
-                        player2.heavyChargeSound.stop();
                         game.state.start('charSelect',false,false);
                     }
                 }else if ((!player1.alive || !player2.alive) && !this.transitionStarted){
@@ -487,6 +517,12 @@ var mainState = {
                 }
                 mainState.lightAttack(player,hitbox);
             }
+        }else if(attackingPlayer.inSpecial){
+        	if(attackingPlayer.charName == "LITERALLY A SCORPION"){
+        		attackingPlayer.chainHit = true;
+        		mainState.scorpionChain(player,hitbox, attackingPlayer.position.x);
+        	}
+
         }else{
             //AG: Projectile could hit after leaving inLightAttack
             if(attackingPlayer.charName == "SECURITY"){
@@ -559,11 +595,21 @@ var mainState = {
     	}
 
     },
+
+    scorpionChain: function(player,hitbox,location){
+    	player.takeDamage(25,100);
+    	player.chained(location);
+
+    	game.camera.shake(0.005, 200);
+    },
     
-    projectileClash: function(bullets1,bullets2){
-        player1.bullets.removeAll();
-        player2.bullets.removeAll();
+    projectileClash: function(bullet1,bullet2){
+        bullet1.kill();
+        bullet2.kill();
+        //console.log("bullet1: "+bullet1.position.x+" and bullet 2: "+bullet2.position.x);
+        player1.perfect_block_sound.volume = .3;
         player1.perfect_block_sound.play();
+        player1.perfect_block_sound.volume = .7;
     },
     
     //--Security's Attacks--//
@@ -575,11 +621,11 @@ var mainState = {
     },
     
     SecurityHeavyAttack: function(player,hitbox){
-        mainState.calcKnockBack(300,100,player.playerNum);
+        mainState.calcKnockBack(500,250,player.playerNum);
         player.takeDamage(10,1000); 
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.005, 100);
-    	  }
+    	}
     },
     
     //AG: Should figure out which direction to apply knockback
@@ -683,6 +729,14 @@ var mainState = {
     unpause: function(event){
         // Only act if paused
         if(game.paused){
+            
+            if(padControl1){
+                if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
+                    game.paused = false;
+                    //this.menuC.alpha = 0;
+                }
+            }
+            
             if (game.input.keyboard.isDown(Phaser.KeyCode.ESC)){
                 //UNPAUSE
                 game.paused = false;
@@ -694,10 +748,6 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
-                player1.heavyChargeSoundPlayed = false;
-                player1.heavyChargeSound.stop();
-                player2.heavyChargeSoundPlayed = false;
-                player2.heavyChargeSound.stop();
                 game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.TWO)){
                 //RESTART MATCH
@@ -708,10 +758,6 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
-                player1.heavyChargeSoundPlayed = false;
-                player1.heavyChargeSound.stop();
-                player2.heavyChargeSoundPlayed = false;
-                player2.heavyChargeSound.stop();
                 game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.THREE)){
                 //CHARACTER SELECT
@@ -720,10 +766,6 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
-                player1.heavyChargeSoundPlayed = false;
-                player1.heavyChargeSound.stop();
-                player2.heavyChargeSoundPlayed = false;
-                player2.heavyChargeSound.stop();
                 game.state.start('charSelect');
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.FOUR)){
                 //CONTROLS
@@ -732,11 +774,7 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
-                player1.heavyChargeSoundPlayed = false;
-                player1.heavyChargeSound.stop();
-                player2.heavyChargeSoundPlayed = false;
-                player2.heavyChargeSound.stop();
-                //game.state.start('controls');
+                game.state.start('controls');
             }else if(game.input.keyboard.isDown(Phaser.KeyCode.FIVE)){
                 //MAIN MENU
                 game.time.slowMotion = 1;
@@ -744,10 +782,6 @@ var mainState = {
                 game.paused = false;
                 main_music.mute = true;
                 deathSound.mute = true;
-                player1.heavyChargeSoundPlayed = false;
-                player1.heavyChargeSound.stop();
-                player2.heavyChargeSoundPlayed = false;
-                player2.heavyChargeSound.stop();
                 game.state.start('title',false,false);
             } 
         }

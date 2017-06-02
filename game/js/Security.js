@@ -24,7 +24,7 @@ Security = function(game, key, x, y, playerNum,dup){
         this.downedFrame = 5;
         this.blockFrame = 4;
         //this.bottleFrame = 2;
-        this.uiFrame = 3;
+        //this.uiFrame = 3;
         this.char.frame = this.idleFrame;
         this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
         this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
@@ -34,9 +34,9 @@ Security = function(game, key, x, y, playerNum,dup){
         this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
         this.idleFrame = 0;
         this.downedFrame = 8;
-        //this.blockFrame = 6;
-        this.bottleFrame = 2;
-        this.uiFrame = 3;
+        this.blockFrame = 6;
+        //this.bottleFrame = 2;
+        //this.uiFrame = 3;
         this.char.frame = this.idleFrame;
         this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
         this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
@@ -204,12 +204,14 @@ Security = function(game, key, x, y, playerNum,dup){
 
     //misc.
     this.canLightAttack = true;
+    this.lightRate = 200;
+    this.reloadRate = 400;
     //this.loaded = true; //AG: can fire another projectile
     
     //ui light attack element
-    this.ui = game.add.sprite(this.uiX, 105, 'security_atlas');
+    /*this.ui = game.add.sprite(this.uiX, 105, 'security_atlas');
     this.ui.frame = this.uiFrame;
-    this.ui.scale.setTo(.5,.5);
+    this.ui.scale.setTo(.5,.5);*/
     
     //Sounds
     this.lightSound = game.add.audio('throw'); //AG: TO-DO: Get throwing sound
@@ -291,11 +293,11 @@ Security.prototype.preState =function (){
     //check if in air
      if (this.position.y != this.floorLevel){
         this.action.jump = true;
-         this.maxSpeed = 120;
+         this.maxSpeed = 100;
     }else{
         this.action.jump = false;
         //this.canLightAttack = true;
-        this.maxSpeed = 420;
+        this.maxSpeed = 320;
     }
     
     //AG: Pasted from Scorpion for downed state
@@ -404,7 +406,7 @@ Security.prototype.lightAttack = function(){
         this.inLightAttack = true; //AG: Adding for knockback
         this.projectile(); //launches projectile
         this.char.animations.play('security_light');
-        this.ui.alpha = 0;
+        //this.ui.alpha = 0;
         if(!this.attackHit){
             this.lightSound.play();
         }
@@ -554,7 +556,7 @@ Security.prototype.projectile = function(){
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);
     bullet.startLocation = this.position.x;
-    var projectileSpeed = 400;
+    var projectileSpeed = 800;
 
     if (this.faceRIGHT){
         bullet.body.velocity.x = projectileSpeed;
@@ -573,11 +575,11 @@ Security.prototype.killBullets = function(b){
     var killLocation = 600;
     if (b.headingRight){
         if (b.position.x - b.startLocation > killLocation){
-            b.kill();
+            b.destroy();//kill();
         }
     }else{
         if (b.startLocation - b.position.x > killLocation){
-            b.kill();
+            b.destroy();//kill();
         }
     }
 }
@@ -739,7 +741,7 @@ Security.prototype.input = function(){
         if(this.timer.timerDone('reload')){
             this.canLightAttack = true;
             //this.debugText.text = "loaded";
-            this.ui.alpha = 1;
+            //this.ui.alpha = 1;
         }
     
         //AG: Turn off shamed
@@ -795,9 +797,9 @@ Security.prototype.input = function(){
             //light attack NH
             if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_X) && !this.action.block && this.canLightAttack){
                 //set timer for half a second
-                this.timer.startTimer('light',400); //AG: done light attacking
-                this.timer.startTimer('light2',200); //AG: Triggers second animation frame
-                this.timer.startTimer('reload',1500); //AG: Allows player to throw again
+                this.timer.startTimer('light',this.lightRate); //AG: done light attacking
+                //this.timer.startTimer('light2',200); //AG: Triggers second animation frame
+                this.timer.startTimer('reload',this.reloadRate); //AG: Allows player to throw again
                 //this.debugText.text = "empty";
                 //this.loaded = false;
 
@@ -945,9 +947,9 @@ Security.prototype.input = function(){
             //light attack NH
             if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
                 //set timer for half a second
-                this.timer.startTimer('light',400); //AG: done light attacking
+                this.timer.startTimer('light',this.lightRate); //AG: done light attacking
                 this.timer.startTimer('light2',200); //AG: Triggers second animation frame
-                this.timer.startTimer('reload',1500); //AG: Allows player to throw again
+                this.timer.startTimer('reload',this.reloadRate); //AG: Allows player to throw again
                 //this.debugText.text = "empty";
                 //this.loaded = false;
 

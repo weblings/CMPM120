@@ -241,7 +241,11 @@ var mainState = {
         }
         
         //AG: If a player has won
-        if(!player1.alive && player2.alive && gamerun ){
+        if (!player1.alive && !player2.alive && gamerun){
+        	gamerun = false;
+        	round++;
+            deathSound.play();
+        }else if(!player1.alive && player2.alive && gamerun ){
         	p2win++;
         	gamerun = false;
             round++;

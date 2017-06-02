@@ -1,33 +1,47 @@
-Simon = function(game, key, x, y, playerNum){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum);
+Simon = function(game, key, x, y, playerNum, dup){
+    Phaser.Sprite.call(this, game, x, y, key, playerNum, dup);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
 
     //Vars
     this.charName = "SIMON";
+    this.copy = dup;
     this.playerNum = playerNum; //Player number
     this.speed = 30; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 420;
+    this.diveLimit = 400;
 
     this.jumpHeight = -1250; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = game.world.height - 20;
 
     //Animations
-    this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
-    //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
-    this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+    if (this.copy){
+        this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
+        //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
+        this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+
+    }else{
+        this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
+        this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+
+    }
+    
 
     this.scaleFactor = 0.32;
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
-    this.char.anchor.y = 1
+    this.char.anchor.y = 0.5
+    game.physics.enable(this.char);
+    //this.char.enableBody = true;
 
     //particle
     this.emitter = game.add.emitter(0, 0, 100);
-    this.emitter.makeParticles('player');
+    this.emitter.makeParticles('rabbit_blood');
     game.physics.enable(this.emitter);
     this.emitter.enableBody = true;
+    this.emitter.blendMode = 2;
+    this.emitter.alpha = 0.8;
     //this.emitter.gravity = 400;
 
 
@@ -127,6 +141,7 @@ Simon = function(game, key, x, y, playerNum){
     this.action.block = false;
     this.action.attacking = false;
     this.action.dive = false;
+    this.action.divable = false;
     this.action.cancel = false;
     this.action.perfectguard =false;
 
@@ -163,10 +178,17 @@ Simon = function(game, key, x, y, playerNum){
     this.jump_sound = game.add.audio('jump_sound');
     this.block_sound = game.add.audio('block');
     this.perfect_block_sound = game.add.audio('perfect_block');
-    
+
     this.heavyChargeSoundPlayed = false;
     this.heavySoundPlayed = false;
-
+    this.attackHit = false;
+    
+    this.hitVolume = .8;
+    this.missVolume = .4;
+    this.blockVolume = .05;
+    
+    this.lightSound.volume = this.missVolume;
+    this.heavySound.volume = this.missVolume;
 }
 
 Simon.prototype = Object.create(Phaser.Sprite.prototype);
@@ -183,7 +205,11 @@ Simon.prototype.preState =function (){
     this.hitbox.position.y = this.position.y +70;
     */
     this.char.position.x = this.position.x ;
-    this.char.position.y= this.position.y+10;
+    this.char.position.y= this.position.y-120;
+
+    if (this.state == this.input){
+        this.action.attacking = false;
+    }
 
     //this value needs to be changed when art is finalized NH
     if (!this.action.attacking){
@@ -218,10 +244,13 @@ Simon.prototype.preState =function (){
         //this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         //this.fist.position.y = this.position.y;
         this.body.gravity.y = this.gravFactor;
+        this.lightSoundPlayed = false;
     }
 
     if (this.state != this.heavyAttack){
         this.fist.scale.x = 0.60;
+        this.char.body.angularVelocity = 0;
+        this.char.body.rotation = 0;
     }
 
     //check if in air
@@ -295,11 +324,11 @@ Simon.prototype.update = function(){
 
 Simon.prototype.dead = function(){
     if (!this.staggered && !this.action.jump){
-        this.body.velocity.x = 0
-        this.body.velocity.y = 0
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
     }
     
-    this.char.frame = 3
+    this.char.frame = 3;
 }
 
 Simon.prototype.downed = function(){
@@ -358,11 +387,12 @@ Simon.prototype.lightAttack = function(){
             this.body.velocity.x = -700;
 
         }
+        if(!this.lightSoundPlayed){
+            if(!this.attackHit) this.lightSound.play();
+            this.lightSoundPlayed = true;
+        }
         this.action.attacking = true;
         this.inLightAttack = true; //AG: Adding for knockback
-        this.lightSound.play();
-
-
     }
 
     if (dir){
@@ -389,23 +419,30 @@ Simon.prototype.lightAttack = function(){
 Simon.prototype.heavyAttack = function(){
     //this.fist.exists = true;
     //this.char.loadTexture('scorpion_B1');
-    this.char.frame=0;//('Simon_HeavyAttackCharge');
+    
 
-    if (this.action.jump || (this.position.y < this.floorLevel)){
+    if (this.action.jump){
         //dive kick
-        this.fist.exists = false;
-        this.char.frame = 11;
+        if ( this.action.divable){
+            this.fist.exists = false;
+            this.char.frame = 0;
+
         
-        this.body.velocity.y = 1200;
-        if (this.faceRIGHT){
-            this.body.velocity.x = 250;
+            this.body.velocity.y = 1200;
+            if (this.faceRIGHT){
+                this.body.velocity.x = 250;
+                this.char.body.angularVelocity = 800;
+            }else{
+                this.body.velocity.x = -250;
+                this.char.body.angularVelocity = -800;
+            }
+            this.action.attacking = true;
+            this.action.dive = true;
+
         }else{
-            this.body.velocity.x = -250;
+            this.changeState(this.input);
         }
-        this.action.attacking = true;
-        this.action.dive = true;
-        //this.action.noCollide = true;
-        
+
     }else{
         //reset velocity
         
@@ -453,7 +490,7 @@ Simon.prototype.heavyAttack = function(){
             if(!this.heavySoundPlayed){
                 this.heavyChargeSoundPlayed = false;
                 this.heavyChargeSound.stop();
-                this.heavySound.play('',0,1,false,false);
+                if(!this.attackHit) this.heavySound.play();
                 this.heavySoundPlayed = true;
             }
 
@@ -479,13 +516,12 @@ Simon.prototype.heavyAttack = function(){
             this.action.dive = true;
             this.heavySoundPlayed = false;
         }
-
-
             
         if (this.action.attacking && this.action.dive){
             this.action.attacking = false;
             this.action.dive = false;
             this.action.cancel = false;
+            this.action.divable = false;
             this.changeState(this.input);
             this.inHeavyAttack = false; //AG: Adding for knockback
         }
@@ -759,6 +795,9 @@ Simon.prototype.input = function(){
             this.timer.startTimer('heavy_cast',500);
             this.timer.startTimer('heavy',1000);
             //this.timer.startTimer('heavy',1000);
+            if (this.position.y < this.diveLimit){
+                this.action.divable = true;
+            }
             this.changeState(this.heavyAttack);
 
 

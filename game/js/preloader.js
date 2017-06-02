@@ -15,9 +15,16 @@ var preloaderState = {
 		game.load.image('guard_ID','assets/img/SecurityGuard_Passport.png');
 		game.load.image('control1','assets/img/controls1.png');
 		game.load.image('control2','assets/img/controls.png');
+        game.load.image('pause_menu','assets/img/menu_bg_temp.png');
+        game.load.image('round_unresolved','assets/img/round_unresolved.png');
+        game.load.image('round_won','assets/img/round_won.png')
+
         
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');
+        game.load.atlas('rabbit_atlas2','assets/img/simon/alt/spritesheet.png','assets/img/simon/sprites.json');
+        game.load.image('rabbit_blood','assets/img/simon/FrozenRabbit_blood.png');
+
 
         //Scorpion
         /*
@@ -35,12 +42,15 @@ var preloaderState = {
         */
         //changes needed: divekick, jump, heavyattack
         game.load.atlas('scorpion_atlas', 'assets/img/Scorpion/spritesheet.png','assets/img/Scorpion/sprites.json');
+        game.load.atlas('scorpion_atlas2', 'assets/img/Scorpion/alt/spritesheet.png','assets/img/Scorpion/sprites.json');
         game.load.image('scorpion_blood','assets/img/Scorpion/Scorpion_blood.png');
 
 		//insert assets to load here NH
         
         //Security
         game.load.atlas('security_atlas', 'assets/img/Security/security_spritesheet.png','assets/img/Security/security_spritesheet.json');
+        game.load.atlas('security_atlas2','assets/img/Security/security_alt_spritesheet.png','assets/img/Security/security_alt_spritesheet.json');
+        game.load.image('security_blood','assets/img/Security/securityguard_blood.png');
 
         //audio 
         game.load.audio('jump_sound', ['assets/audio/jump.wav']);
@@ -51,6 +61,16 @@ var preloaderState = {
         game.load.audio('heavy_charge','assets/audio/heavy_charge.ogg');
         game.load.audio('perfect_block','assets/audio/block.ogg');
         game.load.audio('throw','assets/audio/throw.ogg');
+        
+        //music
+        game.load.audio('local_forecast','assets/audio/Local_Forecast.ogg');
+        game.load.audio('exit_the_premises', 'assets/audio/Exit_the_Premises.ogg');
+        game.load.audio('ouroboros', 'assets/audio/Ouroboros.ogg');
+        game.load.audio('kick_shock', 'assets/audio/Kick_Shock.ogg');
+        game.load.audio('ultra_polka', 'assets/audio/Ultra_Polka.ogg');
+        game.load.audio('pariasian', 'assets/audio/Parisian.ogg');
+        game.load.audio('shoegazer','assets/audio/Shoegazer.ogg');
+
 	},
 
 	create: function(){

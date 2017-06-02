@@ -1,5 +1,5 @@
-Security = function(game, key, x, y, playerNum){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum);
+Security = function(game, key, x, y, playerNum,dup){
+    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -7,25 +7,43 @@ Security = function(game, key, x, y, playerNum){
     //Vars
     this.charName = "SECURITY";
     this.playerNum = playerNum; //Player number
+    this.copy = dup;
     this.speed = 25; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 420;
+    this.diveLimit = 400;
 
     this.jumpHeight = -1250; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = game.world.height - 20;
 
     //Animations
+    
     //this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
-    this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
-    this.idleFrame = 10;
-    this.downedFrame = 5;
-    this.blockFrame = 4;
-    this.bottleFrame = 2;
-    this.uiFrame = 3;
-    this.char.frame = this.idleFrame;
-    this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
-    this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
-    this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
-    this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
+    if(!this.copy){
+        this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
+        this.idleFrame = 10;
+        this.downedFrame = 5;
+        this.blockFrame = 4;
+        //this.bottleFrame = 2;
+        this.uiFrame = 3;
+        this.char.frame = this.idleFrame;
+        this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
+        this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
+        this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
+        this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
+    }else{
+        this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
+        this.idleFrame = 0;
+        this.downedFrame = 8;
+        //this.blockFrame = 6;
+        this.bottleFrame = 2;
+        this.uiFrame = 3;
+        this.char.frame = this.idleFrame;
+        this.char.animations.add('security_stagger',Phaser.Animation.generateFrameNames('security_guard_stagger',1,2,'',1), 10, false);
+        this.char.animations.add('security_light',Phaser.Animation.generateFrameNames('security_guard_light_attack',1,2,'',1), 10, false);
+        this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
+        this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
+    }
+
     this.scaleFactor = 1;
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
@@ -47,9 +65,11 @@ Security = function(game, key, x, y, playerNum){
 
     //particle
     this.emitter = game.add.emitter(0, 0, 100);
-    this.emitter.makeParticles('player');
+    this.emitter.makeParticles('security_blood');
     game.physics.enable(this.emitter);
     this.emitter.enableBody = true;
+    this.emitter.blendMode = 2;
+    this.emitter.alpha = 0.8;
 
     //Physics
     game.physics.enable(this);
@@ -151,6 +171,7 @@ Security = function(game, key, x, y, playerNum){
     this.action.jump = false;
     this.action.block = false;
     this.action.attacking = false;
+    this.action.divable = false;
     this.action.dive = false;
     this.action.cancel = false;
     this.action.perfectguard =false;
@@ -194,7 +215,7 @@ Security = function(game, key, x, y, playerNum){
     this.heavySoundPlayed = false;
     this.attackHit = false;
     
-    this.missVolume = .4;
+    this.missVolume = .6;
     
     this.lightSound.volume = this.missVolume;
     this.heavySound.volume = this.missVolume;
@@ -215,6 +236,10 @@ Security.prototype.preState =function (){
     */
     this.char.position.x = this.position.x ;
     this.char.position.y= this.position.y+50;//18; //AG: Trying to lower character
+
+    if (this.state == this.input){
+        this.action.attacking = false;
+    }
 
     //this value needs to be changed when art is finalized NH
     if (!this.action.attacking){
@@ -237,7 +262,7 @@ Security.prototype.preState =function (){
     //cancel velocity when not in input
     //might be the reason why dive kick is so slow
     //also the reason why down does not move in x NH
-    if (this.state != this.input && this.state != this.downed){
+    if (this.state != this.input && this.state != this.downed && this.state != this.dead ){
         this.body.velocity.x = 0;
     }
     if (this.state != this.lightAttack){
@@ -284,11 +309,18 @@ Security.prototype.preState =function (){
     }
 
     if (this.downCount >= 3){
-        this.changeState(this.downed);
-        this.timer.startTimer('downed', this.downFactor*3);
-        this.timer.startTimer('forcedDown', this.downFactor);
-        this.downCount = 0;
+        if (!this.staggered && !this.action.jump){
+            this.changeState(this.downed);
+            this.timer.startTimer('downed', this.downFactor*3);
+            this.timer.startTimer('forcedDown', this.downFactor);
+            this.downCount = 0;
+        }
     }
+
+    if (!this.alive){
+        this.changeState(this.dead);
+    }
+    
 }
 
 
@@ -312,6 +344,15 @@ Security.prototype.fisting = function(x,y){
     fist.scale.setTo(0.25,0.25);
     this.fists.add(fist);
 
+}
+
+Security.prototype.dead = function(){
+    if (!this.staggered && !this.action.jump){
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+    }
+    
+    this.char.frame = 5;
 }
 
 Security.prototype.downed = function(){
@@ -367,18 +408,25 @@ Security.prototype.lightAttack = function(){
 Security.prototype.heavyAttack = function(){
     this.fist.exists = true;
 
-    if (this.action.jump || (this.position.y < this.floorLevel)){
+     if (this.action.jump){
         //dive kick
+        if ( this.action.divable){
+            this.fist.exists = false;
+            this.char.frame = 11;
 
         
-        this.body.velocity.y = 1200; //750
-        if (this.faceRIGHT){
-            this.body.velocity.x = 250;
+            this.body.velocity.y = 1200;
+            if (this.faceRIGHT){
+                this.body.velocity.x = 250;
+            }else{
+                this.body.velocity.x = -250;
+            }
+            this.action.attacking = true;
+            this.action.dive = true;
+
         }else{
-            this.body.velocity.x = -250;
+            this.changeState(this.input);
         }
-        this.action.attacking = true;
-        this.action.dive = true;
         //this.action.noCollide = true;
         
     }else{
@@ -463,6 +511,7 @@ Security.prototype.heavyAttack = function(){
             this.action.cancel = false;
             this.changeState(this.input);
             this.inHeavyAttack = false; //AG: Adding for knockback
+            this.action.divable = false;
         }
         
     }
@@ -471,9 +520,17 @@ Security.prototype.heavyAttack = function(){
 
 //projectile
 Security.prototype.projectile = function(){
-    var bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas');//water_bottle'); //'player');
-    bullet.frame = this.bottleFrame;
+    var choice = game.rnd.between(0,1);
+    var bullet;
+    if(choice == 0){
+        bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas');//water_bottle'); //'player');
+        bullet.frame = 2;
+    }else if(choice == 1){
+        bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas2');//water_bottle'); //'player');
+        bullet.frame = 5;
+    }
     bullet.scale.setTo(1.3,1.3);
+    bullet.anchor.setTo(0.5,0.5);
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);
     bullet.startLocation = this.position.x;
@@ -481,9 +538,11 @@ Security.prototype.projectile = function(){
 
     if (this.faceRIGHT){
         bullet.body.velocity.x = projectileSpeed;
+        bullet.body.angularVelocity = 800;
         bullet.headingRight = true;
     }else{
         bullet.body.velocity.x = -projectileSpeed;
+        bullet.body.angularVelocity = -800;
         bullet.headingRight = false;
     }
 
@@ -730,6 +789,9 @@ Security.prototype.input = function(){
         if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
             this.timer.startTimer('heavy_cast',1000);
             this.timer.startTimer('heavy',1500);
+            if (this.position.y < this.diveLimit){
+                this.action.divable = true;
+            }
             this.changeState(this.heavyAttack);
 
 

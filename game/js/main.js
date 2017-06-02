@@ -51,20 +51,20 @@ var mainState = {
 		bg.scale.setTo(0.8);
         
         if(P1CharChosen == "SIMON"){
-	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
         }else if(P1CharChosen == "LITERALLY A SCORPION"){
-            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
         }else{
-            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1);
+            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
         }
 	    game.add.existing(player1);
 	    
         if(P2CharChosen == "SIMON"){
-	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate);
         }else if(P2CharChosen == "LITERALLY A SCORPION"){
-            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate);
         }else{
-            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2);
+            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate);
         }
 	    game.add.existing(player2);
 
@@ -140,23 +140,114 @@ var mainState = {
         
         this.hitVolume = .8;
         this.blockVolume = .05;
+        
+        //AG: Pause
+        this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu');
+        this.menu.anchor.setTo(0.5,0.5);
+        this.menu.alpha = 0;
+        this.menu.scale.setTo(.5,.5);
+        
+        pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        oneKey = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+        twoKey = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+        threeKey = game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+        fourKey = game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+        fiveKey = game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+        
+        pauseKey.onDown.add(mainState.unpause, self);
+        oneKey.onDown.add(mainState.unpause, self);
+        twoKey.onDown.add(mainState.unpause, self);
+        threeKey.onDown.add(mainState.unpause, self);
+        fourKey.onDown.add(mainState.unpause, self);
+        fiveKey.onDown.add(mainState.unpause, self);
+        
+        //Transition
+        this.transitionStarted = false;
+
+        //Music
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka'];
+        index = game.rnd.between(0,3);
+        main_music = game.add.audio(fight_music_choices[index]);
+        main_music.play('',0, 1, true);
+        main_music.mute = false;  
+        main_music.loop = true;
+        main_music.volume = .7;
+        
+        deathSound = game.add.audio('shoegazer');
+        deathSound.volume = .7;
+        deathSound.mute = false;
+        
+        //Rounds won UI
+        p2wins1 = game.add.sprite(game.world.width/2+135,60,'round_unresolved');
+        p2wins1.scale.setTo(.3,.3);
+        p2wins2 = game.add.sprite(game.world.width/2+95,60,'round_unresolved');
+        p2wins2.scale.setTo(.3,.3);        
+        p1wins1 = game.add.sprite(game.world.width/2-165,60,'round_unresolved');
+        p1wins1.scale.setTo(.3,.3);
+        p1wins2 = game.add.sprite(game.world.width/2-125,60,'round_unresolved');
+        p1wins2.scale.setTo(.3,.3);
+        
+        p2won1 = game.add.sprite(game.world.width/2+135,60,'round_won');
+        p2won1.scale.setTo(.3,.3);
+        if(p2win < 1) p2won1.alpha = 0;
+        p2won2 = game.add.sprite(game.world.width/2+95,60,'round_won');
+        p2won2.scale.setTo(.3,.3);
+        p2won2.alpha = 0;
+        p1won1 = game.add.sprite(game.world.width/2-165,60,'round_won');
+        p1won1.scale.setTo(.3,.3);
+        if(p1win < 1) p1won1.alpha = 0;
+        p1won2 = game.add.sprite(game.world.width/2-125,60,'round_won');
+        p1won2.scale.setTo(.3,.3);
+        p1won2.alpha = 0;
 	},
 
 	update: function() {
         
+        //Pause button
+        if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
+            this.menu.alpha = 1;
+            game.paused = true;
+        }
+        
         //AG: If a player has won
-        if(!player1.alive || !player2.alive){    
+        if(!player1.alive && player2.alive && gamerun ){
+        	p2win++;
+        	gamerun = false;
+            round++;
+            deathSound.play();
+        }else if(player1.alive && !player2.alive && gamerun){
+        	p1win++;
+        	gamerun = false;
+            round++;
+            deathSound.play();
+        }
+
+        if(!player1.alive || !player2.alive){
+            main_music.fadeOut(500);
+            
             if(!player1.alive && !player2.alive){
                 introText2.text = "YOU'RE BOTH DETAINED"
             }else if(!player1.alive){
                 introText1.text = player2.charName
                 introText1.fontSize = 64;
-                introText2.text = "GETS TO KEEP THEIR SEAT"
+                if(p2win < 2){ 
+                    introText2.text = "WINS ROUND "+round;
+                    game.add.tween(p2won1).to( { alpha: 1 }, 40, "Linear", true, 600);
+                }else{
+                    game.add.tween(p2won2).to( { alpha: 1 }, 40, "Linear", true, 600);
+                    introText2.text = "GETS TO KEEP THEIR SEAT"
+                } 
                 introText1.alpha = 1;
             }else{ //player2 dead
                 introText1.text = player1.charName
                 introText1.fontSize = 64;
-                introText2.text = "GETS TO KEEP THEIR SEAT"
+                if(p1win < 2){ 
+                    introText2.text = "WINS ROUND "+round;
+                    game.add.tween(p1won1).to( { alpha: 1 }, 40, "Linear", true, 600);
+                }else{
+                    game.add.tween(p1won2).to( { alpha: 1 }, 40, "Linear", true, 600);
+                    introText2.text = "GETS TO KEEP THEIR SEAT"
+                } 
                 introText1.alpha = 1;
             }
             introText2.alpha = 1; //make text visible
@@ -166,9 +257,12 @@ var mainState = {
             }
         }
         
+        
         //AG: Allows sounds to play again
         if (this.timer.timerDone('heavySound')){
             this.heavySoundPlayed = false;
+            player1.attackHit = false;
+            player2.attackHit = false;
         }
         
         if (this.timer.timerDone('diveSound')){
@@ -177,6 +271,8 @@ var mainState = {
         
         if (this.timer.timerDone('lightSound')){
             this.lightSoundPlayed = false;
+            player1.attackHit = false;
+            player2.attackHit = false;
         }
         
 	    game.physics.arcade.collide(players,platforms);
@@ -247,6 +343,9 @@ var mainState = {
         if(player1.charName == "SECURITY"){
             game.physics.arcade.overlap(player2,bullets1,mainState.determineAttack, null, this);
         }
+        if(player1.charName == "SECURITY" && player2.charName == "SECURITY"){
+            game.physics.arcade.overlap(bullets1,bullets2,mainState.projectileClash, null, this);
+        }
         
         //Dive kicks
         if(player1.action.dive){
@@ -279,27 +378,35 @@ var mainState = {
         	}
         	
         }
-
-        //press space to restart
+    
         
-        if(!player1.alive && player2.alive && gamerun ){
-        	p2win++;
-        	gamerun = false;
-        }else if(player1.alive && !player2.alive && gamerun){
-        	p1win++;
-        	gamerun = false;
-        }
-
-
-        if ((!player1.alive || !player2.alive) && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && (p1win>=2 || p2win>=2)){
-        	game.time.slowMotion = 1;
-        	this.game.world.removeAll();
-        	game.state.start('charSelect',false,false);
-
-        }else if ((!player1.alive || !player2.alive) && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
-        	game.time.slowMotion = 1;
-        	this.game.world.removeAll();
-        	game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win);
+        //AG: Transitions
+        if(player1.introFinished){
+            if(game.time.slowMotion == 4){
+                if ((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && !this.transitionStarted){
+                    this.timer.startTimer('endMatch',6000);
+                    this.transitionStarted = true;
+                }else if((!player1.alive || !player2.alive) && (p1win>=2 || p2win>=2) && this.transitionStarted){
+                    if(this.timer.timerDone('endMatch')){
+                        game.time.slowMotion = 1;
+                        this.game.world.removeAll();
+                        main_music.mute = true;
+                        deathSound.mute = true;
+                        game.state.start('charSelect',false,false);
+                    }
+                }else if ((!player1.alive || !player2.alive) && !this.transitionStarted){
+                    this.timer.startTimer('nextRound',6000);
+                    this.transitionStarted = true;
+                }else if ((!player1.alive || !player2.alive) && this.transitionStarted){
+                    if(this.timer.timerDone('nextRound')){
+                    game.time.slowMotion = 1;
+                    this.game.world.removeAll();
+                    main_music.mute = true;
+                    deathSound.mute = true;
+                    game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
+                    }
+                }
+            }
         }
 
         
@@ -351,7 +458,7 @@ var mainState = {
                     this.lightSound.play();
                     mainState.SecurityLightAttack(player,hitbox,true);
                 }
-            }else{
+            }else if(attackingPlayer.charName == "LITERALLY A SCORPION"){
                 //AG: Sound handling
                 if(!this.lightSoundPlayed){
                     if(hitPlayer.action.block) this.lightSound.volume = this.blockVolume;
@@ -359,6 +466,16 @@ var mainState = {
                     this.lightSound.play();
                     this.lightSoundPlayed = true;
                     this.timer.startTimer('lightSound',500);
+                }
+                mainState.lightAttack(player,hitbox);
+            }else{
+                //AG: Sound handling
+                if(!this.lightSoundPlayed){
+                    if(hitPlayer.action.block) this.lightSound.volume = this.blockVolume;
+                    else this.lightSound.volume = this.hitVolume;
+                    this.lightSound.play();
+                    this.lightSoundPlayed = true;
+                    this.timer.startTimer('lightSound',1000);
                 }
                 mainState.lightAttack(player,hitbox);
             }
@@ -433,6 +550,12 @@ var mainState = {
             }
     	}
 
+    },
+    
+    projectileClash: function(bullets1,bullets2){
+        player1.bullets.removeAll();
+        player2.bullets.removeAll();
+        player1.perfect_block_sound.play();
     },
     
     //--Security's Attacks--//
@@ -546,6 +669,60 @@ var mainState = {
         tween2 = game.add.tween(introText2).to( { alpha: 0 }, 850, "Linear", true, 200);
         player1.introFinished = true;
         player2.introFinished = true;
+    },
+    
+    //From THESE BEAUTIFUL HUMAN BEINGS: http://www.html5gamedevs.com/topic/501-input-ondown-and-mouse-keyboard-touch/
+    unpause: function(event){
+        // Only act if paused
+        if(game.paused){
+            if (game.input.keyboard.isDown(Phaser.KeyCode.ESC)){
+                //UNPAUSE
+                game.paused = false;
+                mainState.menu.alpha = 0;
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.ONE)){
+                //RESTART ROUND
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                game.paused = false;
+                main_music.mute = true;
+                deathSound.mute = true;
+                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.TWO)){
+                //RESTART MATCH
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                p1win = 0;
+                p2win = 0;
+                game.paused = false;
+                main_music.mute = true;
+                deathSound.mute = true;
+                game.state.start('main',false,false,P1CharChosen,P2CharChosen,p1win,p2win,round);
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.THREE)){
+                //CHARACTER SELECT
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                game.paused = false;
+                main_music.mute = true;
+                deathSound.mute = true;
+                game.state.start('charSelect');
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.FOUR)){
+                //CONTROLS
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                game.paused = false;
+                main_music.mute = true;
+                deathSound.mute = true;
+                //game.state.start('controls');
+            }else if(game.input.keyboard.isDown(Phaser.KeyCode.FIVE)){
+                //MAIN MENU
+                game.time.slowMotion = 1;
+                this.game.world.removeAll();
+                game.paused = false;
+                main_music.mute = true;
+                deathSound.mute = true;
+                game.state.start('title',false,false);
+            } 
+        }
     }
     
 };

@@ -486,6 +486,12 @@ var mainState = {
                 }
                 mainState.lightAttack(player,hitbox);
             }
+        }else if(attackingPlayer.inSpecial){
+        	if(attackingPlayer.charName == "LITERALLY A SCORPION"){
+        		attackingPlayer.chainHit = true;
+        		mainState.scorpionChain(player,hitbox, attackingPlayer.position.x);
+        	}
+
         }else{
             //AG: Projectile could hit after leaving inLightAttack
             if(attackingPlayer.charName == "SECURITY"){
@@ -557,6 +563,13 @@ var mainState = {
             }
     	}
 
+    },
+
+    scorpionChain: function(player,hitbox,location){
+    	player.takeDamage(25,100);
+    	player.chained(location);
+
+    	game.camera.shake(0.005, 200);
     },
     
     projectileClash: function(bullet1,bullet2){

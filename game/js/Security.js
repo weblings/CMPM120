@@ -12,7 +12,7 @@ Security = function(game, key, x, y, playerNum,dup){
     this.maxSpeed = 420;
     this.diveLimit = 400;
 
-    this.jumpHeight = -1250; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
+    this.jumpHeight = -1550; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = game.world.height - 20;
 
     //Animations
@@ -73,7 +73,7 @@ Security = function(game, key, x, y, playerNum,dup){
 
     //Physics
     game.physics.enable(this);
-    this.gravFactor = 2000;
+    this.gravFactor = 3000;
     this.body.collideWorldBounds = true;
     this.body.velocity.x = 0;
     this.body.gravity.y = this.gravFactor;
@@ -269,7 +269,11 @@ Security.prototype.preState =function (){
         //light attack reset
         this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         this.fist.position.y = this.position.y;
-        this.body.gravity.y = this.gravFactor;
+        if (this.position.y < this.diveLimit){
+            this.body.gravity.y = this.gravFactor*2;
+        }else {
+            this.body.gravity.y = this.gravFactor;
+        }
     }
 
     if (this.state != this.heavyAttack){
@@ -574,6 +578,8 @@ Security.prototype.takeDamage = function(damage,staggerLength){
                 def = 0.2;
                 this.block_sound.play();
             }
+        }else if (this.action.down){
+            def = 0;
         }
         if(this.health - damage*def < 0){
             this.health = 0;
@@ -583,7 +589,7 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         this.staggered = true;
         
         //count for down NH
-        if (!this.action.block){
+        if (!this.action.block && !this.action.down){
             this.timer.startTimer('downWindow',2000);
             this.downCount++;
             this.emitter.x = this.position.x;
@@ -673,7 +679,7 @@ Security.prototype.applyKnockBack = function(x,y){
         y1 = 0.1;
     }
     //Added for downed state NH
-    if (this.action.down && this.action.jump){
+    if (this.downCount >= 3 && this.action.jump){
         y1 = -100*y;
         x1 = 50*x;
     }else if(this.staggered && this.downCount >= 3){

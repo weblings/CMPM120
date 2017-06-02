@@ -34,8 +34,11 @@ var mainState = {
 
         var gamerun
 
-        
-        
+        //Controllers
+        var pad1;
+        var pad2;
+        var padControl1;
+        var padControl2; 
     },
 
 	create: function() {
@@ -147,12 +150,19 @@ var mainState = {
         this.menu.alpha = 0;
         this.menu.scale.setTo(.8,.8);
         
+        /*this.menuC = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu_controller');
+        this.menuC.anchor.setTo(0.5,0.5);
+        this.menuC.alpha = 0;
+        this.menuC.scale.setTo(.8,.8);*/
+        
         pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         oneKey = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
         twoKey = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
         threeKey = game.input.keyboard.addKey(Phaser.Keyboard.THREE);
         fourKey = game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
         fiveKey = game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+        
+        //startKey = game.input.gamepad.pad1.onDown(Phaser.Gamepad.XBOX360_START);
         
         pauseKey.onDown.add(mainState.unpause, self);
         oneKey.onDown.add(mainState.unpause, self);
@@ -203,10 +213,31 @@ var mainState = {
 
 	update: function() {
         
+        if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
+            padControl1 = true;
+        }
+        else{
+            padControl1 = false;
+        }
+
+        if (game.input.gamepad.supported && game.input.gamepad.active && pad2.connected){
+            padControl2 = true;
+        }
+        else{
+            padControl2 = false;
+        }
+        
         //Pause button
         if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
             this.menu.alpha = 1;
             game.paused = true;
+        }
+        
+        if(padControl1){
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
+                this.menu.alpha = 1;
+                game.paused = true;
+            }
         }
         
         //AG: If a player has won
@@ -685,6 +716,14 @@ var mainState = {
     unpause: function(event){
         // Only act if paused
         if(game.paused){
+            
+            if(padControl1){
+                if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
+                    game.paused = false;
+                    //this.menuC.alpha = 0;
+                }
+            }
+            
             if (game.input.keyboard.isDown(Phaser.KeyCode.ESC)){
                 //UNPAUSE
                 game.paused = false;

@@ -143,12 +143,34 @@ var controlState = {
 		
 		P2Heavy = game.add.text(725, 640,"HEAVY ATTACK/DIVEKICK: ", {fontSize: '32px', fill: '#fff'});
 		P2HeavyButton = game.add.text(1155, 640,"U", {fontSize: '32px', fill: '#fff'});
+        
+        
+        //Making Xbox Default for Sammy Demo
+        layoutSelect.alpha = 0;
+        controls2.alpha = 0;
+        sprites[2].alpha = 1;
+        P1JumpButton.text = "A";
+        P1LeftButton.text = "LEFT JOYSTICK";
+        P1RightButton.text = "LEFT JOYSTICK";
+        P1GuardButton.text = "Y";
+        P1LightButton.text = "X";
+        P1HeavyButton.text = "B";
+        
+        layoutSelect2.alpha = 0;
+        controls2_2.alpha = 0;
+        sprites2[2].alpha = 1;
+        P2JumpButton.text = "A";
+        P2LeftButton.text = "LEFT JOYSTICK";
+        P2RightButton.text = "LEFT JOYSTICK";
+        P2GuardButton.text = "Y";
+        P2LightButton.text = "X";
+        P2HeavyButton.text = "B";
 	            
     },
     
     update: function(){
         //P1 keys
-        if(game.input.keyboard.justPressed(P1keyDown)){
+        /*if(game.input.keyboard.justPressed(P1keyDown)){
             if(P1index + 2 > selectBoxes.length){
                selectBoxes[P1index].alpha = 0;
 			   P1index = 0;
@@ -210,12 +232,12 @@ var controlState = {
 				P1LightButton.text = "X";
 				P1HeavyButton.text = "B";
 			}
-		}
+		}*/
 
         
         
         //P2 keys
-        if(game.input.keyboard.justPressed(P2keyDown)){
+        /*if(game.input.keyboard.justPressed(P2keyDown)){
             if(P2index + 2 > selectBoxes2.length){
                selectBoxes2[P2index].alpha = 0;
 			   P2index = 0;
@@ -265,7 +287,7 @@ var controlState = {
 				P2GuardButton.text = "L";
 				P2LightButton.text = "I";
 				P2HeavyButton.text = "U";
-			}else if(sprites2[1].alpha == 1){ //switch to controller
+			}else if(sprites2[1].alpha == 1){//switch to controller
 				sprites2[0].alpha = 0;
 				sprites2[1].alpha = 0;
 				sprites2[2].alpha = 1;
@@ -277,7 +299,7 @@ var controlState = {
 				P2LightButton.text = "X";
 				P2HeavyButton.text = "B";
 			}
-		}
+		}*/
         
         
 		if(game.input.keyboard.justPressed(ESCKey)){
@@ -285,7 +307,7 @@ var controlState = {
 			game.state.start('charSelect');
 			
 		}
-        
+            
         //update Text
        // P1Text.text = characters[P1index];
         //P2Text.text = characters[P2index];

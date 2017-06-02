@@ -16,6 +16,8 @@ var preloaderState = {
 		game.load.image('control1','assets/img/controls1.png');
 		game.load.image('control2','assets/img/controls.png');
         game.load.image('pause_menu','assets/img/menu_bg_temp.png');
+        //game.load.image('pause_menu_controller',
+                       'assets/img/bg_menu_controller.png')
         game.load.image('round_unresolved','assets/img/round_unresolved.png');
         game.load.image('round_won','assets/img/round_won.png');
 		game.load.image('arrow','assets/img/Arrow.png');

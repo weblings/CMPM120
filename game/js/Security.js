@@ -44,6 +44,14 @@ Security = function(game, key, x, y, playerNum,dup){
         this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
     }
 
+    //gamepad
+    game.input.gamepad.start();
+    if (this.playerNum==1){
+        this.pad1 = game.input.gamepad.pad1;
+    }else{
+        this.pad1 = game.input.gamepad.pad2;
+    }
+
     this.scaleFactor = 1;
     this.char.scale.setTo(this.scaleFactor,this.scaleFactor);
     this.char.anchor.x = 0.5;
@@ -758,153 +766,307 @@ Security.prototype.input = function(){
     
         //AG: if touching ground can jump (Altered code from tutorial)
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
-        if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
-            this.body.velocity.y = this.jumpHeight;
-            this.jump_sound.play();
-        }
 
-        //blocking NH
-        if (game.input.keyboard.isDown(this.keyDown)){
-            this.action.block = true;
-            if (!this.action.perfectguard){
-                this.timer.startTimer('perfectguard',250);
-                this.action.perfectguard = true;
+
+        if (this.padControl){
+            if(this.pad1.justPressed(Phaser.Gamepad.XBOX360_A) && this.body.touching.down && !this.action.block ){
+                this.body.velocity.y = this.jumpHeight;
+                this.jump_sound.play();
             }
-        }else{
-            //possibly have a millisecond of un guarding? NH
-            this.action.block = false;
-            this.action.perfectguard = false;
 
-        }
+            //blocking NH
+            if (this.pad1.isDown(Phaser.Gamepad.XBOX360_Y)){
+                this.action.block = true;
+                if (!this.action.perfectguard){
+                    this.timer.startTimer('perfectguard',250);
+                    this.action.perfectguard = true;
+                }
+            }else{
+                //possibly have a millisecond of un guarding? NH
+                this.action.block = false;
+                this.action.perfectguard = false;
 
-        //test combat inputs
+            }
+
+            //test combat inputs
 
 
-        //light attack NH
-        if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
-            //set timer for half a second
-            this.timer.startTimer('light',400); //AG: done light attacking
-            this.timer.startTimer('light2',200); //AG: Triggers second animation frame
-            this.timer.startTimer('reload',1500); //AG: Allows player to throw again
-            //this.debugText.text = "empty";
-            //this.loaded = false;
+            //light attack NH
+            if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_X) && !this.action.block && this.canLightAttack){
+                //set timer for half a second
+                this.timer.startTimer('light',400); //AG: done light attacking
+                this.timer.startTimer('light2',200); //AG: Triggers second animation frame
+                this.timer.startTimer('reload',1500); //AG: Allows player to throw again
+                //this.debugText.text = "empty";
+                //this.loaded = false;
 
-            //this line might be redundant NH
-            this.body.velocity.x = 0
-            //this.debugText.text = 'attack facing right';
-            this.changeState(this.lightAttack);
+                //this line might be redundant NH
+                this.body.velocity.x = 0
+                //this.debugText.text = 'attack facing right';
+                this.changeState(this.lightAttack);
 
+                
+            }
+
+            //heavy attack NH
             
-        }
+            if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_B) && !this.action.block){
+                this.timer.startTimer('heavy_cast',1000);
+                this.timer.startTimer('heavy',1500);
+                if (this.position.y < this.diveLimit){
+                    this.action.divable = true;
+                }
+                this.changeState(this.heavyAttack);
 
-        //heavy attack NH
-        
-        if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
-            this.timer.startTimer('heavy_cast',1000);
-            this.timer.startTimer('heavy',1500);
-            if (this.position.y < this.diveLimit){
-                this.action.divable = true;
+
             }
-            this.changeState(this.heavyAttack);
+
+            //projectile 
+
+            this.bullets.forEachAlive(this.killBullets,this);
+            
 
 
-        }
 
-        //projectile 
 
-        this.bullets.forEachAlive(this.killBullets,this);
+            //fixed your shit NH
+            
+
         
+            //AG: Left controls
+            if(this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 && !this.action.block ){
+                this.char.scale.x = this.scaleFactor;
 
+                if (this.body.velocity.x > 0){
+                    this.body.velocity.x = 0;
+                }
+                if (this.body.velocity.x > -1*this.maxSpeed){
+                    this.body.velocity.x -= this.speed;      
+                }else{
+                    this.body.velocity.x = -1*this.maxSpeed;
+                }
 
+                if (this.action.jump){
+                    //this.char.loadTexture('scorpion_jump');
+                }else{
+                    this.char.frame = this.idleFrame;
+                }
+                
+                
+                //stop that animation shit  NH
+                if(this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1  && !this.action.block){
+                    
+                    if (this.prev_anim == 0){
+                        //this.char.frame = 0;
+                        this.faceRIGHT = false;
+                    }else{
+                        this.char.scale.x = -1*this.scaleFactor;
+                        this.anim_lock = true;
+                    }
+                    this.body.velocity.x = 0;
+                }
 
+                //for frame changes NH
+                if (!this.anim_lock){
+                    this.prev_anim = 0;
+                    this.faceRIGHT = false;
+                }
+                this.anim_lock = false;
+                
+                
 
-        //fixed your shit NH
-        
+            //AG: Right controls
+            }else if(this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1  && !this.action.block){
+                this.char.scale.x = -1*this.scaleFactor;
 
-    
-        //AG: Left controls
-        if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
-            this.char.scale.x = this.scaleFactor;
+                if (this.body.velocity.x < 0){
+                    this.body.velocity.x = 0;
+                }
+                if (this.body.velocity.x < this.maxSpeed){
+                    this.body.velocity.x += this.speed;        
+                }else{
+                    this.body.velocity.x = this.maxSpeed;
+                }
 
-            if (this.body.velocity.x > 0){
+                if (this.action.jump){
+                    //this.char.loadTexture('scorpion_jump');
+                }else{
+                    this.char.frame = this.idleFrame;
+                }
+
+                this.prev_anim = 1;
+                this.faceRIGHT = true;
+
+            }else{
                 this.body.velocity.x = 0;
-            }
-            if (this.body.velocity.x > -1*this.maxSpeed){
-                this.body.velocity.x -= this.speed;      
-            }else{
-                this.body.velocity.x = -1*this.maxSpeed;
-            }
-
-            if (this.action.jump){
-                //this.char.loadTexture('scorpion_jump');
-            }else{
-                this.char.frame = this.idleFrame;
-            }
-            
-            
-            //stop that animation shit  NH
-            if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
+                if (this.action.jump){
+                    //this.char.loadTexture('scorpion_jump');
+                }else if (this.action.block){
+                    this.char.frame = this.blockFrame;
+                }else{
+                    this.char.frame = this.idleFrame;
+                }
                 
                 if (this.prev_anim == 0){
                     //this.char.frame = 0;
+                    //this.char.scale.x = this.scaleFactor;
+
                     this.faceRIGHT = false;
                 }else{
-                    this.char.scale.x = -1*this.scaleFactor;
-                    this.anim_lock = true;
+                    this.char.faceRIGHT = true;
                 }
                 this.body.velocity.x = 0;
             }
+        }else{
 
-            //for frame changes NH
-            if (!this.anim_lock){
-                this.prev_anim = 0;
-                this.faceRIGHT = false;
+            if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
+                this.body.velocity.y = this.jumpHeight;
+                this.jump_sound.play();
             }
-            this.anim_lock = false;
+
+            //blocking NH
+            if (game.input.keyboard.isDown(this.keyDown)){
+                this.action.block = true;
+                if (!this.action.perfectguard){
+                    this.timer.startTimer('perfectguard',250);
+                    this.action.perfectguard = true;
+                }
+            }else{
+                //possibly have a millisecond of un guarding? NH
+                this.action.block = false;
+                this.action.perfectguard = false;
+
+            }
+
+            //test combat inputs
+
+
+            //light attack NH
+            if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
+                //set timer for half a second
+                this.timer.startTimer('light',400); //AG: done light attacking
+                this.timer.startTimer('light2',200); //AG: Triggers second animation frame
+                this.timer.startTimer('reload',1500); //AG: Allows player to throw again
+                //this.debugText.text = "empty";
+                //this.loaded = false;
+
+                //this line might be redundant NH
+                this.body.velocity.x = 0
+                //this.debugText.text = 'attack facing right';
+                this.changeState(this.lightAttack);
+
+                
+            }
+
+            //heavy attack NH
             
+            if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
+                this.timer.startTimer('heavy_cast',1000);
+                this.timer.startTimer('heavy',1500);
+                if (this.position.y < this.diveLimit){
+                    this.action.divable = true;
+                }
+                this.changeState(this.heavyAttack);
+
+
+            }
+
+            //projectile 
+
+            this.bullets.forEachAlive(this.killBullets,this);
             
 
-        //AG: Right controls
-        }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
-            this.char.scale.x = -1*this.scaleFactor;
 
-            if (this.body.velocity.x < 0){
+
+
+            //fixed your shit NH
+            
+
+        
+            //AG: Left controls
+            if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){
+                this.char.scale.x = this.scaleFactor;
+
+                if (this.body.velocity.x > 0){
+                    this.body.velocity.x = 0;
+                }
+                if (this.body.velocity.x > -1*this.maxSpeed){
+                    this.body.velocity.x -= this.speed;      
+                }else{
+                    this.body.velocity.x = -1*this.maxSpeed;
+                }
+
+                if (this.action.jump){
+                    //this.char.loadTexture('scorpion_jump');
+                }else{
+                    this.char.frame = this.idleFrame;
+                }
+                
+                
+                //stop that animation shit  NH
+                if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
+                    
+                    if (this.prev_anim == 0){
+                        //this.char.frame = 0;
+                        this.faceRIGHT = false;
+                    }else{
+                        this.char.scale.x = -1*this.scaleFactor;
+                        this.anim_lock = true;
+                    }
+                    this.body.velocity.x = 0;
+                }
+
+                //for frame changes NH
+                if (!this.anim_lock){
+                    this.prev_anim = 0;
+                    this.faceRIGHT = false;
+                }
+                this.anim_lock = false;
+                
+                
+
+            //AG: Right controls
+            }else if(game.input.keyboard.isDown(this.keyRight) && !this.action.block){
+                this.char.scale.x = -1*this.scaleFactor;
+
+                if (this.body.velocity.x < 0){
+                    this.body.velocity.x = 0;
+                }
+                if (this.body.velocity.x < this.maxSpeed){
+                    this.body.velocity.x += this.speed;        
+                }else{
+                    this.body.velocity.x = this.maxSpeed;
+                }
+
+                if (this.action.jump){
+                    //this.char.loadTexture('scorpion_jump');
+                }else{
+                    this.char.frame = this.idleFrame;
+                }
+
+                this.prev_anim = 1;
+                this.faceRIGHT = true;
+
+            }else{
+                this.body.velocity.x = 0;
+                if (this.action.jump){
+                    //this.char.loadTexture('scorpion_jump');
+                }else if (this.action.block){
+                    this.char.frame = this.blockFrame;
+                }else{
+                    this.char.frame = this.idleFrame;
+                }
+                
+                if (this.prev_anim == 0){
+                    //this.char.frame = 0;
+                    //this.char.scale.x = this.scaleFactor;
+
+                    this.faceRIGHT = false;
+                }else{
+                    this.char.faceRIGHT = true;
+                }
                 this.body.velocity.x = 0;
             }
-            if (this.body.velocity.x < this.maxSpeed){
-                this.body.velocity.x += this.speed;        
-            }else{
-                this.body.velocity.x = this.maxSpeed;
-            }
-
-            if (this.action.jump){
-                //this.char.loadTexture('scorpion_jump');
-            }else{
-                this.char.frame = this.idleFrame;
-            }
-
-            this.prev_anim = 1;
-            this.faceRIGHT = true;
-
-        }else{
-            this.body.velocity.x = 0;
-            if (this.action.jump){
-                //this.char.loadTexture('scorpion_jump');
-            }else if (this.action.block){
-                this.char.frame = this.blockFrame;
-            }else{
-                this.char.frame = this.idleFrame;
-            }
-            
-            if (this.prev_anim == 0){
-                //this.char.frame = 0;
-                //this.char.scale.x = this.scaleFactor;
-
-                this.faceRIGHT = false;
-            }else{
-                this.char.faceRIGHT = true;
-            }
-            this.body.velocity.x = 0;
         }
 
 };

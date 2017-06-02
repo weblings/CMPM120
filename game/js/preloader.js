@@ -13,7 +13,7 @@ var preloaderState = {
 		game.load.image('scorp_ID','assets/img/Scorpion_Passport.png');
 		game.load.image('rabbit_ID','assets/img/Rabbit_Passport.png');
 		game.load.image('guard_ID','assets/img/SecurityGuard_Passport.png');
-        game.load.image('pause_menu','assets/img/menu_bg_temp');
+        game.load.image('pause_menu','assets/img/menu_bg_temp.png');
         game.load.image('round_unresolved','assets/img/round_unresolved.png');
         game.load.image('round_won','assets/img/round_won.png')
         

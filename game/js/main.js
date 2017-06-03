@@ -53,6 +53,7 @@ var mainState = {
 		var bg = game.add.sprite(0,0,'bg');
 		bg.scale.setTo(0.8);
         
+		
         if(P1CharChosen == "SIMON"){
 	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
         }else if(P1CharChosen == "LITERALLY A SCORPION"){
@@ -149,6 +150,12 @@ var mainState = {
         this.menu.anchor.setTo(0.5,0.5);
         this.menu.alpha = 0;
         this.menu.scale.setTo(.8,.8);
+		this.control1 = game.add.sprite(38, 120, "controls1_menu");
+		this.control1.scale.setTo(.5, .5);
+		this.control1.alpha = 0;
+		this.control2 = game.add.sprite(825, 120, "controls2_menu");
+		this.control2.scale.setTo(.5, .5);
+		this.control2.alpha = 0;
         
         /*this.menuC = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu_controller');
         this.menuC.anchor.setTo(0.5,0.5);
@@ -215,6 +222,8 @@ var mainState = {
         
         if(!game.paused){
            //EVIE: ADD YO SHIT HERE SO IT DISSAPEAR WHEN YOU UNPAUSE AND IT BE GUD GUD
+		   this.control1.alpha = 0;
+		   this.control2.alpha = 0;
            this.menu.alpha = 0; 
         } 
         
@@ -235,12 +244,16 @@ var mainState = {
         //Pause button
         if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
             this.menu.alpha = 1;
+			this.control1.alpha = 1;
+			this.control2.alpha = 1;
             game.paused = true;
         }
         
         if(padControl1){
             if(pad1.isDown(Phaser.Gamepad.XBOX360_START) && player1.introFinished){
                 this.menu.alpha = 1;
+				this.control1.alpha = 1;
+				this.control2.alpha = 1;
                 game.paused = true;
             }
         }
@@ -248,6 +261,8 @@ var mainState = {
         if(padControl2){
             if(pad2.isDown(Phaser.Gamepad.XBOX360_START) && player1.introFinished){
                 this.menu.alpha = 1;
+				this.control1.alpha = 1;
+				this.control2.alpha = 1;
                 game.paused = true;
             }
         }

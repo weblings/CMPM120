@@ -150,18 +150,6 @@ var mainState = {
         this.hitVolume = .8;
         this.blockVolume = .05;
         
-        //AG: Pause
-        this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu');
-        this.menu.anchor.setTo(0.5,0.5);
-        this.menu.alpha = 0;
-        this.menu.scale.setTo(.8,.8);
-		this.control1 = game.add.sprite(38, 120, "controls1_menu");
-		this.control1.scale.setTo(.5, .5);
-		this.control1.alpha = 0;
-		this.control2 = game.add.sprite(825, 120, "controls2_menu");
-		this.control2.scale.setTo(.5, .5);
-		this.control2.alpha = 0;
-        
         /*this.menuC = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu_controller');
         this.menuC.anchor.setTo(0.5,0.5);
         this.menuC.alpha = 0;
@@ -200,7 +188,7 @@ var mainState = {
         deathSound.mute = false;
         
         //Rounds won UI
-        var roundUIHeight = 114;
+        var roundUIHeight = 112;
         p2wins1 = game.add.sprite(game.world.width/2+225,102,'round_unresolved');
         p2wins1.scale.setTo(.3,.3);
         p2wins1.position.y = roundUIHeight;
@@ -244,6 +232,17 @@ var mainState = {
         healthBorder2.scale.setTo(1.004,1.004);
         healthBorders.add(healthBorder2);
         
+        //AG: Pause
+        this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu');
+        this.menu.anchor.setTo(0.5,0.5);
+        this.menu.alpha = 0;
+        this.menu.scale.setTo(.8,.8);
+		this.control1 = game.add.sprite(38, 120, "controls1_menu");
+		this.control1.scale.setTo(.5, .5);
+		this.control1.alpha = 0;
+		this.control2 = game.add.sprite(825, 120, "controls2_menu");
+		this.control2.scale.setTo(.5, .5);
+		this.control2.alpha = 0;
     },
 
 	update: function() {        

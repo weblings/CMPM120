@@ -136,6 +136,22 @@ var charSelect = {
         
         padControls1Shown = false;
         padControls2Shown = false;
+        
+        battleCryText1X = 255;
+        battleCryText2X = 775;
+        battleCryTextY = 250;
+        battleCryTextY2 = 160;
+        battleCryTextY3 = 100;
+        
+        battleCryText1 = game.add.text(battleCryText1X,battleCryTextY,"Select with E", {fontSize: '32px', fill: '#fff'});
+        battleCryText2 = game.add.text(battleCryText2X,battleCryTextY,"Select with E", {fontSize: '32px', fill: '#fff'});
+        
+        battleCryText1.alpha = 0;
+        battleCryText2.alpha = 0;
+        
+        battleCry1Done = false;
+        battleCry2Done = false;
+
     },
     
     update: function(){
@@ -193,6 +209,7 @@ var charSelect = {
                 P1InstructionText.text = "Deselect with B";
                 p1AButton.alpha = 0;
                 p1BButton.alpha = 1;
+                charSelect.battleCry(1);
             }
             
             if(pad1.isDown(Phaser.Gamepad.XBOX360_B) && P1Chose){
@@ -200,6 +217,7 @@ var charSelect = {
                 P1InstructionText.text = "Select with A";
                 p1AButton.alpha = 1;
                 p1BButton.alpha = 0;
+                battleCry1Done = false;
             }
         }else{
             
@@ -231,11 +249,13 @@ var charSelect = {
             if(game.input.keyboard.justPressed(P1keyA) && !P1Chose){
                 P1Chose = true;
                 P1InstructionText.text = "Deselect with R";
+                charSelect.battleCry(1);
             }
             
             if(game.input.keyboard.justPressed(P1keyB) && P1Chose){
                 P1Chose = false;
                 P1InstructionText.text = "Select with E";
+                battleCry1Done = false;
             }
         }
 
@@ -279,6 +299,7 @@ var charSelect = {
                 P2InstructionText.text = "Deselect with B";
                 p2AButton.alpha = 0;
                 p2BButton.alpha = 1;
+                charSelect.battleCry(2);
             }
             
             if(pad2.isDown(Phaser.Gamepad.XBOX360_B) && P2Chose){
@@ -286,6 +307,7 @@ var charSelect = {
                 P2InstructionText.text = "Select with A";
                 p2AButton.alpha = 1;
                 p2BButton.alpha = 0;
+                battleCry2Done = false;
             }
 
         }else{
@@ -317,11 +339,13 @@ var charSelect = {
             if(game.input.keyboard.justPressed(P2keyA) && !P2Chose){
                 P2Chose = true;
                 P2InstructionText.text = "Deselect with U";
+                charSelect.battleCry(2);
             }
             
             if(game.input.keyboard.justPressed(P2keyB) && P2Chose){
                 P2Chose = false;
                 P2InstructionText.text = "Select with I";
+                battleCry2Done = false;
             }
         }
         //update Text
@@ -337,7 +361,7 @@ var charSelect = {
             JoyStickDown.alpha = 0;
         }
         
-        if(P1Chose && P2Chose){
+        if(P1Chose && P2Chose && battleCry1Done && battleCry2Done){
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
             if (P1CharChosen == P2CharChosen){
@@ -351,7 +375,43 @@ var charSelect = {
         }
     },
     
-    playMainMusic: function() {	main_music.play('', 0, 1, true);}
-
+    playMainMusic: function() {	main_music.play('', 0, 1, true);},
+    
+    battleCry: function(inputNumber){
+        if(!battleCry1Done && inputNumber == 1){
+            charSelect.resetBattleCryVars1();
+            var tween1 = game.add.tween(battleCryText1).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText1X - 50 }, 300, "Linear", true, 400);
+            tween1.onComplete.add(charSelect.Tween1completed, this);
+        }else if(!battleCry2Done && inputNumber == 2){
+            charSelect.resetBattleCryVars2();
+            var tween1_2 = game.add.tween(battleCryText2).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText2X - 50 }, 300, "Linear", true, 400);
+            tween1_2.onComplete.add(charSelect.Tween1_2completed, this);
+        }  
+    },
+    
+    resetBattleCryVars1: function(){
+            //battleCry1Done = false;
+            battleCryText1.position.y = battleCryTextY;
+            battleCryText1.position.x = battleCryText1X;
+            battleCryText1.fontSize = 32;
+    },    
+    
+    resetBattleCryVars2: function(){
+            battleCryText2.position.y = battleCryTextY;
+            battleCryText2.position.x = battleCryText2X;
+            battleCryText2.fontSize = 32;
+    },
+    
+    Tween1completed: function(){
+        tween2 = game.add.tween(battleCryText1).to( { alpha: 0, y: battleCryTextY3 }, 600, "Linear", true, 600);
+        tween2.onComplete.add(charSelect.resetBattleCryVars1,this);
+        battleCry1Done = true;
+    },
+    
+    Tween1_2completed: function(){
+        tween2_2 = game.add.tween(battleCryText2).to( { alpha: 0, y: battleCryTextY3 }, 600, "Linear", true, 600);
+        tween2.onComplete.add(charSelect.resetBattleCryVars2, this);
+        battleCry2Done = true;
+    }
     
 };

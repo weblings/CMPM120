@@ -34,17 +34,30 @@ var charSelect = {
         
         var padControls1Shown;
         var padControls2Shown;
+		
+		var upArrow;
     },
     
     create: function(){
         
+		var bg = game.add.sprite(0,-30,'CharBG');
+		bg.scale.setTo(1, .8);
+		
+		var gateClosed = game.add.sprite(450, 155, "closed");
+		gateClosed.scale.setTo(.9, .7);
+		
+		var nowBoarding = game.add.sprite(450, 155, "boarding");
+		nowBoarding.scale.setTo(.9, .7);
+		nowBoarding.alpha = 0;
+		
         //var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
         //logo.scale.setTo(.7,.7);
 		
-		var upArrow = game.add.sprite(585,275,"arrow");
+		upArrow = game.add.sprite(585,275,"arrow");
 		upArrow.scale.setTo(.25, .25);
 		var downArrow = game.add.sprite(585,425,"arrow");
 		downArrow.scale.setTo(.25, -.25);
+
 		
 		var rabbitID = game.add.sprite(150,220,"rabbit_ID");
 		rabbitID.scale.setTo(.5,.5);
@@ -52,11 +65,13 @@ var charSelect = {
 		var guardID = game.add.sprite(150,220,"guard_ID");
 		guardID.scale.setTo(.5,.5);
 		guardID.alpha = 0;
+
 		var scorpID = game.add.sprite(150,220,"scorp_ID");
 		scorpID.scale.setTo(.5,.5);
 
 		var rabbitID2 = game.add.sprite(670,220,"rabbit_ID");
 		rabbitID2.scale.setTo(.5,.5);
+
 		rabbitID2.alpha = 0;
 		var guardID2 = game.add.sprite(670,220,"guard_ID");
 		guardID2.scale.setTo(.5,.5);
@@ -65,6 +80,7 @@ var charSelect = {
 		scorpID2.scale.setTo(.5,.5);
         
         characters = ["LITERALLY A SCORPION","SECURITY", "SIMON"];//["THE TEMP","LITERALLY A SCORPION","SECURITY"];
+
 		sprites = [scorpID, guardID, rabbitID];
 		sprites2 = [scorpID2, guardID2, rabbitID2];
 
@@ -82,7 +98,9 @@ var charSelect = {
         P2index = 0;
         P2Chose = false;
         
+
         game.stage.backgroundColor = "#162160";//"#000";
+
       //  P1Text = game.add.text(game.width/5,game.height/2,characters[P1index], {fontSize: '32px', fill: '#fff'});
         P1InstructionText = game.add.text(game.width/5,(3 * game.height)/4,"Select with E", {fontSize: '32px', fill: '#fff'});
      //   P2Text = game.add.text((3 * game.width)/5,game.height/2,characters[P2index], {fontSize: '32px', fill: '#fff'});
@@ -161,6 +179,7 @@ var charSelect = {
         }
         else{
             padControl1 = false;
+
         }
 
         if (game.input.gamepad.supported && game.input.gamepad.active && pad2.connected){
@@ -255,7 +274,11 @@ var charSelect = {
             if(game.input.keyboard.justPressed(P1keyB) && P1Chose){
                 P1Chose = false;
                 P1InstructionText.text = "Select with E";
+
                 battleCry1Done = false;
+
+
+
             }
         }
 

@@ -34,7 +34,8 @@ var preloaderState = {
         game.load.image('Joystick_Right','assets/img/Xbox_Controls/Joystick_Right.png');
         game.load.image('Joystick_Up','assets/img/Xbox_Controls/Joystick_Up.png');
         game.load.image('Joystick_Down','assets/img/Xbox_Controls/Joystick_Down.png');
-
+		game.load.image('JoystickL','assets/img/Xbox_Controls/JoystickL_left.png');
+		game.load.image('JoystickR','assets/img/Xbox_Controls/JoystickL_right.png');
 
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');

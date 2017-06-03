@@ -461,7 +461,7 @@ var charSelect = {
     
     Tween1_2completed: function(){
         tween2_2 = game.add.tween(battleCryText2).to( { alpha: 0, y: battleCryTextY3 }, 600, "Linear", true, 600);
-        tween2.onComplete.add(charSelect.resetBattleCryVars2, this);
+        tween2_2.onComplete.add(charSelect.resetBattleCryVars2, this);
         battleCry2Done = true;
     }
 	

@@ -165,10 +165,42 @@ var controlState = {
         P2GuardButton.text = "Y";
         P2LightButton.text = "X";
         P2HeavyButton.text = "B";
+        
+        //Controllers
+        var pad1;
+        var pad2;
+        var padControl1;
+        var padControl2; 
 	            
     },
     
     update: function(){
+        
+        if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
+            padControl1 = true;
+        }
+        else{
+            padControl1 = false;
+        }
+
+        if (game.input.gamepad.supported && game.input.gamepad.active && pad2.connected){
+            padControl2 = true;
+        }
+        else{
+            padControl2 = false;
+        }
+        
+        if(padControl1){
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
+			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round)
+            }
+        }
+        
+        if(padControl2){
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_START)){
+			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+            }
+        }
         //P1 keys
         /*if(game.input.keyboard.justPressed(P1keyDown)){
             if(P1index + 2 > selectBoxes.length){
@@ -303,9 +335,7 @@ var controlState = {
         
         
 		if(game.input.keyboard.justPressed(ESCKey)){
-			
-			game.state.start('charSelect');
-			
+			game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
 		}
             
         //update Text

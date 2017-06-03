@@ -240,6 +240,13 @@ var mainState = {
             }
         }
         
+        if(padControl2){
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_START)){
+                this.menu.alpha = 1;
+                game.paused = true;
+            }
+        }
+        
         //AG: If a player has won
         if (!player1.alive && !player2.alive && gamerun){
         	gamerun = false;

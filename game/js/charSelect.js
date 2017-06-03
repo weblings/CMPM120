@@ -405,7 +405,7 @@ var charSelect = {
             }
 			if(!steveSet){
                 timer.startTimer("tom",1500);
-				timer.startTimer("steve", 6000); 
+				timer.startTimer("steve", 2200); 
 				steveSet = true;
 			}
             if(timer.timerDone("tom")){

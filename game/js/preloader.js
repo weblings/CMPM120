@@ -16,6 +16,8 @@ var preloaderState = {
 		game.load.image('control1','assets/img/Controls1.png');
 		game.load.image('control2','assets/img/Controls.png');
         game.load.image('pause_menu','assets/img/menu_bg_temp.png');
+		game.load.image('controls1_menu','assets/img/Player1_Controls.png');
+		game.load.image('controls2_menu','assets/img/Player2_Controls.png');
 
         game.load.image('round_unresolved','assets/img/round_unresolved5.png');
         game.load.image('round_won','assets/img/round_won5.png');
@@ -34,7 +36,8 @@ var preloaderState = {
         game.load.image('Joystick_Right','assets/img/Xbox_Controls/Joystick_Right.png');
         game.load.image('Joystick_Up','assets/img/Xbox_Controls/Joystick_Up.png');
         game.load.image('Joystick_Down','assets/img/Xbox_Controls/Joystick_Down.png');
-
+		game.load.image('JoystickL','assets/img/Xbox_Controls/JoystickL.png');
+		game.load.image('JoystickR','assets/img/Xbox_Controls/JoystickR.png');
 
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');

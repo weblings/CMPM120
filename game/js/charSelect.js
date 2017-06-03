@@ -347,7 +347,7 @@ var charSelect = {
             }
         main_music.mute = true;
         //game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
-        game.state.start("controls",true,false,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+        game.state.start("main",true,false,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
         }
     },
     

@@ -18,6 +18,9 @@ var preloaderState = {
         game.load.image('pause_menu','assets/img/menu_bg_temp.png');
 		game.load.image('controls1_menu','assets/img/Player1_Controls.png');
 		game.load.image('controls2_menu','assets/img/Player2_Controls.png');
+		game.load.image('CharBG', 'assets/img/CharSelectBG.png');
+		game.load.image('closed', 'assets/img/GateClosed.png');
+		game.load.image('boarding', 'assets/img/NowBoarding.png');
 
         game.load.image('round_unresolved','assets/img/round_unresolved5.png');
         game.load.image('round_won','assets/img/round_won5.png');

@@ -34,17 +34,30 @@ var charSelect = {
         
         var padControls1Shown;
         var padControls2Shown;
+		
+		var upArrow;
     },
     
     create: function(){
         
+		var bg = game.add.sprite(0,-30,'CharBG');
+		bg.scale.setTo(1, .8);
+		
+		var gateClosed = game.add.sprite(450, 155, "closed");
+		gateClosed.scale.setTo(.9, .7);
+		
+		var nowBoarding = game.add.sprite(450, 155, "boarding");
+		nowBoarding.scale.setTo(.9, .7);
+		nowBoarding.alpha = 0;
+		
         //var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
         //logo.scale.setTo(.7,.7);
 		
-		var upArrow = game.add.sprite(585,275,"arrow");
+		upArrow = game.add.sprite(585,275,"arrow");
 		upArrow.scale.setTo(.25, .25);
 		var downArrow = game.add.sprite(585,425,"arrow");
 		downArrow.scale.setTo(.25, -.25);
+
 		
 		var rabbitID = game.add.sprite(150,220,"rabbit_ID");
 		rabbitID.scale.setTo(.5,.5);

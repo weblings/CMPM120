@@ -213,7 +213,10 @@ var mainState = {
 
 	update: function() {
         
-        if(!game.paused) this.menu.alpha = 0;
+        if(!game.paused){
+           //EVIE: ADD YO SHIT HERE SO IT DISSAPEAR WHEN YOU UNPAUSE AND IT BE GUD GUD
+           this.menu.alpha = 0; 
+        } 
         
         if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
             padControl1 = true;

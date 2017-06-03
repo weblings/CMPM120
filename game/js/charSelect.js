@@ -404,7 +404,7 @@ var charSelect = {
                 duplicate = false;
             }
 			if(!steveSet){
-                timer.startTime("tom",3000);
+                timer.startTimer("tom",1500);
 				timer.startTimer("steve", 6000); 
 				steveSet = true;
 			}

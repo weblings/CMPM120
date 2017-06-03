@@ -106,9 +106,9 @@ var charSelect = {
         game.stage.backgroundColor = "#162160";//"#000";
 
       //  P1Text = game.add.text(game.width/5,game.height/2,characters[P1index], {fontSize: '32px', fill: '#fff'});
-        P1InstructionText = game.add.text(game.width/5,(3 * game.height)/4,"Select with E", {fontSize: '32px', fill: '#fff'});
+        P1InstructionText = game.add.text(game.width/5,(3 * game.height)/4,"Select with E", {fontSize: '32px', fill: '#000'});
      //   P2Text = game.add.text((3 * game.width)/5,game.height/2,characters[P2index], {fontSize: '32px', fill: '#fff'});
-        P2InstructionText = game.add.text(3 * game.width/5,(3 * game.height)/4,"Select with I", {fontSize: '32px', fill: '#fff'});
+        P2InstructionText = game.add.text(3 * game.width/5,(3 * game.height)/4,"Select with I", {fontSize: '32px', fill: '#000'});
 
         p1win = 0;
         p2win = 0;
@@ -166,10 +166,10 @@ var charSelect = {
         battleCryTextY3 = 100;
         
         //		sprites = [scorpID, guardID, rabbitID];
-        battleCries = ["*SNIP* *SNIP*","2 YEARS TO RETIREMENT","*ICE RABBIT NOISES*"]
+        battleCries = ["*SNIP* *SNIP*","TESTOTERONE!!!","*ICE RABBIT NOISES*"]
         
-        battleCryText1 = game.add.text(battleCryText1X,battleCryTextY,"", {fontSize: '32px', fill: '#fff'});
-        battleCryText2 = game.add.text(battleCryText2X,battleCryTextY,"", {fontSize: '32px', fill: '#fff'});
+        battleCryText1 = game.add.text(battleCryText1X,battleCryTextY,"", {fontSize: '32px', fill: '#000'});
+        battleCryText2 = game.add.text(battleCryText2X,battleCryTextY,"", {fontSize: '32px', fill: '#000'});
         
         battleCryText1.alpha = 0;
         battleCryText2.alpha = 0;
@@ -424,12 +424,16 @@ var charSelect = {
         if(!battleCry1Done && inputNumber == 1){
             charSelect.resetBattleCryVars1();
             battleCryText1.text = battleCries[P1index];
-            var tween1 = game.add.tween(battleCryText1).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText1X - 50 }, 300, "Linear", true, 400);
+            var room = 50;
+            if(P1index == 1 || P1index == 2) room = 150; 
+            var tween1 = game.add.tween(battleCryText1).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText1X - room }, 200, "Linear", true, 400);
             tween1.onComplete.add(charSelect.Tween1completed, this);
         }else if(!battleCry2Done && inputNumber == 2){
             charSelect.resetBattleCryVars2();
             battleCryText2.text = battleCries[P2index];
-            var tween1_2 = game.add.tween(battleCryText2).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText2X - 50 }, 300, "Linear", true, 400);
+            var room = 50;
+            if(P2index == 1 || P2index == 2) room = 150;
+            var tween1_2 = game.add.tween(battleCryText2).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText2X - room }, 200, "Linear", true, 400);
             tween1_2.onComplete.add(charSelect.Tween1_2completed, this);
         }  
     },

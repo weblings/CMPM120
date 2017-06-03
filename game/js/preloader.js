@@ -18,7 +18,8 @@ var preloaderState = {
         game.load.image('pause_menu','assets/img/menu_bg_temp.png');
 		game.load.image('controls1_menu','assets/img/Player1_Controls.png');
 		game.load.image('controls2_menu','assets/img/Player2_Controls.png');
-		game.load.image('CharBG', 'assets/img/CharSelectBG.png');
+		game.load.image('CharBG_GC', 'assets/img/CharSelectBG_GC.png');
+		game.load.image('CharBG_NB', 'assets/img/CharSelectBG_NB.png');
 		game.load.image('closed', 'assets/img/GateClosed.png');
 		game.load.image('boarding', 'assets/img/NowBoarding.png');
 
@@ -99,8 +100,8 @@ var preloaderState = {
 	},
 
 	create: function(){
-		game.state.start('charSelect');
-        //game.state.start('title');
+		//game.state.start('main');
+        game.state.start('charSelect');
 	}
 
 };

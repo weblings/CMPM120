@@ -36,19 +36,23 @@ var charSelect = {
         var padControls2Shown;
 		
 		var upArrow;
+		var backgrounds;
+		var bg_GC;
+		var bg_NB;
+		
     },
     
     create: function(){
-        
-		var bg = game.add.sprite(0,-30,'CharBG');
-		bg.scale.setTo(1, .8);
+        backgrounds = game.add.group();
 		
-		var gateClosed = game.add.sprite(450, 155, "closed");
-		gateClosed.scale.setTo(.9, .7);
+		bg_GC = game.add.sprite(0,-30,'CharBG_GC');
+		bg_GC.scale.setTo(1, .8);
 		
-		var nowBoarding = game.add.sprite(450, 155, "boarding");
-		nowBoarding.scale.setTo(.9, .7);
-		nowBoarding.alpha = 0;
+		bg_NB = game.add.sprite(0,-30,'CharBG_NB');
+		bg_NB.scale.setTo(1, .8);
+		bg_NB.alpha = 0;
+		
+		backgrounds.add(bg_NB);
 		
         //var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
         //logo.scale.setTo(.7,.7);
@@ -172,6 +176,8 @@ var charSelect = {
         
         battleCry1Done = false;
         battleCry2Done = false;
+		
+		steveSet = false;
 
     },
     
@@ -389,6 +395,9 @@ var charSelect = {
         }
         
         if(P1Chose && P2Chose && battleCry1Done && battleCry2Done){
+			bg_GC.alpha = 0;
+			bg_NB.alpha = 1;
+			//backgroundSwitch();
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
             if (P1CharChosen == P2CharChosen){
@@ -396,10 +405,17 @@ var charSelect = {
             }else{
                 duplicate = false;
             }
-        main_music.mute = true;
-        //game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
-        game.state.start("main",true,false,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
-        }
+			if(!steveSet){
+				timer.startTimer("steve", 2000); 
+				
+				steveSet = true;
+			}
+			if(timer.timerDone("steve")){
+				main_music.mute = true;
+				//game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+				game.state.start("main",true,false,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+			}
+		}
     },
     
     playMainMusic: function() {	main_music.play('', 0, 1, true);},
@@ -442,5 +458,7 @@ var charSelect = {
         tween2.onComplete.add(charSelect.resetBattleCryVars2, this);
         battleCry2Done = true;
     }
+	
+
     
 };

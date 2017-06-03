@@ -36,6 +36,9 @@ var charSelect = {
         var padControls2Shown;
 		
 		var upArrow;
+		var gateClosed;
+		var nowBoarding;
+		
     },
     
     create: function(){
@@ -43,10 +46,10 @@ var charSelect = {
 		var bg = game.add.sprite(0,-30,'CharBG');
 		bg.scale.setTo(1, .8);
 		
-		var gateClosed = game.add.sprite(450, 155, "closed");
+		gateClosed = game.add.sprite(450, 155, "closed");
 		gateClosed.scale.setTo(.9, .7);
 		
-		var nowBoarding = game.add.sprite(450, 155, "boarding");
+		nowBoarding = game.add.sprite(450, 155, "boarding");
 		nowBoarding.scale.setTo(.9, .7);
 		nowBoarding.alpha = 0;
 		
@@ -169,6 +172,8 @@ var charSelect = {
         
         battleCry1Done = false;
         battleCry2Done = false;
+		
+		steveSet = false;
 
     },
     
@@ -385,6 +390,8 @@ var charSelect = {
         }
         
         if(P1Chose && P2Chose && battleCry1Done && battleCry2Done){
+			gateClosed.alpha = 0;
+			nowBoarding.alpha = 1;
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
             if (P1CharChosen == P2CharChosen){
@@ -392,10 +399,17 @@ var charSelect = {
             }else{
                 duplicate = false;
             }
-        main_music.mute = true;
-        //game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
-        game.state.start("main",true,false,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
-        }
+			if(!steveSet){
+				timer.startTimer("steve", 2000); 
+				
+				steveSet = true;
+			}
+			if(timer.timerDone("steve")){
+				main_music.mute = true;
+				//game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+				game.state.start("main",true,false,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+			}
+		}
     },
     
     playMainMusic: function() {	main_music.play('', 0, 1, true);},

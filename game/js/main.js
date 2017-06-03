@@ -213,6 +213,8 @@ var mainState = {
 
 	update: function() {
         
+        if(!game.paused) this.menu.alpha = 0;
+        
         if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
             padControl1 = true;
         }
@@ -234,14 +236,14 @@ var mainState = {
         }
         
         if(padControl1){
-            if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_START) && player1.introFinished){
                 this.menu.alpha = 1;
                 game.paused = true;
             }
         }
         
         if(padControl2){
-            if(pad2.isDown(Phaser.Gamepad.XBOX360_START)){
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_START) && player1.introFinished){
                 this.menu.alpha = 1;
                 game.paused = true;
             }

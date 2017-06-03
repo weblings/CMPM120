@@ -82,7 +82,7 @@ var charSelect = {
         P2index = 0;
         P2Chose = false;
         
-        game.stage.backgroundColor = "#000";
+        game.stage.backgroundColor = "#162160";//"#000";
       //  P1Text = game.add.text(game.width/5,game.height/2,characters[P1index], {fontSize: '32px', fill: '#fff'});
         P1InstructionText = game.add.text(game.width/5,(3 * game.height)/4,"Select with E", {fontSize: '32px', fill: '#fff'});
      //   P2Text = game.add.text((3 * game.width)/5,game.height/2,characters[P2index], {fontSize: '32px', fill: '#fff'});

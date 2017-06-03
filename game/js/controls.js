@@ -170,7 +170,15 @@ var controlState = {
         var pad1;
         var pad2;
         var padControl1;
-        var padControl2; 
+        var padControl2;
+        
+        ContinuingText = game.add.text(game.world.width/2,50,"PUSH ESC TO CONTINUE", {fontSize: '16px', fill: '#fff'});
+        ContinuingText.anchor.setTo(.5,.5);
+        
+        startButton = game.add.sprite(game.world.width/2-33,46,'Start_Button');
+        startButton.anchor.setTo(.5,.5);
+        startButton.scale.setTo(.07,.07);
+        startButton.alpha = 0;
 	            
     },
     
@@ -191,12 +199,14 @@ var controlState = {
         }
         
         if(padControl1){
+            startButton.alpha = 1;
             if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
 			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round)
             }
         }
         
         if(padControl2){
+            startButton.alpha = 1;
             if(pad2.isDown(Phaser.Gamepad.XBOX360_START)){
 			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
             }

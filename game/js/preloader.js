@@ -11,10 +11,10 @@ var preloaderState = {
         game.load.image('health_damage','assets/img/health_damage.png');
         game.load.image('logo','assets/img/Logo.png');
 		game.load.image('scorp_ID','assets/img/Scorpion_Passport.png');
-		game.load.image('rabbit_ID','assets/img/Rabbit_Passport.png');
-		game.load.image('guard_ID','assets/img/SecurityGuard_Passport.png');
-		game.load.image('control1','assets/img/controls1.png');
-		game.load.image('control2','assets/img/controls.png');
+		game.load.image('rabbit_ID','assets/img/Rabbit_passport.png');
+		game.load.image('guard_ID','assets/img/SecurityGuard_passport.png');
+		game.load.image('control1','assets/img/Controls1.png');
+		game.load.image('control2','assets/img/Controls.png');
         game.load.image('pause_menu','assets/img/menu_bg_temp.png');
 
         game.load.image('round_unresolved','assets/img/round_unresolved5.png');

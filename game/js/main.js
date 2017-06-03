@@ -38,7 +38,12 @@ var mainState = {
         var pad1;
         var pad2;
         var padControl1;
-        var padControl2; 
+        var padControl2;
+        
+        //Health Border
+        var healthBorder1;
+        var healthBorder2;
+        var healthBorders;
     },
 
 	create: function() {
@@ -195,31 +200,53 @@ var mainState = {
         deathSound.mute = false;
         
         //Rounds won UI
+        var roundUIHeight = 114;
         p2wins1 = game.add.sprite(game.world.width/2+225,102,'round_unresolved');
         p2wins1.scale.setTo(.3,.3);
+        p2wins1.position.y = roundUIHeight;
         p2wins2 = game.add.sprite(game.world.width/2+185,102,'round_unresolved');
-        p2wins2.scale.setTo(.3,.3);        
+        p2wins2.scale.setTo(.3,.3);
+        p2wins2.position.y = roundUIHeight;
         p1wins1 = game.add.sprite(game.world.width/2-255,102,'round_unresolved');
         p1wins1.scale.setTo(.3,.3);
+        p1wins1.position.y = roundUIHeight;
         p1wins2 = game.add.sprite(game.world.width/2-215,102,'round_unresolved');
         p1wins2.scale.setTo(.3,.3);
+        p1wins2.position.y = roundUIHeight;
         
         p2won1 = game.add.sprite(game.world.width/2+225,102,'round_won');
         p2won1.scale.setTo(.3,.3);
         if(p2win < 1) p2won1.alpha = 0;
+        p2won1.position.y = roundUIHeight;
         p2won2 = game.add.sprite(game.world.width/2+185,102,'round_won');
         p2won2.scale.setTo(.3,.3);
         p2won2.alpha = 0;
+        p2won2.position.y = roundUIHeight;
         p1won1 = game.add.sprite(game.world.width/2-255,102,'round_won');
         p1won1.scale.setTo(.3,.3);
+        p1won1.position.y = roundUIHeight;
         if(p1win < 1) p1won1.alpha = 0;
         p1won2 = game.add.sprite(game.world.width/2-215,102,'round_won');
         p1won2.scale.setTo(.3,.3);
         p1won2.alpha = 0;
-	},
-
-	update: function() {
+        p1won2.position.y = roundUIHeight;
         
+        //Health Border UI
+        healthBorders = this.game.add.group();
+
+        healthBorder1 = game.add.sprite(game.width/2 - 395,73,'health_border');
+        healthBorder1.anchor.setTo(.5,.5);
+        healthBorder1.scale.setTo(-1.004,1.004);
+        healthBorders.add(healthBorder1);
+        
+        healthBorder2 = game.add.sprite(game.width/2 + 395,73,'health_border');
+        healthBorder2.anchor.setTo(.5,.5);
+        healthBorder2.scale.setTo(1.004,1.004);
+        healthBorders.add(healthBorder2);
+        
+    },
+
+	update: function() {        
         if(!game.paused){
            //EVIE: ADD YO SHIT HERE SO IT DISSAPEAR WHEN YOU UNPAUSE AND IT BE GUD GUD
 		   this.control1.alpha = 0;
@@ -490,7 +517,7 @@ var mainState = {
             }
         }
 
-        
+        game.world.bringToTop(healthBorders);
 
     },
     

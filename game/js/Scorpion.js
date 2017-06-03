@@ -103,10 +103,10 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     this.healthBarScaleMaster = 1; //used to scale bars
     if(playerNum == 1){
         this.debugText = game.add.text(16,16,'', {fontSize: '32px', fill: '#000000'});
-        this.healthBar = game.add.image(10,48,'health_full');
+        this.healthBar = game.add.image(20,48,'health_full');
     }else{ //playerNum == 2
         this.debugText = game.add.text(game.width - 100,16,'', {fontSize: '32px', fill: '#000000'});
-        this.healthBar = game.add.image(game.width-460,48,'health_full');
+        this.healthBar = game.add.image(game.width-470,48,'health_full');
     }
     
 
@@ -732,17 +732,17 @@ Scorpion.prototype.takeDamage = function(damage,staggerLength){
             this.emitter.start(true, 2000, null, 10);
 
         }
-        //AG: HealthBar handling
+         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged
             this.healthBarScaleMaster = 1 - ((damage*def)/100);
             console.log(this.healthBarScaleMaster);
             this.healthBar.scale.x *= this.healthBarScaleMaster;
             if(this.playerNum == 2){
-                this.damageBar = game.add.image(game.width-460,48,"health_empty");
+                this.damageBar = game.add.image(game.width-470,48,"health_empty");
                 this.damageBar.scale.x *= (damage*def)/100;
                 this.healthBar.x = this.damageBar.x + this.damageBar.width;
                 //Red from hit
-                var damaged = game.add.image(game.width-460,48,"health_damage");
+                var damaged = game.add.image(game.width-470,48,"health_damage");
                 damaged.scale.x *= (damage*def)/100;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }else{ //playerNum == 1
@@ -794,7 +794,7 @@ Scorpion.prototype.takeDamage = function(damage,staggerLength){
                 this.damageBar.x = 10;
                 this.damageBar.scale.x = 1;
                 //Red from hit
-                var damaged = game.add.image(10,48,"health_damage");
+                var damaged = game.add.image(20,48,"health_damage");
                 damaged.scale.x *= lastScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear",true, 800); 
             } 

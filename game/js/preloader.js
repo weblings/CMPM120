@@ -18,12 +18,12 @@ var preloaderState = {
         game.load.image('pause_menu','assets/img/menu_bg_temp.png');
 		game.load.image('controls1_menu','assets/img/Player1_Controls.png');
 		game.load.image('controls2_menu','assets/img/Player2_Controls.png');
-
         game.load.image('round_unresolved','assets/img/round_unresolved5.png');
         game.load.image('round_won','assets/img/round_won5.png');
 		game.load.image('arrow','assets/img/Arrow.png');
 		game.load.image('selectBox','assets/img/selectBox.png');
 		game.load.image('selectBox2','assets/img/selectBox2.png');
+        game.load.image('health_border','assets/img/health_border.png');
         
         //Xbox
         game.load.image('controller','assets/img/controller.png');

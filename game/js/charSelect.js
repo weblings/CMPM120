@@ -36,22 +36,23 @@ var charSelect = {
         var padControls2Shown;
 		
 		var upArrow;
-		var gateClosed;
-		var nowBoarding;
+		var backgrounds;
+		var bg_GC;
+		var bg_NB;
 		
     },
     
     create: function(){
-        
-		var bg = game.add.sprite(0,-30,'CharBG');
-		bg.scale.setTo(1, .8);
+        backgrounds = game.add.group();
 		
-		gateClosed = game.add.sprite(450, 155, "closed");
-		gateClosed.scale.setTo(.9, .7);
+		bg_GC = game.add.sprite(0,-30,'CharBG_GC');
+		bg_GC.scale.setTo(1, .8);
 		
-		nowBoarding = game.add.sprite(450, 155, "boarding");
-		nowBoarding.scale.setTo(.9, .7);
-		nowBoarding.alpha = 0;
+		bg_NB = game.add.sprite(0,-30,'CharBG_NB');
+		bg_NB.scale.setTo(1, .8);
+		bg_NB.alpha = 0;
+		
+		backgrounds.add(bg_NB);
 		
         //var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
         //logo.scale.setTo(.7,.7);
@@ -390,8 +391,9 @@ var charSelect = {
         }
         
         if(P1Chose && P2Chose && battleCry1Done && battleCry2Done){
-			gateClosed.alpha = 0;
-			nowBoarding.alpha = 1;
+			bg_GC.alpha = 0;
+			bg_NB.alpha = 1;
+			//backgroundSwitch();
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
             if (P1CharChosen == P2CharChosen){
@@ -450,5 +452,7 @@ var charSelect = {
         tween2.onComplete.add(charSelect.resetBattleCryVars2, this);
         battleCry2Done = true;
     }
+	
+
     
 };

@@ -11,7 +11,7 @@ var charSelect = {
         
         var P2keyUp;
         var P2keyDown;
-        var PiIndex;
+        var P2Index;
         var P2Chose;
         var P2CharChosen;
         
@@ -161,8 +161,11 @@ var charSelect = {
         battleCryTextY2 = 160;
         battleCryTextY3 = 100;
         
-        battleCryText1 = game.add.text(battleCryText1X,battleCryTextY,"Select with E", {fontSize: '32px', fill: '#fff'});
-        battleCryText2 = game.add.text(battleCryText2X,battleCryTextY,"Select with E", {fontSize: '32px', fill: '#fff'});
+        //		sprites = [scorpID, guardID, rabbitID];
+        battleCries = ["*SNIP* *SNIP*","2 YEARS TO RETIREMENT","*ICE RABBIT NOISES*"]
+        
+        battleCryText1 = game.add.text(battleCryText1X,battleCryTextY,"", {fontSize: '32px', fill: '#fff'});
+        battleCryText2 = game.add.text(battleCryText2X,battleCryTextY,"", {fontSize: '32px', fill: '#fff'});
         
         battleCryText1.alpha = 0;
         battleCryText2.alpha = 0;
@@ -268,6 +271,7 @@ var charSelect = {
             if(game.input.keyboard.justPressed(P1keyA) && !P1Chose){
                 P1Chose = true;
                 P1InstructionText.text = "Deselect with R";
+                //battleCryText1.text = battleCries[P1index]; 
                 charSelect.battleCry(1);
             }
             
@@ -403,10 +407,12 @@ var charSelect = {
     battleCry: function(inputNumber){
         if(!battleCry1Done && inputNumber == 1){
             charSelect.resetBattleCryVars1();
+            battleCryText1.text = battleCries[P1index];
             var tween1 = game.add.tween(battleCryText1).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText1X - 50 }, 300, "Linear", true, 400);
             tween1.onComplete.add(charSelect.Tween1completed, this);
         }else if(!battleCry2Done && inputNumber == 2){
             charSelect.resetBattleCryVars2();
+            battleCryText2.text = battleCries[P2index];
             var tween1_2 = game.add.tween(battleCryText2).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText2X - 50 }, 300, "Linear", true, 400);
             tween1_2.onComplete.add(charSelect.Tween1_2completed, this);
         }  

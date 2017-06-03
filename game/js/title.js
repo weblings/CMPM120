@@ -12,11 +12,17 @@ titleState.prototype = {
 
         var timer;
         var beta = false; //keep track of where A button registers
+        
+        //AG: Adding bg for Sammys
+        var bg;
 
 	},
 
 	create: function(){
-
+        //AG: Adding bg for Sammys
+		var bg = game.add.sprite(0,-30,'CharBG');
+		bg.scale.setTo(1, .8);
+        
 		game.input.gamepad.start();
         pad1 = game.input.gamepad.pad1;
         pad2 = game.input.gamepad.pad2;

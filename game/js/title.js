@@ -20,8 +20,18 @@ titleState.prototype = {
 
 	create: function(){
         //AG: Adding bg for Sammys
-		var bg = game.add.sprite(0,-30,'CharBG');
-		bg.scale.setTo(1, .8);
+		bg_GC = game.add.sprite(0,-30,'CharBG_GC');
+		bg_GC.scale.setTo(1, .8);
+        
+        main_music = game.add.audio('parisian');
+        //solution for looping bug from http://www.html5gamedevs.com/topic/13947-audio-not-looping-in-chrome/
+        main_music.play('',0, 1, true);
+        //main_music.onLoop.add(playMainMusic, this);       
+        main_music.mute = false;  
+        main_music.loop = true;
+        main_music.volume = 0.7;
+        
+        //Logo = game.add.sprite(100, game.world.height/2, 'logo');
         
 		game.input.gamepad.start();
         pad1 = game.input.gamepad.pad1;
@@ -115,8 +125,10 @@ titleState.prototype = {
 
 			if(pad1.isDown(Phaser.Gamepad.XBOX360_X) /*&& !beta*/){ //change back to A later
                 //console.log("you pressed A");
+                main_music.mute = true;
                 game.state.start('charSelect');
             }
+           
 
             //move button down
         	//if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock1')){

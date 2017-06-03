@@ -94,7 +94,7 @@ var preloaderState = {
         game.load.audio('ouroboros',['assets/audio/Ouroboros.mp3','assets/audio/Ouroboros.ogg']);
         game.load.audio('kick_shock',['assets/audio/Kick_Shock.mp3','assets/audio/Kick_Shock.ogg']);
         game.load.audio('ultra_polka',['assets/audio/Ultra_Polka.mp3','assets/audio/Ultra_Polka.ogg']);
-        game.load.audio('pariasian',['assets/audio/Parisian.mp3','assets/audio/Parisian.ogg']);
+        game.load.audio('parisian',['assets/audio/Parisian.mp3','assets/audio/Parisian.ogg']);
         game.load.audio('shoegazer',['assets/audio/Shoegazer.mp3','assets/audio/Shoegazer.ogg']);
 
 	},

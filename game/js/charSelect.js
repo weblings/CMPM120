@@ -395,8 +395,6 @@ var charSelect = {
         }
         
         if(P1Chose && P2Chose && battleCry1Done && battleCry2Done){
-			bg_GC.alpha = 0;
-			bg_NB.alpha = 1;
 			//backgroundSwitch();
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
@@ -406,10 +404,14 @@ var charSelect = {
                 duplicate = false;
             }
 			if(!steveSet){
-				timer.startTimer("steve", 2000); 
-				
+                timer.startTime("tom",3000);
+				timer.startTimer("steve", 6000); 
 				steveSet = true;
 			}
+            if(timer.timerDone("tom")){
+                bg_GC.alpha = 0;
+			    bg_NB.alpha = 1;
+            }
 			if(timer.timerDone("steve")){
 				main_music.mute = true;
 				//game.state.start("main",false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);

@@ -87,6 +87,31 @@ var controlState = {
 	   preset2_1 = ['O', 'K', 'L', 'COLON', 'I', 'U'];
 	   preset2_2 = ['O', 'K', 'L', 'COLON', 'I', 'P'];
 	   
+	   var Abutton = game.add.sprite(155, 410,"A");
+	   Abutton.scale.setTo(.08, .08);
+	   var joystick = game.add.sprite(155, 455, "JoystickL");
+	   joystick.scale.setTo(.09, .09);
+	   var joystick2 = game.add.sprite(170, 500, "JoystickR");
+	   joystick2.scale.setTo(.09, .09);
+	   var Ybutton = game.add.sprite(185, 550, "Y");
+	   Ybutton.scale.setTo(.08, .08);
+	   var Xbutton = game.add.sprite(300, 595, "X");
+	   Xbutton.scale.setTo(.08, .08);
+	   var Bbutton = game.add.sprite(475, 640, "B");
+	   Bbutton.scale.setTo(.08, .08);
+	   
+	   var Abutton2 = game.add.sprite(835, 410,"A");
+	   Abutton2.scale.setTo(.08, .08);
+	   var joystick2 = game.add.sprite(835, 455, "JoystickL");
+	   joystick2.scale.setTo(.09, .09);
+	   var joystick2_2 = game.add.sprite(850, 500, "JoystickR");
+	   joystick2_2.scale.setTo(.09, .09);
+	   var Ybutton2 = game.add.sprite(865, 550, "Y");
+	   Ybutton2.scale.setTo(.08, .08);
+	   var Xbutton2 = game.add.sprite(980, 595, "X");
+	   Xbutton2.scale.setTo(.08, .08);
+	   var Bbutton2 = game.add.sprite(1155, 640, "B");
+	   Bbutton2.scale.setTo(.08, .08);
 	   
 	    P1keyUp = Phaser.Keyboard.W;
         P1keyDown = Phaser.Keyboard.S;
@@ -108,42 +133,53 @@ var controlState = {
 		
 		P1Jump = game.add.text(50, 415,"JUMP: ", {fontSize: '32px', fill: '#fff'});
 		P1JumpButton = game.add.text(160, 415,"W", {fontSize: '32px', fill: '#fff'});
+		P1JumpButton.alpha = 0;
 		
 		P1Left = game.add.text(50, 460,"LEFT: ", {fontSize: '32px', fill: '#fff'});
 		P1LeftButton = game.add.text(155, 460,"A", {fontSize: '32px', fill: '#fff'});
+		P1LeftButton.alpha = 0;
 		
 		P1Right = game.add.text(50, 505,"RIGHT: ", {fontSize: '32px', fill: '#fff'});
 		P1RightButton = game.add.text(165, 505,"D", {fontSize: '32px', fill: '#fff'});
+		P1RightButton.alpha = 0;
 		
 		P1Guard = game.add.text(50, 550,"GUARD: ", {fontSize: '32px', fill: '#fff'});
 		P1GuardButton = game.add.text(185, 550,"S", {fontSize: '32px', fill: '#fff'});
+		P1GuardButton.alpha = 0;
 		
 		P1Light = game.add.text(50, 595,"LIGHT ATTACK: ", {fontSize: '32px', fill: '#fff'});
 		P1LightButton = game.add.text(300, 595,"E", {fontSize: '32px', fill: '#fff'});
+		P1LightButton.alpha = 0;
 		
 		P1Heavy = game.add.text(50, 640,"HEAVY ATTACK/DIVEKICK: ", {fontSize: '32px', fill: '#fff'});
 		P1HeavyButton = game.add.text(480, 640,"R", {fontSize: '32px', fill: '#fff'});
+		P1HeavyButton.alpha = 0;
 		
 		P2 = game.add.text(800, 365,"PLAYER 2", {fontSize: '35px', fill: '#fff'});
 		
 		P2Jump = game.add.text(725, 415,"JUMP: ", {fontSize: '32px', fill: '#fff'});
 		P2JumpButton = game.add.text(835, 415,"O", {fontSize: '32px', fill: '#fff'});
+		P2JumpButton.alpha = 0;
 		
 		P2Left = game.add.text(725, 460,"LEFT: ", {fontSize: '32px', fill: '#fff'});
 		P2LeftButton = game.add.text(830, 460,"K", {fontSize: '32px', fill: '#fff'});
+		P2LeftButton.alpha = 0;
 		
 		P2Right = game.add.text(725, 505,"RIGHT: ", {fontSize: '32px', fill: '#fff'});
 		P2RightButton = game.add.text(840, 505,";", {fontSize: '32px', fill: '#fff'});
+		P2RightButton.alpha = 0;
 		
 		P2Guard = game.add.text(725, 550,"GUARD: ", {fontSize: '32px', fill: '#fff'});
 		P2GuardButton = game.add.text(860, 550,"L", {fontSize: '32px', fill: '#fff'});
+		P2GuardButton.alpha = 0;
 		
 		P2Light = game.add.text(725, 595,"LIGHT ATTACK: ", {fontSize: '32px', fill: '#fff'});
 		P2LightButton = game.add.text(975, 595,"I", {fontSize: '32px', fill: '#fff'});
+		P2LightButton.alpha = 0;
 		
 		P2Heavy = game.add.text(725, 640,"HEAVY ATTACK/DIVEKICK: ", {fontSize: '32px', fill: '#fff'});
 		P2HeavyButton = game.add.text(1155, 640,"U", {fontSize: '32px', fill: '#fff'});
-        
+        P2HeavyButton.alpha = 0;
         
         //Making Xbox Default for Sammy Demo
         layoutSelect.alpha = 0;
@@ -170,7 +206,15 @@ var controlState = {
         var pad1;
         var pad2;
         var padControl1;
-        var padControl2; 
+        var padControl2;
+        
+        ContinuingText = game.add.text(game.world.width/2,50,"PUSH ESC TO CONTINUE", {fontSize: '16px', fill: '#fff'});
+        ContinuingText.anchor.setTo(.5,.5);
+        
+        startButton = game.add.sprite(game.world.width/2-33,46,'Start_Button');
+        startButton.anchor.setTo(.5,.5);
+        startButton.scale.setTo(.07,.07);
+        startButton.alpha = 0;
 	            
     },
     
@@ -191,12 +235,14 @@ var controlState = {
         }
         
         if(padControl1){
+            startButton.alpha = 1;
             if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
 			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round)
             }
         }
         
         if(padControl2){
+            startButton.alpha = 1;
             if(pad2.isDown(Phaser.Gamepad.XBOX360_START)){
 			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
             }

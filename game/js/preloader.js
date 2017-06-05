@@ -16,12 +16,19 @@ var preloaderState = {
 		game.load.image('control1','assets/img/Controls1.png');
 		game.load.image('control2','assets/img/Controls.png');
         game.load.image('pause_menu','assets/img/menu_bg_temp.png');
+		game.load.image('controls1_menu','assets/img/Player1_Controls.png');
+		game.load.image('controls2_menu','assets/img/Player2_Controls.png');
+		game.load.image('CharBG_GC', 'assets/img/CharSelectBG_GC.png');
+		game.load.image('CharBG_NB', 'assets/img/CharSelectBG_NB.png');
+		game.load.image('closed', 'assets/img/GateClosed.png');
+		game.load.image('boarding', 'assets/img/NowBoarding.png');
 
         game.load.image('round_unresolved','assets/img/round_unresolved5.png');
         game.load.image('round_won','assets/img/round_won5.png');
 		game.load.image('arrow','assets/img/Arrow.png');
 		game.load.image('selectBox','assets/img/selectBox.png');
 		game.load.image('selectBox2','assets/img/selectBox2.png');
+        game.load.image('health_border','assets/img/health_border.png');
         
         //Xbox
         game.load.image('controller','assets/img/controller.png');
@@ -29,11 +36,13 @@ var preloaderState = {
         game.load.image('B','assets/img/Xbox_Controls/B_Button.png');
         game.load.image('Y','assets/img/Xbox_Controls/Y_Button.png');
         game.load.image('X','assets/img/Xbox_Controls/X_Button.png');
+        game.load.image('Start_Button','assets/img/Xbox_Controls/Start_Button.png');
         game.load.image('Joystick_Left','assets/img/Xbox_Controls/Joystick_Left.png');
         game.load.image('Joystick_Right','assets/img/Xbox_Controls/Joystick_Right.png');
         game.load.image('Joystick_Up','assets/img/Xbox_Controls/Joystick_Up.png');
         game.load.image('Joystick_Down','assets/img/Xbox_Controls/Joystick_Down.png');
-
+		game.load.image('JoystickL','assets/img/Xbox_Controls/JoystickL.png');
+		game.load.image('JoystickR','assets/img/Xbox_Controls/JoystickR.png');
 
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');
@@ -85,7 +94,7 @@ var preloaderState = {
         game.load.audio('ouroboros',['assets/audio/Ouroboros.mp3','assets/audio/Ouroboros.ogg']);
         game.load.audio('kick_shock',['assets/audio/Kick_Shock.mp3','assets/audio/Kick_Shock.ogg']);
         game.load.audio('ultra_polka',['assets/audio/Ultra_Polka.mp3','assets/audio/Ultra_Polka.ogg']);
-        game.load.audio('pariasian',['assets/audio/Parisian.mp3','assets/audio/Parisian.ogg']);
+        game.load.audio('parisian',['assets/audio/Parisian.mp3','assets/audio/Parisian.ogg']);
         game.load.audio('shoegazer',['assets/audio/Shoegazer.mp3','assets/audio/Shoegazer.ogg']);
 
 	},

@@ -59,8 +59,15 @@ var charSelect = {
 		
 		upArrow = game.add.sprite(585,275,"arrow");
 		upArrow.scale.setTo(.25, .25);
+        
+        upTween = game.add.tween(upArrow).to( { y: 250 }, 450, "Linear", true, 450);
+        upTween.yoyo(true,200).loop();
+                                                             
 		var downArrow = game.add.sprite(585,425,"arrow");
 		downArrow.scale.setTo(.25, -.25);
+        
+        downTween =  game.add.tween(downArrow).to( { y: 450 }, 450, "Linear", true, 450);
+        downTween.yoyo(true,200).loop();
 
 		
 		var rabbitID = game.add.sprite(150,220,"rabbit_ID");
@@ -155,6 +162,11 @@ var charSelect = {
         JoyStickDown.scale.setTo(.2,.2);
         JoyStickDown.anchor.setTo(.5,.5);
         JoyStickDown.alpha = 0;
+        
+        upJoyTween = game.add.tween(upArrow).to( { y: 250 }, 450, "Linear", true, 450);
+        upJoyTween.yoyo(true,200).loop();
+        downJoyTween =  game.add.tween(downArrow).to( { y: 450 }, 450, "Linear", true, 450);
+        downJoyTween.yoyo(true,200).loop();
         
         padControls1Shown = false;
         padControls2Shown = false;

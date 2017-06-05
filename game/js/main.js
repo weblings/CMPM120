@@ -584,7 +584,7 @@ var mainState = {
                     this.lightSoundPlayed = true;
                     this.timer.startTimer('lightSound',1000);
                 }
-                mainState.lightAttack(player,hitbox);
+                mainState.dashAttack(player,hitbox);
             }
         }else if(attackingPlayer.inSpecial){
         	if(attackingPlayer.charName == "LITERALLY A SCORPION"){
@@ -646,6 +646,15 @@ var mainState = {
         
         
 
+    },
+
+    dashAttack: function(player,hitbox){
+    	mainState.calcKnockBack(50,10,player.playerNum);
+        player.takeDamage(5,100);
+
+        if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
+        	game.camera.shake(0.001, 100);
+        }
     },
     
 

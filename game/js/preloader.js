@@ -87,6 +87,7 @@ var preloaderState = {
         game.load.audio('heavy_charge',['assets/audio/heavy_charge.mp3','assets/audio/heavy_charge.ogg']);
         game.load.audio('perfect_block',['assets/audio/block.mp3','assets/audio/block.ogg']);
         game.load.audio('throw',['assets/audio/throw.mp3','assets/audio/throw.ogg']);
+        game.load.audio('super',['assets/audio/Steel_Rods.mp3','assets/audio/Steel_Racks.ogg']);
         
         //music
         game.load.audio('local_forecast',['assets/audio/Local_Forecast.mp3','assets/audio/Local_Forecast.ogg']);

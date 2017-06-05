@@ -159,7 +159,7 @@ Security = function(game, key, x, y, playerNum,dup){
     this.fist.anchor.y = 0.5;
     this.fists.add(this.fist);
     this.fist.exists = false;
-    this.fist.alpha = 0;
+    this.fist.alpha = 0.5;
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
@@ -210,6 +210,8 @@ Security = function(game, key, x, y, playerNum,dup){
     this.canLightAttack = true;
     this.lightRate = 200;
     this.reloadRate = 400;
+
+    this.chainLocation = 0;
     //this.loaded = true; //AG: can fire another projectile
     
     //ui light attack element
@@ -294,6 +296,7 @@ Security.prototype.preState =function (){
 
     if (this.state != this.heavyAttack){
         this.fist.scale.x = 0.25;
+        this.action.dive = false;
     }
 
     //check if in air
@@ -562,12 +565,25 @@ Security.prototype.heavyAttack = function(){
 
 Security.prototype.chained = function(location){
     //this.action.chained = false;
+    this.action.dive = false;
     if (!this.action.block){
-        this.position.x = location;
+        this.timer.startTimer('chainStun', 500);
+        this.chainLocation = location;
+        this.changeState(this.chainStop);
 
     }
     
 
+}
+
+Security.prototype.chainStop = function(){
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
+    if (this.timer.timerDone('chainStun')){
+        this.position.x = this.chainLocation;
+        this.changeState(this.input);
+
+    }
 }
 
 //projectile

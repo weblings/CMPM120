@@ -179,6 +179,7 @@ Simon = function(game, key, x, y, playerNum, dup){
 
     //misc.
     this.canLightAttack = true;
+    this.chainLocation = 0;
     
     //Sounds
     this.lightSound = game.add.audio('light');
@@ -262,6 +263,7 @@ Simon.prototype.preState =function (){
 
     if (this.state != this.heavyAttack){
         this.fist.scale.x = 0.60;
+        this.action.dive = false;
         this.char.body.angularVelocity = 0;
         this.char.body.rotation = 0;
     }
@@ -575,14 +577,28 @@ Simon.prototype.heavyAttack = function(){
     
 }
 
+
 Simon.prototype.chained = function(location){
     //this.action.chained = false;
+    this.action.dive = false;
     if (!this.action.block){
-        this.position.x = location;
+        this.timer.startTimer('chainStun', 500);
+        this.chainLocation = location;
+        this.changeState(this.chainStop);
 
     }
     
 
+}
+
+Simon.prototype.chainStop = function(){
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
+    if (this.timer.timerDone('chainStun')){
+        this.position.x = this.chainLocation;
+        this.changeState(this.input);
+
+    }
 }
 
 //projectile

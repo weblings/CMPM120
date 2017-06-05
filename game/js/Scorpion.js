@@ -20,6 +20,8 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     this.specialEmitter.makeParticles('scorpion_curse');
     game.physics.enable(this.specialEmitter);
     this.specialEmitter.enableBody = true;
+    this.specialEmitter.blendMode = 1;
+    this.specialEmitter.alpha = 0.75;
 
     //Animations
     if (this.copy){
@@ -147,7 +149,7 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     this.fist.anchor.y = 0.5;
     this.fists.add(this.fist);
     this.fist.exists = false;
-    this.fist.alpha = 0;
+    this.fist.alpha = 0.5;
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
@@ -158,6 +160,7 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     this.chain.animations.add('scorpion_special',Phaser.Animation.generateFrameNames('scorpion_special',1,8,'',2), 20, false,false);
     this.chain.anchor.setTo(1,1);
     this.chain.exists = false;
+    this.chainLocation = 0;
 
     this.specialstart = false;
     this.chainHit = false;
@@ -287,7 +290,7 @@ Scorpion.prototype.preState =function (){
         this.body.velocity.x = 0;
     }
 
-    if (this.state != this.lightAttack){
+    if (this.state != this.lightAttack || !this.inSpecial){
         //light attack reset
         //this.fist.position.x = -300; //AG: Was at this.position.x; Moving offscreen so doesn't collide when not active
         //this.fist.position.y = this.position.y;
@@ -302,6 +305,7 @@ Scorpion.prototype.preState =function (){
 
     if (this.state != this.heavyAttack){
         this.fist.scale.x = 0.25;
+        this.action.dive = false;
     }
 
 
@@ -367,7 +371,13 @@ Scorpion.prototype.preState =function (){
     else{
         this.padControl = false;
     }
-    
+
+    if(this.state != this.chainBuffer && this.state != this.special){
+        this.chain.exists = false;
+        this.chainHit = false;
+        this.inSpecial = false;
+    }
+        
     
 }
 
@@ -612,10 +622,12 @@ Scorpion.prototype.heavyAttack = function(){
 Scorpion.prototype.special = function(){
 
     this.inSpecial = true;
-    this.chain.exists = true;
-    this.chain.position.x = this.position.x;
-    this.chain.position.y = this.position.y;
-    this.fist.exists = true;
+    if (this.action.jump ){
+        this.body.gravity.y = 0;
+        this.body.velocity.y =0 ;
+    }
+    
+    
     this.action.attacking = true;
     if (this.faceRIGHT){
         this.chain.scale.x = -0.7;
@@ -626,11 +638,18 @@ Scorpion.prototype.special = function(){
     }
 
     if (this.specialstart){
-        this.chain.play('scorpion_special');
+        if (this.timer.timerDone('specialCharge')){
+            this.fist.exists = true;
+            this.chain.exists = true;
+            this.chain.position.x = this.position.x;
+            this.chain.position.y = this.position.y;
+            this.chain.play('scorpion_special');
+            this.specialstart = false;
+        }
         this.specialEmitter.x = this.position.x;
         this.specialEmitter.y = this.position.y-75;
         this.specialEmitter.start(true, 2000, null, 10);
-        this.specialstart = false;
+        
     }else{
         if(this.faceRIGHT){
             if (this.fist.position.x - this.position.x < 735){
@@ -639,7 +658,7 @@ Scorpion.prototype.special = function(){
 
         }else{
             if (this.position.x - this.fist.position.x < 735){
-                this.fist.position.x += (mir*40);
+                this.fist.position.x += (mir*35);
             }
 
         }
@@ -648,24 +667,59 @@ Scorpion.prototype.special = function(){
     }
 
     if (this.timer.timerDone('spec') || this.chainHit){
-        this.changeState(this.input);
-        this.chain.exists = false;
-        this.action.attacking = false;
-        this.fist.exists = false;
-        this.chainHit = false;
-        this.inSpecial = false;
+
+        if (this.chainHit){
+            this.chain.animations.stop();
+            this.timer.startTimer('chainFreeze', 500);
+            this.changeState(this.chainBuffer);
+            this.action.attacking = false;
+            this.fist.exists = false;
+            this.chainHit = false;
+            this.inSpecial = false;
+
+        }else{
+            this.changeState(this.input);
+            this.chain.exists = false;
+            this.action.attacking = false;
+            this.fist.exists = false;
+            this.chainHit = false;
+            this.inSpecial = false;
+
+        }
+        
     }
     
 }
 
+Scorpion.prototype.chainBuffer = function(){
+    if (this.timer.timerDone('chainFreeze')){
+        this.chain.exists = false;
+        this.changeState(this.input);
+    }
+}    
+
 Scorpion.prototype.chained = function(location){
     //this.action.chained = false;
+    this.action.dive = false;
     if (!this.action.block){
-        this.position.x = location;
+        this.timer.startTimer('chainStun', 500);
+        this.chainLocation = location;
+        this.changeState(this.chainStop);
 
     }
     
 
+}
+
+Scorpion.prototype.chainStop = function(){
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
+    this.fist.exists = false;
+    if (this.timer.timerDone('chainStun')){
+        this.position.x = this.chainLocation;
+        this.changeState(this.input);
+
+    }
 }
 
 //projectile
@@ -1154,10 +1208,10 @@ Scorpion.prototype.input = function(){
 
 
             }
-            /*
+            
             if (game.input.keyboard.justPressed(this.keyB) && game.input.keyboard.justPressed(this.keyA) && !this.action.block){
-                //this.timer.startTimer('heavy_cast',500);
-                this.timer.startTimer('spec',1000);
+                this.timer.startTimer('specialCharge',200);
+                this.timer.startTimer('spec',1200);
                 this.specialstart = true;
                 
 
@@ -1165,7 +1219,7 @@ Scorpion.prototype.input = function(){
 
 
             }
-            */
+            
     
         //AG: Left controls
             if(game.input.keyboard.isDown(this.keyLeft) && !this.action.block ){

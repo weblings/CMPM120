@@ -149,7 +149,7 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     this.fist.anchor.y = 0.5;
     this.fists.add(this.fist);
     this.fist.exists = false;
-    this.fist.alpha = 0.5;
+    this.fist.alpha = 0;
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
@@ -544,17 +544,49 @@ Scorpion.prototype.heavyAttack = function(){
             this.char.yPosPreShake = this.char.position.y;
         }
 
-        if (this.action.cancel == true && game.input.keyboard.isDown(this.keyUp)){
-            this.action.attacking = false;
-            this.action.dive = false;
-            this.action.cancel = false;
-            this.body.velocity.y = this.jumpHeight;
-            this.changeState(this.input);
-            this.inHeavyAttack = false; //AG: Adding for knockback
-            this.heavyChargeSoundPlayed = false; //AG: Sound stuff
-            this.heavyChargeSound.stop();
+        if(this.padControl){
+            if (this.action.cancel == true && this.pad1.justPressed(Phaser.Gamepad.XBOX360_A)){
+                this.action.attacking = false;
+                this.action.dive = false;
+                this.action.cancel = false;
+                this.body.velocity.y = this.jumpHeight;
+                this.changeState(this.input);
+                this.inHeavyAttack = false; //AG: Adding for knockback
+                this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+                this.heavyChargeSound.stop();
+            }else if (this.action.cancel == true && this.pad1.justPressed(Phaser.Gamepad.XBOX360_Y)){
+                this.action.attacking = false;
+                this.action.dive = false;
+                this.action.cancel = false;
+                this.changeState(this.input);
+                this.inHeavyAttack = false; //AG: Adding for knockback
+                this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+                this.heavyChargeSound.stop();
+
+            }
+        }else{
+
+            if (this.action.cancel == true && game.input.keyboard.isDown(this.keyUp)){
+                this.action.attacking = false;
+                this.action.dive = false;
+                this.action.cancel = false;
+                this.body.velocity.y = this.jumpHeight;
+                this.changeState(this.input);
+                this.inHeavyAttack = false; //AG: Adding for knockback
+                this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+                this.heavyChargeSound.stop();
+            }else if (this.action.cancel == true && game.input.keyboard.isDown(this.keyDown)){
+                this.action.attacking = false;
+                this.action.dive = false;
+                this.action.cancel = false;
+                this.changeState(this.input);
+                this.inHeavyAttack = false; //AG: Adding for knockback
+                this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+                this.heavyChargeSound.stop();
+
+            }
         }
-        
+
         if(!this.timer.timerDone('heavy_cast') && !this.action.dive){
             this.char.position.x = this.char.xPosPreShake + game.rnd.between(-1,1);
             this.char.position.y = this.char.yPosPreShake + game.rnd.between(-1,1);

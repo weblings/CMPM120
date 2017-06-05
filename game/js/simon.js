@@ -171,8 +171,8 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.inLightAttack = false;
     this.inHeavyAttack = false;
     this.inSpecial = false;
-    this.touchLeftWallAt = 131.25;
-    this.touchRightWallAt = 1148.75;
+    this.touchLeftWallAt = 125;
+    this.touchRightWallAt = 1155;
     this.hitAgainstWall = false;
     
     this.introFinished = false; //AG: Intro in Main finished
@@ -502,17 +502,50 @@ Simon.prototype.heavyAttack = function(){
             this.char.yPosPreShake = this.char.position.y;
         }
 
-        if (this.action.cancel == true && game.input.keyboard.isDown(this.keyUp)){
-            this.action.attacking = false;
-            this.action.dive = false;
-            this.action.cancel = false;
-            this.body.velocity.y = this.jumpHeight;
-            this.changeState(this.input);
-            this.inHeavyAttack = false; //AG: Adding for knockback
-            this.heavyChargeSoundPlayed = false; //AG: Sound stuff
-            this.heavyChargeSound.stop();
+        if (this.padControl){
+
+            if (this.action.cancel == true && this.pad1.justPressed(Phaser.Gamepad.XBOX360_A) ){
+                this.action.attacking = false;
+                this.action.dive = false;
+                this.action.cancel = false;
+                this.body.velocity.y = this.jumpHeight;
+                this.changeState(this.input);
+                this.inHeavyAttack = false; //AG: Adding for knockback
+                this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+                this.heavyChargeSound.stop();
+            }else if (this.action.cancel == true && this.pad1.justPressed(Phaser.Gamepad.XBOX360_Y) ){
+                this.action.attacking = false;
+                this.action.dive = false;
+                this.action.cancel = false;
+                this.changeState(this.input);
+                this.inHeavyAttack = false; //AG: Adding for knockback
+                this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+                this.heavyChargeSound.stop();
+            }
+
+
+        }else{
+
+            if (this.action.cancel == true && game.input.keyboard.isDown(this.keyUp)){
+                this.action.attacking = false;
+                this.action.dive = false;
+                this.action.cancel = false;
+                this.body.velocity.y = this.jumpHeight;
+                this.changeState(this.input);
+                this.inHeavyAttack = false; //AG: Adding for knockback
+                this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+                this.heavyChargeSound.stop();
+            }else if (this.action.cancel == true && game.input.keyboard.isDown(this.keyDown)){
+                this.action.attacking = false;
+                this.action.dive = false;
+                this.action.cancel = false;
+                this.changeState(this.input);
+                this.inHeavyAttack = false; //AG: Adding for knockback
+                this.heavyChargeSoundPlayed = false; //AG: Sound stuff
+                this.heavyChargeSound.stop();
+            }
         }
-        
+
         if(!this.timer.timerDone('heavy_cast') && !this.action.dive){
             this.char.position.x = this.char.xPosPreShake + game.rnd.between(-1,1);
             this.char.position.y = this.char.yPosPreShake + game.rnd.between(-1,1);
@@ -859,8 +892,8 @@ Simon.prototype.input = function(){
             //heavy attack NH
             
             if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_B) && !this.action.block){
-                this.timer.startTimer('heavy_cast',500);
-                this.timer.startTimer('heavy',1000);
+                this.timer.startTimer('heavy_cast',800);
+                this.timer.startTimer('heavy',1400);
                 //this.timer.startTimer('heavy',1000);
                 if (this.position.y < this.diveLimit){
                     this.action.divable = true;
@@ -1028,8 +1061,8 @@ Simon.prototype.input = function(){
             //heavy attack NH
             
             if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
-                this.timer.startTimer('heavy_cast',500);
-                this.timer.startTimer('heavy',1000);
+                this.timer.startTimer('heavy_cast',800);
+                this.timer.startTimer('heavy',1400);
                 //this.timer.startTimer('heavy',1000);
                 if (this.position.y < this.diveLimit){
                     this.action.divable = true;

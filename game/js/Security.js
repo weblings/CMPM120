@@ -754,7 +754,7 @@ Security.prototype.takeDamage = function(damage,staggerLength){
                 damaged.scale.x *= lastScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }else{ //playerNum == 1
-                this.damageBar.x = 10;
+                this.damageBar.x = 20;
                 this.damageBar.scale.x = 1;
                 //Red from hit
                 var damaged = game.add.image(20,48,"health_damage");

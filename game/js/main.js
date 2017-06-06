@@ -226,12 +226,12 @@ var mainState = {
 
         healthBorder1 = game.add.sprite(game.width/2 - 395,73,'health_border');
         healthBorder1.anchor.setTo(.5,.5);
-        healthBorder1.scale.setTo(-.997,.998);
+        healthBorder1.scale.setTo(-1.01,.998);
         healthBorders.add(healthBorder1);
         
         healthBorder2 = game.add.sprite(game.width/2 + 395,73,'health_border');
         healthBorder2.anchor.setTo(.5,.5);
-        healthBorder2.scale.setTo(.997,.998);
+        healthBorder2.scale.setTo(1.01,.998);
         healthBorders.add(healthBorder2);
         
         //AG: Pause

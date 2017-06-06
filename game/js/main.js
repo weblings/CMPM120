@@ -44,6 +44,8 @@ var mainState = {
         var healthBorder1;
         var healthBorder2;
         var healthBorders;
+        var charText1;
+        var charText2;
     },
 
 	create: function() {
@@ -243,6 +245,13 @@ var mainState = {
 		this.control2 = game.add.sprite(825, 120, "controls2_menu");
 		this.control2.scale.setTo(.5, .5);
 		this.control2.alpha = 0;
+        
+        charText1 = game.add.text(game.world.width/30, game.world.height/50, "", { font: "24px Arial", fill: "#081102", align: "center" });
+        charText1.text = player1.charName;
+        
+        charText2 = game.add.text(29 * (game.world.width/30), game.world.height/50, "", { font: "24px Arial", fill: "#081102", align: "center" });
+        charText2.text = player2.charName;
+        charText2.anchor.setTo(1,0);
     },
 
 	update: function() {        

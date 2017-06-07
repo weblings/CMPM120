@@ -658,8 +658,8 @@ var mainState = {
     },
 
     dashAttack: function(player,hitbox){
-    	mainState.calcKnockBack(50,10,player.playerNum);
-        player.takeDamage(5,100);
+    	mainState.calcKnockBack(10,10,player.playerNum);
+        player.takeDamage(5,200);
 
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.001, 100);

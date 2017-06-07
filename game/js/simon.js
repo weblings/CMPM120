@@ -452,6 +452,7 @@ Simon.prototype.lightAttack = function(){
         //this.projectile();
         //this.char.loadTexture('scorpion_idle');
         this.char.frame= 0;//('Simon_Idle');
+        this.timer.startTimer('antispam', 500);
         this.changeState(this.input);
         this.action.attacking = false;
         this.canLightAttack = false;
@@ -877,7 +878,7 @@ Simon.prototype.input = function(){
             }
 
             //light attack NH
-            if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_X) && !this.action.block && this.canLightAttack){
+            if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_X) && !this.action.block && this.canLightAttack && this.timer.timerDone('antispam')){
                 //set timer for half a second
                 this.timer.startTimer('light',666);
 
@@ -1046,7 +1047,7 @@ Simon.prototype.input = function(){
 
 
             //light attack NH
-            if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack){
+            if (game.input.keyboard.justPressed(this.keyA) && !this.action.block && this.canLightAttack && this.timer.timerDone('antispam')){
                 //set timer for half a second
                 this.timer.startTimer('light',666);
 

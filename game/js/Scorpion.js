@@ -978,7 +978,7 @@ Scorpion.prototype.input = function(){
         //AG: if touching ground can jump (Altered code from tutorial)
         //AG: Did an hardcode. Will only jump if at inital spawn y coordinate so not extendable if we want platforms
 
-
+        /*
         if(game.input.keyboard.justPressed(this.keyUp) && this.body.touching.down && !this.action.block ){
             this.body.velocity.y = this.jumpHeight;
             this.jump_sound.play();
@@ -1026,6 +1026,7 @@ Scorpion.prototype.input = function(){
 
 
         }
+        */
 
         
         //fixed your shit NH

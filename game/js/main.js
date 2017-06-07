@@ -435,10 +435,10 @@ var mainState = {
         
         //Handling SECURITY's Projectiles
         if(player2.charName == "SECURITY"){
-            game.physics.arcade.overlap(player1,bullets2,mainState.determineAttack, null, this);
+            game.physics.arcade.overlap(player1,bullets2,mainState.SecurityLightAttack, null, this);
         }
         if(player1.charName == "SECURITY"){
-            game.physics.arcade.overlap(player2,bullets1,mainState.determineAttack, null, this);
+            game.physics.arcade.overlap(player2,bullets1,mainState.SecurityLightAttack, null, this);
         }
         if(player1.charName == "SECURITY" && player2.charName == "SECURITY"){
             //game.physics.arcade.overlap(bullets1,bullets2,mainState.projectileClash, null, this);
@@ -563,8 +563,8 @@ var mainState = {
                 mainState.heavyAttack(player,hitbox);
             }
         }else if(attackingPlayer.inLightAttack){
-            if(attackingPlayer.charName == "SECURITY"){
-                attackingPlayer.bullets.removeAll(); //AG: If bullet hits opponent, destroy it
+            /*if(attackingPlayer.charName == "SECURITY"){
+                //attackingPlayer.bullets.removeAll(); //AG: If bullet hits opponent, destroy it
                 if(hitPlayer.action.block){ //AG: If opponent is blocking
                     this.lightSound.volume = this.blockVolume;
                     this.lightSound.play();
@@ -574,7 +574,7 @@ var mainState = {
                     this.lightSound.play();
                     mainState.SecurityLightAttack(player,hitbox,true);
                 }
-            }else if(attackingPlayer.charName == "LITERALLY A SCORPION"){
+            }else*/ if(attackingPlayer.charName == "LITERALLY A SCORPION"){
                 //AG: Sound handling
                 if(!this.lightSoundPlayed){
                     if(hitPlayer.action.block) this.lightSound.volume = this.blockVolume;
@@ -619,6 +619,7 @@ var mainState = {
     },
     
     lightAttack: function(player,hitbox){
+        
         mainState.calcKnockBack(35,10,player.playerNum);
         player.takeDamage(5,50);
 
@@ -690,6 +691,15 @@ var mainState = {
     	game.camera.shake(0.005, 200);
     },
     
+    //--Security's Attacks--//
+    
+    //Used for when projectile hits other player
+    projectileDestroy: function(player,bullet){
+        bullet.kill();
+        //console.log("bullet1: "+bullet1.position.x+" and bullet 2: "+bullet2.position.x);
+    },
+    
+    //Used for when projectile hits another projectile
     projectileClash: function(bullet1,bullet2){
         bullet1.kill();
         bullet2.kill();
@@ -699,9 +709,37 @@ var mainState = {
         player1.perfect_block_sound.volume = .7;
     },
     
-    //--Security's Attacks--//
-    
-    SecurityLightAttack: function(player,hitbox,stun){
+    SecurityLightAttack: function(player,bullets){
+        
+        //Destroy projectile
+        for(let i=0; i< bullets.children.length; i++){
+            game.physics.arcade.overlap(player,bullets.children[i],mainState.projectileDestroy, null, this);
+        }
+        
+        //Setting up attackingPlayer and hitPlayer for sound
+        var attackingPlayer;
+        var hitPlayerNum = player.playerNum;
+        var hitPlayer = player;
+        var stun;
+        
+        //AG: Determines out who is attacking
+        if(hitPlayerNum == 1){
+            attackingPlayer = player2;
+        }else{
+            attackingPlayer = player1;
+        }
+        
+        attackingPlayer.attackHit = true;
+        
+        if(hitPlayer.action.block){ //AG: If opponent is blocking
+            this.lightSound.volume = this.blockVolume;
+            this.lightSound.play();
+            stun = false;
+        }else{
+            this.lightSound.volume = this.hitVolume;
+            this.lightSound.play();
+            stun = true;
+        }
         //If player is blocking, they won't be stunned
         if(stun) mainState.calcKnockBack(10,10,player.playerNum);
         player.takeDamage(5,100);

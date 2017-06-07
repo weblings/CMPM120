@@ -542,7 +542,7 @@ Security.prototype.heavyAttack = function(){
             this.char.position.y = this.char.yPosPreShake;
             
             //can cancel out of attack NH
-            //this.action.cancel = false;
+            this.action.cancel = false;
             this.char.animations.play("security_heavy_attack");
             if(!this.heavySoundPlayed){
                 this.heavyChargeSoundPlayed = false;

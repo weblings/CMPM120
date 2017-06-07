@@ -129,6 +129,9 @@ Simon = function(game, key, x, y, playerNum, dup){
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
+    this.spikes = game.add.group();
+
+
     
 
 
@@ -156,6 +159,7 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.action.predown = false;
     this.action.down = false;
     this.action.noCollide =false;
+    this.action.castingIce = false;
 
     this.action.stagfall = false;
 
@@ -266,6 +270,8 @@ Simon.prototype.preState =function (){
         this.action.dive = false;
         this.char.body.angularVelocity = 0;
         this.char.body.rotation = 0;
+        this.action.castingIce = false;
+        this.spikes.forEachAlive(this.lowerSpikes,this);
     }
 
     //check if in air
@@ -563,7 +569,7 @@ Simon.prototype.heavyAttack = function(){
             this.char.position.y = this.char.yPosPreShake;
             
             //can cancel out of attack NH
-            //this.action.cancel = false;
+            this.action.cancel = false;
             //this.char.loadTexture('scorpion_B2');
             if(!this.heavySoundPlayed){
                 this.heavyChargeSoundPlayed = false;
@@ -588,9 +594,19 @@ Simon.prototype.heavyAttack = function(){
                 this.fist.scale.y = 0.75;
                 this.char.body.angularVelocity = -800;
             }
+            if(!this.action.castingIce){
+                this.iceSpikes(this.position.x -250);
+                this.iceSpikes(this.position.x +250); 
+                this.action.castingIce = true;
+            }
+            
             
         }
 
+
+        if (this.action.castingIce){
+            this.spikes.forEachAlive(this.checkSpikes,this);
+        }
 
 
         if (this.timer.timerDone('heavy') && !this.action.dive){
@@ -634,6 +650,45 @@ Simon.prototype.chainStop = function(){
 
     }
 }
+
+Simon.prototype.iceSpikes = function(x){
+    var spike = game.add.sprite(x, 900, 'hitbox');
+    this.spikes.add(spike);
+    spike.scale.setTo(0.5,0.5);
+    spike.anchor.x = 0.5;
+    spike.alpha = 0.3;
+    game.physics.arcade.enable(spike);
+    spike.body.velocity.y = -1200;
+    spike.lower = false;
+    
+
+
+}
+
+Simon.prototype.checkSpikes = function(s){
+    if (s.position.y < 550 && !s.lower){
+        s.body.velocity.y = 0;
+    }
+}
+
+
+Simon.prototype.lowerSpikes = function(kek){
+    
+    if (kek.position.y < 550){
+        kek.lower = true;
+        kek.checkWorldBounds = true;
+        kek.outOfBoundsKill = true;
+        kek.body.velocity.y = 100;
+    }
+    /*
+    if (kek.body.velocity.y < 0){
+        kek.kill();
+    }
+    */
+
+    
+}
+
 
 //projectile
 Simon.prototype.projectile = function(){
@@ -855,6 +910,7 @@ Simon.prototype.input = function(){
             
             this.staggered = false;
         }
+
     
         if (this.padControl){
             if(this.pad1.justPressed(Phaser.Gamepad.XBOX360_A) && this.body.touching.down && !this.action.block ){
@@ -1063,7 +1119,7 @@ Simon.prototype.input = function(){
             
             if (game.input.keyboard.justPressed(this.keyB) && !this.action.block){
                 this.timer.startTimer('heavy_cast',800);
-                this.timer.startTimer('heavy',1400);
+                this.timer.startTimer('heavy',1600);
                 //this.timer.startTimer('heavy',1000);
                 if (this.position.y < this.diveLimit){
                     this.action.divable = true;

@@ -660,27 +660,7 @@ Simon.prototype.special = function(){
         }
 
 
-        this.action.attacking = true;
 
-        if (!this.action.attacking){
-            this.fist.position.x = -300; //AG: Keeps fist offscreen
-            this.action.attacking = true;
-            this.inLightAttack = true; //AG: Adding for knockback
-            this.projectile(); //launches projectile
-            this.char.animations.play('security_light');
-            //this.ui.alpha = 0;
-            if(!this.attackHit){
-                this.lightSound.play();
-            }
-        }
-
-        if (this.timer.timerDone('light')){
-            this.char.frame = this.idleFrame;
-            this.changeState(this.input);
-            this.action.attacking = false;
-            this.canLightAttack = false;
-            this.inLightAttack = false; //AG: Adding for knockback
-        }
         
         /*if (this.faceRIGHT){
             this.chain.scale.x = -0.7;
@@ -907,21 +887,21 @@ Simon.prototype.takeDamage = function(damage,staggerLength){
             console.log(this.healthBarScaleMaster);
             this.healthBar.scale.x *= this.healthBarScaleMaster;
             if(this.playerNum == 2){
-                this.damageBar = game.add.image(game.width-470,48,"health_empty");
+                this.damageBar = game.add.image(game.width-470,this.healthBarHeight,"health_empty");
                 this.damageBar.scale.x *= (damage*def)/100;
                 this.healthBar.x = this.damageBar.x + this.damageBar.width;
                 //Red from hit
-                var damaged = game.add.image(game.width-470,48,"health_damage");
+                var damaged = game.add.image(game.width-470,this.healthBarHeight,"health_damage");
                 damaged.scale.x *= (damage*def)/100;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }else{ //playerNum == 1
                 var calcDamageX = this.healthBar.x + this.healthBar.width;
-                this.damageBar = game.add.image(calcDamageX,48,"health_empty");
+                this.damageBar = game.add.image(calcDamageX,this.healthBarHeight,"health_empty");
                 this.damageBarScaledMaster = 0;
                 this.damageBar.scale.x *= (damage*def)/100;
                 this.damageBarScaledMaster += this.damageBar.scale.x;
                 //Red from hit
-                var damaged = game.add.image(calcDamageX,48,"health_damage");
+                var damaged = game.add.image(calcDamageX,this.healthBarHeight,"health_damage");
                 damaged.scale.x *= (damage*def)/100;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }
@@ -936,7 +916,7 @@ Simon.prototype.takeDamage = function(damage,staggerLength){
                 this.damageBar.scale.x *= 1 - this.healthBarScaleMaster;
                 this.healthBar.x = this.damageBar.x + this.damageBar.width;
                 //Red from hit
-                var damaged = game.add.image(oldDamageEnd,48,"health_damage");
+                var damaged = game.add.image(oldDamageEnd,this.healthBarHeight,"health_damage");
                 damaged.scale.x *= newScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }else{ //playerNum == 1
@@ -945,7 +925,7 @@ Simon.prototype.takeDamage = function(damage,staggerLength){
                 this.damageBar.scale.x = 1;
                 this.damageBar.scale.x *= 1 - this.healthBarScaleMaster;
                 //Red from hit
-                var damaged = game.add.image(calcDamageX,48,"health_damage");
+                var damaged = game.add.image(calcDamageX,this.healthBarHeight,"health_damage");
                 damaged.scale.x *= newScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear",true, 800); 
             } 
@@ -956,14 +936,14 @@ Simon.prototype.takeDamage = function(damage,staggerLength){
                 var oldDamageEnd = this.damageBar.x + this.damageBar.width;
                 this.damageBar.scale.x = 1;
                 //Red from hit
-                var damaged = game.add.image(oldDamageEnd,48,"health_damage");
+                var damaged = game.add.image(oldDamageEnd,this.healthBarHeight,"health_damage");
                 damaged.scale.x *= lastScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }else{ //playerNum == 1
                 this.damageBar.x = 20;
                 this.damageBar.scale.x = 1;
                 //Red from hit
-                var damaged = game.add.image(20,48,"health_damage");
+                var damaged = game.add.image(20,this.healthBarHeight,"health_damage");
                 damaged.scale.x *= lastScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear",true, 800); 
             } 

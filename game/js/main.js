@@ -42,10 +42,13 @@ var mainState = {
         var padControl1;
         var padControl2;
         
-        //Health Border
+        //UI
         var healthBorder1;
         var healthBorder2;
         var healthBorders;
+        var specialBorder1;
+        var specialBorder2;
+        var SpecialBorders;
         var charText1;
         var charText2;
     },
@@ -230,18 +233,29 @@ var mainState = {
         p1won2.alpha = 0;
         p1won2.position.y = roundUIHeight;
         
-        //Health Border UI
+        //UI
         healthBorders = this.game.add.group();
-
-        healthBorder1 = game.add.sprite(game.width/2 - 395,73,'health_border');
+        specialBorders = this.game.add.group();
+        this.healthBorderHeight = 67;
+        
+        healthBorder1 = game.add.sprite(game.width/2 - 395,this.healthBorderHeight,'health_border');
         healthBorder1.anchor.setTo(.5,.5);
         healthBorder1.scale.setTo(-1.01,.998);
         healthBorders.add(healthBorder1);
         
-        healthBorder2 = game.add.sprite(game.width/2 + 395,73,'health_border');
+        healthBorder2 = game.add.sprite(game.width/2 + 395,this.healthBorderHeight,'health_border');
         healthBorder2.anchor.setTo(.5,.5);
         healthBorder2.scale.setTo(1.01,.998);
         healthBorders.add(healthBorder2);
+        
+        specialBorder1 = game.add.sprite(199,127,'special_border');
+        specialBorder1.anchor.setTo(.5,.5);
+        specialBorders.add(specialBorder1);
+        
+        specialBorder2 = game.add.sprite(game.world.width - 199,127,'special_border');
+        specialBorder2.anchor.setTo(.5,.5);
+        specialBorder2.scale.setTo(-1,1);
+        specialBorders.add(specialBorder2);
         
         //AG: Pause
         this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu');
@@ -255,10 +269,10 @@ var mainState = {
 		this.control2.scale.setTo(.5, .5);
 		this.control2.alpha = 0;
         
-        charText1 = game.add.text(game.world.width/30, game.world.height/50, "", { font: "24px Arial", fill: "#081102", align: "center" });
+        charText1 = game.add.text(game.world.width/30, game.world.height/50-5, "", { font: "24px Arial", fill: "#081102", align: "center" });
         charText1.text = player1.charName;
         
-        charText2 = game.add.text(29 * (game.world.width/30), game.world.height/50, "", { font: "24px Arial", fill: "#081102", align: "center" });
+        charText2 = game.add.text(29 * (game.world.width/30), game.world.height/50-5, "", { font: "24px Arial", fill: "#081102", align: "center" });
         charText2.text = player2.charName;
         charText2.anchor.setTo(1,0);
     },

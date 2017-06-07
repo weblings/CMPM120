@@ -372,6 +372,11 @@ var mainState = {
             player2.attackHit = false;
         }
         
+        if(player1.introFinished){
+            player1.addToSpecialBar(.0003);
+            player2.addToSpecialBar(.0003);
+        }
+        
 	    game.physics.arcade.collide(players,platforms);
 
 	    //insert if statement here to turn off collision on hits

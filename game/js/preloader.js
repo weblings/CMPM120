@@ -22,13 +22,15 @@ var preloaderState = {
 		game.load.image('CharBG_NB', 'assets/img/CharSelectBG_NB.png');
 		game.load.image('closed', 'assets/img/GateClosed.png');
 		game.load.image('boarding', 'assets/img/NowBoarding.png');
-
         game.load.image('round_unresolved','assets/img/round_unresolved5.png');
         game.load.image('round_won','assets/img/round_won5.png');
 		game.load.image('arrow','assets/img/Arrow.png');
 		game.load.image('selectBox','assets/img/selectBox.png');
 		game.load.image('selectBox2','assets/img/selectBox2.png');
         game.load.image('health_border','assets/img/health_border.png');
+        game.load.image('special_full','assets/img/special_full.png');
+        game.load.image('special_empty','assets/img/special_empty.png');
+        game.load.image('special_used','assets/img/special_used.png');
         
         //Xbox
         game.load.image('controller','assets/img/controller.png');

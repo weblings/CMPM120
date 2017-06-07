@@ -381,6 +381,7 @@ var controlState = {
         
         
 		if(game.input.keyboard.justPressed(ESCKey)){
+            main_music.mute = true;
 			game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
 		}
             

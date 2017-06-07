@@ -79,12 +79,28 @@ Simon = function(game, key, x, y, playerNum, dup){
 
     //Debug text and health bars
     this.healthBarScaleMaster = 1; //used to scale bars
+    this.healthBarHeight = 42;
+    this.specialBarScaleMaster = 0;
+    this.specialHappening = false;
     if(playerNum == 1){
         this.debugText = game.add.text(16,16,'', {fontSize: '32px', fill: '#000000'});
-        this.healthBar = game.add.image(20,48,'health_full');
+        this.healthBar = game.add.image(20,this.healthBarHeight,'health_full');
+        this.specialEmpty = game.add.image(40,112,'special_empty');
+        this.specialBar = game.add.image(40,112,'special_full');
+        this.specialBar.scale.setTo(0,1);
+        this.specialUsed = game.add.image(40,112,'special_used');
+        this.specialUsed.alpha = 0;
     }else{ //playerNum == 2
         this.debugText = game.add.text(game.width - 100,16,'', {fontSize: '32px', fill: '#000000'});
-        this.healthBar = game.add.image(game.width-470,48,'health_full');
+        this.healthBar = game.add.image(game.width-470,this.healthBarHeight,'health_full');
+        this.specialEmpty = game.add.image(game.width-40,112,'special_empty');
+        this.specialEmpty.anchor.setTo(1,0);
+        this.specialBar = game.add.image(game.width-40,112,'special_full');
+        this.specialBar.anchor.setTo(1,0);
+        this.specialBar.scale.setTo(0,1);
+        this.specialUsed = game.add.image(game.width-40,112,'special_used');
+        this.specialUsed.anchor.setTo(1,0);
+        this.specialUsed.alpha = 0;        
     }
     
 
@@ -192,6 +208,8 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.jump_sound = game.add.audio('jump_sound');
     this.block_sound = game.add.audio('block');
     this.perfect_block_sound = game.add.audio('perfect_block');
+    this.special_sound = game.add.audio('super');
+
 
     this.heavyChargeSoundPlayed = false;
     this.heavySoundPlayed = false;
@@ -625,6 +643,135 @@ Simon.prototype.heavyAttack = function(){
         
     }
     
+}
+
+Simon.prototype.special = function(){
+    //AG: HealthBar handling
+    if(this.specialBar.width == 315 || this.specialHappening){ //If first time damaged
+        
+        if(!this.specialHappening) this.special_sound.play(); //AG: Need to put this in another timer/boolean flag fixture to make it not play multiple times and sound like shit
+
+        this.specialHappening = true;
+
+        this.inSpecial = true;
+        if (this.action.jump ){
+            this.body.gravity.y = 0;
+            this.body.velocity.y =0 ;
+        }
+
+
+        this.action.attacking = true;
+
+        if (!this.action.attacking){
+            this.fist.position.x = -300; //AG: Keeps fist offscreen
+            this.action.attacking = true;
+            this.inLightAttack = true; //AG: Adding for knockback
+            this.projectile(); //launches projectile
+            this.char.animations.play('security_light');
+            //this.ui.alpha = 0;
+            if(!this.attackHit){
+                this.lightSound.play();
+            }
+        }
+
+        if (this.timer.timerDone('light')){
+            this.char.frame = this.idleFrame;
+            this.changeState(this.input);
+            this.action.attacking = false;
+            this.canLightAttack = false;
+            this.inLightAttack = false; //AG: Adding for knockback
+        }
+        
+        /*if (this.faceRIGHT){
+            this.chain.scale.x = -0.7;
+            var mir = 1;
+        }else{
+            this.chain.scale.x = 0.7;
+            var mir = -1;
+        }
+
+        if (this.specialstart){
+            if (this.timer.timerDone('specialCharge')){
+                this.fist.exists = true;
+                this.chain.exists = true;
+                this.chain.position.x = this.position.x;
+                this.chain.position.y = this.position.y;
+                this.chain.play('scorpion_special');
+                this.specialstart = false;
+            }
+            this.specialEmitter.x = this.position.x;
+            this.specialEmitter.y = this.position.y-75;
+            this.specialEmitter.start(true, 2000, null, 10);
+
+        }else{
+            if(this.faceRIGHT){
+                if (this.fist.position.x - this.position.x < 735){
+                    this.fist.position.x += (mir*35);
+                }
+
+            }else{
+                if (this.position.x - this.fist.position.x < 735){
+                    this.fist.position.x += (mir*35);
+                }
+
+            }
+
+
+        }*/
+
+        if (this.timer.timerDone('spec')){// || this.chainHit){
+
+            this.specialHappening = false;
+            /*if (this.chainHit){
+                this.chain.animations.stop();
+                this.timer.startTimer('chainFreeze', 500);
+                this.changeState(this.chainBuffer);
+                this.action.attacking = false;
+                this.fist.exists = false;
+                this.chainHit = false;
+                this.inSpecial = false;*/
+
+            //}else{
+                this.changeState(this.input);
+                /*this.chain.exists = false;
+                this.action.attacking = false;
+                this.fist.exists = false;
+                this.chainHit = false;
+                this.inSpecial = false;
+
+            }*/
+
+        }
+    
+
+        //this.specialBarScaleMaster = 1 - ((damage*def)/100);
+        //console.log(this.specialBarScaleMaster);
+        //this.specialBar.scale.x *= this.specialBarScaleMaster;
+        this.specialUsed.alpha = 1;
+        this.specialBarScaleMaster = 0;
+        this.specialBar.scale.setTo(this.specialBarScaleMaster,1);
+        this.fullTween.stop();
+        game.add.tween(this.specialUsed).to( { alpha: 0 }, 50, "Linear", true, 200);
+    }else{
+        this.changeState(this.input);
+    }
+    
+}
+
+//AG: Enter decimals
+Simon.prototype.addToSpecialBar = function(amount){
+    if(this.specialBarScaleMaster + amount >= 1){
+        if(this.specialBarScaleMaster != 1) this.specialFullAnimation();
+        this.specialBarScaleMaster = 1;
+    }else this.specialBarScaleMaster += amount;
+    
+    this.specialBar.scale.setTo(this.specialBarScaleMaster,1);
+}
+
+Simon.prototype.specialFullAnimation = function(){
+    //this.specialUsed.alpha = 1;
+    this.fullTween = game.add.tween(this.specialUsed).to( { alpha: 0.3 }, 300, "Linear", true, 300);
+    this.fullTween.yoyo(true,300).loop();
 }
 
 

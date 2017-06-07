@@ -40,6 +40,9 @@ var charSelect = {
 		var bg_GC;
 		var bg_NB;
 		
+        var selectSound;
+        var deselectSound;
+        var moveSound;
     },
     
     create: function(){
@@ -189,8 +192,15 @@ var charSelect = {
         battleCry1Done = false;
         battleCry2Done = false;
 		
+        //steve is a timer that keeps frame transition at bay for a bit
 		steveSet = false;
-
+        
+        selectSound = game.add.audio('select');
+        selectSound.volume = .7;
+        deselectSound = game.add.audio('deselect');
+        deselectSound.volume = .7;
+        moveSound = game.add.audio('throw');
+        //moveSound.volume = .5;
     },
     
     update: function(){
@@ -220,6 +230,7 @@ var charSelect = {
             
             if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && !P1Chose && timer.timerDone('selectLock1')){
                 timer.startTimer('selectLock1',200);
+                moveSound.play();
                 if(P1index + 2 > characters.length){
                    sprites[P1index].alpha = 0;
                    P1index = 0;
@@ -233,6 +244,7 @@ var charSelect = {
             
             if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && !P1Chose && timer.timerDone('selectLock1')){
                 timer.startTimer('selectLock1',200);
+                moveSound.play();
                 if(P1index - 1 < 0){
                     sprites[P1index].alpha = 0;
                     P1index = characters.length-1;
@@ -250,6 +262,7 @@ var charSelect = {
                 p1AButton.alpha = 0;
                 p1BButton.alpha = 1;
                 charSelect.battleCry(1);
+                selectSound.play();
             }
             
             if(pad1.isDown(Phaser.Gamepad.XBOX360_B) && P1Chose){
@@ -258,11 +271,13 @@ var charSelect = {
                 p1AButton.alpha = 1;
                 p1BButton.alpha = 0;
                 battleCry1Done = false;
+                deselectSound.play();
             }
         }else{
             
             //P1 keys
             if(game.input.keyboard.justPressed(P1keyUp) && !P1Chose){
+                moveSound.play();
                 if(P1index + 2 > characters.length){
                    sprites[P1index].alpha = 0;
     			   P1index = 0;
@@ -275,6 +290,7 @@ var charSelect = {
             }
             
             if(game.input.keyboard.justPressed(P1keyDown) && !P1Chose){
+                moveSound.play();
                 if(P1index - 1 < 0){
     				sprites[P1index].alpha = 0;
                     P1index = characters.length-1;
@@ -291,13 +307,14 @@ var charSelect = {
                 P1InstructionText.text = "Deselect with R";
                 //battleCryText1.text = battleCries[P1index]; 
                 charSelect.battleCry(1);
+                selectSound.play();
             }
             
             if(game.input.keyboard.justPressed(P1keyB) && P1Chose){
                 P1Chose = false;
                 P1InstructionText.text = "Select with E";
-
                 battleCry1Done = false;
+                deselectSound.play();
 
 
 
@@ -315,6 +332,7 @@ var charSelect = {
             //P2 keys
             if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && !P2Chose && timer.timerDone('selectLock2')){
                 timer.startTimer('selectLock2',200);
+                moveSound.play();
                 if(P2index + 2 > characters.length){
                     sprites2[P2index].alpha = 0;
                     P2index = 0;
@@ -328,6 +346,7 @@ var charSelect = {
             
             if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && !P2Chose && timer.timerDone('selectLock2')){
                 timer.startTimer('selectLock2',200);
+                moveSound.play();
                 if(P2index - 1 < 0){
                     sprites2[P2index].alpha = 0;
                     P2index = characters.length-1;
@@ -345,6 +364,7 @@ var charSelect = {
                 p2AButton.alpha = 0;
                 p2BButton.alpha = 1;
                 charSelect.battleCry(2);
+                selectSound.play();
             }
             
             if(pad2.isDown(Phaser.Gamepad.XBOX360_B) && P2Chose){
@@ -353,11 +373,13 @@ var charSelect = {
                 p2AButton.alpha = 1;
                 p2BButton.alpha = 0;
                 battleCry2Done = false;
+                deselectSound.play();
             }
 
         }else{
             //P2 keys
             if(game.input.keyboard.justPressed(P2keyUp) && !P2Chose){
+                moveSound.play();
                 if(P2index + 2 > characters.length){
     				sprites2[P2index].alpha = 0;
                     P2index = 0;
@@ -370,6 +392,7 @@ var charSelect = {
             }
             
             if(game.input.keyboard.justPressed(P2keyDown) && !P2Chose){
+                moveSound.play();
                 if(P2index - 1 < 0){
     				sprites2[P2index].alpha = 0;
                     P2index = characters.length-1;
@@ -385,12 +408,14 @@ var charSelect = {
                 P2Chose = true;
                 P2InstructionText.text = "Deselect with U";
                 charSelect.battleCry(2);
+                selectSound.play();
             }
             
             if(game.input.keyboard.justPressed(P2keyB) && P2Chose){
                 P2Chose = false;
                 P2InstructionText.text = "Select with I";
                 battleCry2Done = false;
+                deselectSound.play();   
             }
         }
         //update Text

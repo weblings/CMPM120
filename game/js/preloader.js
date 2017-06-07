@@ -88,6 +88,8 @@ var preloaderState = {
         game.load.audio('perfect_block',['assets/audio/block.mp3','assets/audio/block.ogg']);
         game.load.audio('throw',['assets/audio/throw.mp3','assets/audio/throw.ogg']);
         game.load.audio('super',['assets/audio/Steel_Rods.mp3','assets/audio/Steel_Racks.ogg']);
+        game.load.audio('select',['assets/audio/select.mp3','assets/audio/select.ogg']);
+        game.load.audio('deselect',['assets/audio/deselect.mp3','assets/audio/deselect.ogg']);
         
         //music
         game.load.audio('local_forecast',['assets/audio/Local_Forecast.mp3','assets/audio/Local_Forecast.ogg']);

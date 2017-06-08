@@ -717,7 +717,7 @@ Simon.prototype.special = function(){
             }
             
             this.specialEmitter.x = this.position.x;
-            this.specialEmitter.y = this.position.y-75;
+            this.specialEmitter.y = this.position.y-150;
             this.specialEmitter.start(true, 2000, null, 10);
             
             this.char.position.x += game.rnd.between(-5,5);

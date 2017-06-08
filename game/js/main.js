@@ -407,8 +407,8 @@ var mainState = {
         }
         
         if(player1.introFinished){
-            //player1.addToSpecialBar(.0003);
-            player1.addToSpecialBar(1);
+            player1.addToSpecialBar(.0003);
+            //player1.addToSpecialBar(1);
             player2.addToSpecialBar(.0003);
         }
         

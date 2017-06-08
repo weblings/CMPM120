@@ -17,6 +17,13 @@ Security = function(game, key, x, y, playerNum,dup){
 
     //Animations
     
+    this.specialEmitter = game.add.emitter(0, 0, 100);
+    this.specialEmitter.makeParticles('security_blood');
+    game.physics.enable(this.specialEmitter);
+    this.specialEmitter.enableBody = true;
+    this.specialEmitter.blendMode = 1;
+    this.specialEmitter.alpha = 0.75;
+    
     //this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
     if(!this.copy){
         this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
@@ -112,6 +119,7 @@ Security = function(game, key, x, y, playerNum,dup){
     this.healthBarHeight = 42;
     this.specialBarScaleMaster = 0;
     this.specialHappening = false;
+    this.specialsThrown = 0;
     if(playerNum == 1){
         this.debugText = game.add.text(16,16,'', {fontSize: '32px', fill: '#000000'});
         this.healthBar = game.add.image(20,this.healthBarHeight,'health_full');
@@ -181,11 +189,11 @@ Security = function(game, key, x, y, playerNum,dup){
 
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
+    this.specialBullets = game.add.group();
     
     //Special
     this.specialstart = false;
-    this.possibleThrowingObjects = ['logo','rabbit_ID','guard_ID','scorp_ID','controller','A','B','X','Y','Start_Button','Joystick_Left'];
-
+    this.possibleThrowingObjects = ['logo','rabbit_ID','guard_ID','scorp_ID','controller','A','B','X','Y','Start_Button','Joystick_Left','beret1','beret2','beret3','beret4','moustache1','moustache2','moustache3','moustache4','bg'];
 
     //set timer
     this.timer = new setTime();
@@ -627,27 +635,37 @@ Security.prototype.special = function(){
         }
 
 
-        this.action.attacking = true;
-
-        if (!this.action.attacking){
-            this.fist.position.x = -300; //AG: Keeps fist offscreen
-            this.action.attacking = true;
-            this.inLightAttack = true; //AG: Adding for knockback
-            this.projectile(); //launches projectile
-            this.char.animations.play('security_light');
-            //this.ui.alpha = 0;
-            if(!this.attackHit){
-                this.lightSound.play();
+        if (!this.action.attacking || timer.timerDone('specFire')){
+            if(!this.action.attacking){
+                this.specialEmitter.x = this.position.x;
+                this.specialEmitter.y = this.position.y-75;
+                this.specialEmitter.minParticleScale = 7;
+                this.specialEmitter.maxParticleScale = 7;
+                this.specialEmitter.start(true, 2000, null, 10);
+            }   
+            if(this.specialsThrown < 4){
+                timer.startTimer('specFire',300)
+                this.fist.position.x = -300; //AG: Keeps fist offscreen
+                this.action.attacking = true;
+                this.inSpecial = true; //AG: Adding for knockback
+                this.specialProjectile(); //launches projectile
+                this.char.animations.play('security_light');
+                //this.ui.alpha = 0;
+                if(!this.attackHit){
+                    this.lightSound.play();
+                }
             }
         }
+        
+        this.action.attacking = true;
 
-        if (this.timer.timerDone('light')){
+        /*if (this.timer.timerDone('light')){
             this.char.frame = this.idleFrame;
             this.changeState(this.input);
             this.action.attacking = false;
-            this.canLightAttack = false;
-            this.inLightAttack = false; //AG: Adding for knockback
-        }
+            //this.canLightAttack = false;
+            //this.inLightAttack = false; //AG: Adding for knockback
+        }*/
         
         /*if (this.faceRIGHT){
             this.chain.scale.x = -0.7;
@@ -699,12 +717,15 @@ Security.prototype.special = function(){
                 this.inSpecial = false;*/
 
             //}else{
+                this.char.frame = this.idleFrame;
                 this.changeState(this.input);
+                this.inSpecial = false;
+                this.specialsThrown = 0;
                 /*this.chain.exists = false;
                 this.action.attacking = false;
                 this.fist.exists = false;
                 this.chainHit = false;
-                this.inSpecial = false;
+                
 
             }*/
 
@@ -778,6 +799,7 @@ Security.prototype.projectile = function(){
     bullet.scale.setTo(1.3,1.3);
     bullet.anchor.setTo(0.5,0.5);
     this.bullets.add(bullet);
+    //console.log("In Security: "+this.bullets.length);
     game.physics.arcade.enable(bullet);
     bullet.startLocation = this.position.x;
     var projectileSpeed = 800;
@@ -795,8 +817,59 @@ Security.prototype.projectile = function(){
     
 }
 
+//projectile
+Security.prototype.specialProjectile = function(){
+    this.specialsThrown++;
+    //console.log("st: "+this.specialsThrown);
+    //console.log(this.possibleThrowingObjects.length);
+    //if(this.specialsThrown != 4){
+        var choice = game.rnd.between(0,this.possibleThrowingObjects.length-1);
+        //console.log("choice:"+choice);
+        var bullet = game.add.sprite(this.position.x,this.position.y-200,this.possibleThrowingObjects[choice]);
+        bullet.scale.setTo(.2,.2);
+    /*}else{
+        var bullet = game.add.sprite(this.position.x,this.position.y-200,'bg');
+        bullet.scale.setTo(.15,.15);
+    }*/
+    
+    bullet.anchor.setTo(0.5,0.5);
+    this.specialBullets.add(bullet);
+    game.physics.arcade.enable(bullet);
+    bullet.startLocation = this.position.x;
+    var projectileSpeed = 800;
+
+    if (this.faceRIGHT){
+        if(this.specialsThrown == 2) bullet.body.velocity.y = -projectileSpeed/3;
+        else if(this.specialsThrown == 3) bullet.body.velocity.y = -projectileSpeed/1.5;
+        bullet.body.velocity.x = projectileSpeed;
+        bullet.body.angularVelocity = 200;
+        bullet.headingRight = true;
+    }else{
+        if(this.specialsThrown == 2) bullet.body.velocity.y = -projectileSpeed/3;
+        else if(this.specialsThrown == 3) bullet.body.velocity.y = -projectileSpeed/1.5;
+        bullet.body.velocity.x = -projectileSpeed;
+        bullet.body.angularVelocity = -200;
+        bullet.headingRight = false;
+    }
+
+    
+}
+
 Security.prototype.killBullets = function(b){
     var killLocation = 600;
+    if (b.headingRight){
+        if (b.position.x - b.startLocation > killLocation){
+            b.destroy();//kill();
+        }
+    }else{
+        if (b.startLocation - b.position.x > killLocation){
+            b.destroy();//kill();
+        }
+    }
+}
+
+Security.prototype.killSpecialBullets = function(b){
+    var killLocation = 1800;
     if (b.headingRight){
         if (b.position.x - b.startLocation > killLocation){
             b.destroy();//kill();
@@ -1056,7 +1129,7 @@ Security.prototype.input = function(){
             //projectile 
 
             this.bullets.forEachAlive(this.killBullets,this);
-            
+            this.specialBullets.forEachAlive(this.killSpecialBullets,this);
 
 
 

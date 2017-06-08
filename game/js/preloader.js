@@ -66,6 +66,10 @@ var preloaderState = {
         game.load.image('rabbit_cryomancy','assets/img/simon/FrozenRabbit_Heavy.png');
         game.load.image('rabbit_trail','assets/img/simon/FrozenRabbit_part.png');
         game.load.image('rabbit_curse','assets/img/simon/FrozenRabbit_curse.png');
+        game.load.image('ice_spikes','assets/img/simon/icespikes.png');
+        game.load.image('alt_ice_spikes','assets/img/simon/altice.png');
+        game.load.image('ice_orb','assets/img/simon/iceorb.png');
+        game.load.image('alt_ice_orb','assets/img/simon/iceorb2.png');
 
 
         //Scorpion

@@ -900,6 +900,7 @@ Security.prototype.takeDamage = function(damage,staggerLength){
             this.health = 0;
             this.alive = false;
         }else this.damage(damage*def);
+        this.addToSpecialBar((damage*def)/80);
         this.shamed = true;
         this.staggered = true;
         

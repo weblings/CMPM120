@@ -644,8 +644,8 @@ Simon.prototype.heavyAttack = function(){
                 this.char.body.angularVelocity = -800;
             }
             if(!this.action.castingIce){
-                this.iceSpikes(this.position.x -250);
-                this.iceSpikes(this.position.x +250); 
+                this.iceSpikes(this.position.x -150);
+                this.iceSpikes(this.position.x +150); 
                 this.action.castingIce = true;
             }
             
@@ -814,11 +814,16 @@ Simon.prototype.chainStop = function(){
 }
 
 Simon.prototype.iceSpikes = function(x){
-    var spike = game.add.sprite(x, 900, 'hitbox');
+    if (this.copy){
+        var spike = game.add.sprite(x, 900, 'alt_ice_spikes');
+    }else{
+        var spike = game.add.sprite(x, 900, 'ice_spikes');
+    }
+    
     this.spikes.add(spike);
-    spike.scale.setTo(0.5,0.5);
+    spike.scale.setTo(0.25,0.25);
     spike.anchor.x = 0.5;
-    spike.alpha = 0.3;
+    //spike.alpha = 0.3;
     game.physics.arcade.enable(spike);
     spike.body.velocity.y = -1200;
     spike.lower = false;
@@ -875,11 +880,19 @@ Simon.prototype.projectile = function(){
 }
 
 Simon.prototype.cryomancy = function(){
-    var iceorb = game.add.sprite(this.position.x, this.position.y-200, 'rabbit_cryomancy');
+
+    if(this.copy){
+        var iceorb = game.add.sprite(this.position.x, this.position.y-200, 'alt_ice_orb');
+    }else{
+        var iceorb = game.add.sprite(this.position.x, this.position.y-200, 'ice_orb');
+    }
+    
+
+
     this.iceorbs.add(iceorb);
     game.physics.arcade.enable(iceorb);
     iceorb.startLocation = this.position.x;
-    iceorb.scale.setTo(.3,.3);
+    iceorb.scale.setTo(.5,.5);
     iceorb.anchor.setTo(0.5,0.5);
     iceorb.Emitter = game.add.emitter(0,0,100);
     iceorb.Emitter.makeParticles('rabbit_trail');
@@ -894,11 +907,11 @@ Simon.prototype.cryomancy = function(){
     if (this.faceRIGHT){
         iceorb.body.velocity.x = 800;
         iceorb.headingRight = true;
-        iceorb.body.angularVelocity = 800;
+        iceorb.body.angularVelocity = 1200;
     }else{
         iceorb.body.velocity.x = -800;
         iceorb.headingRight = false;
-        iceorb.body.angularVelocity = -800;
+        iceorb.body.angularVelocity = -1200;
     }
 
     
@@ -940,6 +953,7 @@ Simon.prototype.takeDamage = function(damage,staggerLength){
             this.health = 0;
             this.alive = false;
         }else this.damage(damage*def);
+        this.addToSpecialBar((damage*def)/80);
         this.shamed = true;
         this.staggered = true;
 

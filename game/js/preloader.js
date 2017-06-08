@@ -47,6 +47,18 @@ var preloaderState = {
 		game.load.image('JoystickL','assets/img/Xbox_Controls/JoystickL.png');
 		game.load.image('JoystickR','assets/img/Xbox_Controls/JoystickR.png');
 
+        //Parisian
+        game.load.image('beret1','assets/img/Parisian/Red_Beret.png');
+        game.load.image('beret2','assets/img/Parisian/Green_Beret.png');
+        game.load.image('beret3','assets/img/Parisian/Yellow_Beret.png');
+        game.load.image('beret4','assets/img/Parisian/Purple_Beret.png');
+        game.load.image('moustache1','assets/img/Parisian/Moustache1.png');
+        game.load.image('moustache2','assets/img/Parisian/Moustache2.png');
+        game.load.image('moustache3','assets/img/Parisian/Moustache3.png');
+        game.load.image('moustache4','assets/img/Parisian/Moustache4.png');
+
+
+        
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');
         game.load.atlas('rabbit_atlas2','assets/img/simon/alt/spritesheet.png','assets/img/simon/sprites.json');

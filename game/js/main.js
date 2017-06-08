@@ -17,6 +17,8 @@ var mainState = {
         var fist2;
         var bullets1;
         var bullets2;
+        var specialBullets1;
+        var specialBullets2;
         var spikes1;
         var spikes2;
 
@@ -117,12 +119,14 @@ var mainState = {
         fist1 = player1.fists;
         if(player1.charName == "SECURITY") {
         	bullets1 = player1.bullets;
+            specialBullets1 = player1.specialBullets;
         }else if(player1.charName == "SIMON") {
         	spikes1 = player1.spikes;
         }
         fist2 = player2.fists;
         if(player2.charName == "SECURITY") {
         	bullets2 = player2.bullets;
+            specialBullets2 = player2.specialBullets;
         }else if(player2.charName == "SIMON") {
         	spikes2 = player2.spikes;
         }
@@ -189,7 +193,7 @@ var mainState = {
         this.transitionStarted = false;
 
         //Music
-        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka'];
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka']; //,'Parisian'];
         index = game.rnd.between(0,3);
         main_music = game.add.audio(fight_music_choices[index]);
         main_music.play('',0, 1, true);
@@ -468,12 +472,18 @@ var mainState = {
             for(let i=0; i< bullets2.children.length; i++){
                 game.physics.arcade.overlap(player1,bullets2.children[i],mainState.SecurityLightAttack, null, this);
             }
+            for(let i=0; i< specialBullets2.children.length; i++){
+                game.physics.arcade.overlap(player1,specialBullets2.children[i],mainState.SecuritySpecialAttack, null, this);
+            }
             //game.physics.arcade.overlap(player1,bullets2,mainState.SecurityLightAttack, null, this);
         }
         if(player1.charName == "SECURITY"){
             //console.log("Bullets2 length: "+bullets1.children.length);
             for(let i=0; i< bullets1.children.length; i++){
                 game.physics.arcade.overlap(player2,bullets1.children[i],mainState.SecurityLightAttack, null, this);
+            }
+            for(let i=0; i< specialBullets1.children.length; i++){
+                game.physics.arcade.overlap(player2,specialBullets1.children[i],mainState.SecuritySpecialAttack, null, this);
             }
         }
         if(player1.charName == "SECURITY" && player2.charName == "SECURITY"){
@@ -747,7 +757,7 @@ var mainState = {
         }else{
             attackingPlayer = player1;
         }
-        
+            
         attackingPlayer.attackHit = true;
         
         if(!this.lightSoundPlayed){
@@ -766,6 +776,48 @@ var mainState = {
         //If player is blocking, they won't be stunned
         if(stun) mainState.calcKnockBack(10,10,player.playerNum);
         player.takeDamage(5,100);
+    },
+    
+    SecuritySpecialAttack: function(player,bullet){
+        
+        //Destroy projectile
+        //console.log("Bullets length: "+bullets.children.length);
+        bullet.kill();
+        
+        //Setting up attackingPlayer and hitPlayer for sound
+        var attackingPlayer;
+        var hitPlayerNum = player.playerNum;
+        var hitPlayer = player;
+        var stun;
+        
+        //AG: Determines out who is attacking
+        if(hitPlayerNum == 1){
+            attackingPlayer = player2;
+        }else{
+            attackingPlayer = player1;
+        }
+            
+        attackingPlayer.attackHit = true;
+        
+        if(!this.lightSoundPlayed){
+            if(hitPlayer.action.block) this.lightSound.volume = this.blockVolume;
+            else this.lightSound.volume = this.hitVolume;
+            this.lightSound.play();
+            this.lightSoundPlayed = true;
+            this.timer.startTimer('lightSound',400);
+        }
+        
+        if(hitPlayer.action.block){ //AG: If opponent is blocking
+            stun = false;
+        }else{
+            stun = true;
+        }
+        //If player is blocking, they won't be stunned
+        if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
+            game.camera.shake(0.008, 600);
+            mainState.calcKnockBack(400,400,player.playerNum);
+            player.takeDamage(7.5,300);
+        }
     },
     
     SecurityHeavyAttack: function(player,hitbox){

@@ -108,6 +108,8 @@ var preloaderState = {
         game.load.audio('super',['assets/audio/Steel_Rods.mp3','assets/audio/Steel_Racks.ogg']);
         game.load.audio('select',['assets/audio/select.mp3','assets/audio/select.ogg']);
         game.load.audio('deselect',['assets/audio/deselect.mp3','assets/audio/deselect.ogg']);
+        game.load.audio('frozen',['assets/audio/frozen.mp3','assets/audio/frozen.ogg']);
+
         
         //music
         game.load.audio('local_forecast',['assets/audio/Local_Forecast.mp3','assets/audio/Local_Forecast.ogg']);
@@ -117,7 +119,8 @@ var preloaderState = {
         game.load.audio('ultra_polka',['assets/audio/Ultra_Polka.mp3','assets/audio/Ultra_Polka.ogg']);
         game.load.audio('parisian',['assets/audio/Parisian.mp3','assets/audio/Parisian.ogg']);
         game.load.audio('shoegazer',['assets/audio/Shoegazer.mp3','assets/audio/Shoegazer.ogg']);
-
+        game.load.audio('patriotism',['assets/audio/Patriotism.mp3', 'assets/audio/Patriotism.ogg']);
+        
 	},
 
 	create: function(){

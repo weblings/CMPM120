@@ -674,6 +674,21 @@ var mainState = {
     
     lightAttack: function(player,hitbox){
         
+        
+
+        var attackingPlayer;
+        var hitPlayerNum = player.playerNum;
+
+        if(hitPlayerNum == 1){
+            attackingPlayer = player2;
+        }else{
+            attackingPlayer = player1;
+        }
+
+        if(!player.staggered && !player.action.down){
+        	attackingPlayer.addToSpecialBar(5/100);
+        }
+
         mainState.calcKnockBack(35,10,player.playerNum);
         player.takeDamage(5,50);
 
@@ -684,9 +699,25 @@ var mainState = {
     },
   
     heavyAttack: function(player,hitbox){
-        mainState.calcKnockBack(400,80,player.playerNum);
+        
+
+        var attackingPlayer;
+        var hitPlayerNum = player.playerNum;
+
+        if(hitPlayerNum == 1){
+            attackingPlayer = player2;
+        }else{
+            attackingPlayer = player1;
+        }
+
+        if(!player.staggered && !player.action.down){
+        	attackingPlayer.addToSpecialBar(15/100);
+        }
+
+		mainState.calcKnockBack(400,80,player.playerNum);
 
         player.takeDamage(15,200);
+
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.005, 100);
         }
@@ -713,7 +744,21 @@ var mainState = {
     },
 
     dashAttack: function(player,hitbox){
-    	mainState.calcKnockBack(10,10,player.playerNum);
+    	
+        var attackingPlayer;
+        var hitPlayerNum = player.playerNum;
+
+        if(hitPlayerNum == 1){
+            attackingPlayer = player2;
+        }else{
+            attackingPlayer = player1;
+        }
+
+        if(!player.staggered && !player.action.down){
+        	attackingPlayer.addToSpecialBar(5/100);
+        }
+
+        mainState.calcKnockBack(10,10,player.playerNum);
         player.takeDamage(5,200);
 
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
@@ -733,14 +778,23 @@ var mainState = {
             attackingPlayer = player1;
         }
 
+
+
 	    if (!hitbox.justHit){
 	    	hitbox.justHit = true;
 			mainState.calcKnockBack(100,1000,player.playerNum);
 
 	        player.takeDamage(5,200);
 	        this.heavySound.play();
-
+			if(!player.action.down){
+        		attackingPlayer.addToSpecialBar(5/100);
+        	}
+        	if(!player.action.block && !player1.action.down && !player2.action.down){
+        		game.camera.shake(0.003, 100);
+        	}
 	    }
+
+	    
 		
     	
     },
@@ -761,15 +815,30 @@ var mainState = {
         }
         
         if(!player.action.block && !player1.action.down && !player2.action.down){
-        	game.camera.shake(0.007, 100);
+        	game.camera.shake(0.007, 200);
         }
 
     },
     
 
     diveKick: function(player,hitbox){
+        
+        var attackingPlayer;
+        var hitPlayerNum = player.playerNum;
+
+        if(hitPlayerNum == 1){
+            attackingPlayer = player2;
+        }else{
+            attackingPlayer = player1;
+        }
+
+        if(!player.staggered && !player.action.down){
+        	attackingPlayer.addToSpecialBar(5/100);
+        }
+
         mainState.calcKnockBack(40,30,player.playerNum);
         player.takeDamage(5,250);
+
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.005, 100);
                               
@@ -781,13 +850,16 @@ var mainState = {
             }
     	}
 
+
     },
 
     scorpionChain: function(player,hitbox,location){
     	player.takeDamage(25,100);
     	player.chained(location);
 
-    	game.camera.shake(0.005, 200);
+    	if(!player.action.block && !player1.action.down && !player2.action.down){
+        	game.camera.shake(0.007, 200);
+        }
     },
     
     //--Security's Attacks--//
@@ -839,6 +911,12 @@ var mainState = {
         //If player is blocking, they won't be stunned
         if(stun) mainState.calcKnockBack(10,10,player.playerNum);
         player.takeDamage(5,100);
+
+        if (!player.action.down){
+        	attackingPlayer.addToSpecialBar(5/100);
+        }
+        
+        
     },
     
     SecuritySpecialAttack: function(player,bullet){
@@ -884,8 +962,24 @@ var mainState = {
     },
     
     SecurityHeavyAttack: function(player,hitbox){
-        mainState.calcKnockBack(1200,300,player.playerNum);
+        
+
+        var attackingPlayer;
+        var hitPlayerNum = player.playerNum;
+        
+        if(hitPlayerNum == 1){
+            attackingPlayer = player2;
+        }else{
+            attackingPlayer = player1;
+        }
+
+        if(!player.staggered && !player.action.down){
+        	attackingPlayer.addToSpecialBar(15/100);
+        }
+
+		mainState.calcKnockBack(1200,300,player.playerNum);
         player.takeDamage(15,400); 
+
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.005, 100);
     	}

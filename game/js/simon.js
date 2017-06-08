@@ -245,6 +245,9 @@ Simon = function(game, key, x, y, playerNum, dup){
     
     this.lightSound.volume = this.missVolume;
     this.heavySound.volume = this.missVolume;
+    
+    //Parisian
+    this.Parisian = false;
 }
 
 Simon.prototype = Object.create(Phaser.Sprite.prototype);

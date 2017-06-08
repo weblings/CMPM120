@@ -248,6 +248,9 @@ Scorpion = function(game, key, x, y, playerNum, dup){
     
     this.lightSound.volume = this.missVolume;
     this.heavySound.volume = this.missVolume;
+    
+    //Parisian
+    this.Parisian = false;
 }
 
 Scorpion.prototype = Object.create(Phaser.Sprite.prototype);

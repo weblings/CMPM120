@@ -1137,6 +1137,17 @@ Scorpion.prototype.input = function(){
 
             }
 
+            if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_RIGHT_BUMPER) && this.pad1.justPressed(Phaser.Gamepad.XBOX360_LEFT_BUMPER) && !this.action.block){
+                this.timer.startTimer('specialCharge',200);
+                this.timer.startTimer('spec',1200);
+                this.specialstart = true;
+                
+
+                this.changeState(this.special);
+
+
+            }
+
             if(this.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 && !this.action.block ){
                 this.char.scale.x = this.scaleFactor;
 

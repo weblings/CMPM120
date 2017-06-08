@@ -1128,6 +1128,17 @@ Security.prototype.input = function(){
 
             }
 
+            if (this.pad1.justPressed(Phaser.Gamepad.XBOX360_RIGHT_BUMPER) && this.pad1.justPressed(Phaser.Gamepad.XBOX360_LEFT_BUMPER) && !this.action.block){
+                this.timer.startTimer('specialCharge',200);
+                this.timer.startTimer('spec',1200);
+                this.specialstart = true;
+                
+
+                this.changeState(this.special);
+
+
+            }
+
             //projectile 
 
             this.bullets.forEachAlive(this.killBullets,this);

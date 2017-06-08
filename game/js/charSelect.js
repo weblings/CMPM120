@@ -132,7 +132,7 @@ var charSelect = {
         //main_music.onLoop.add(playMainMusic, this);       
         main_music.mute = false;  
         main_music.loop = true;
-        main_music.volume = 0.7;
+        main_music.volume = 0.5;
 
         game.input.gamepad.start();
         pad1 = game.input.gamepad.pad1;
@@ -200,7 +200,7 @@ var charSelect = {
         deselectSound = game.add.audio('deselect');
         deselectSound.volume = .7;
         moveSound = game.add.audio('throw');
-        //moveSound.volume = .5;
+        moveSound.volume = 1;
     },
     
     update: function(){

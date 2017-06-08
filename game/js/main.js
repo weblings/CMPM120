@@ -21,6 +21,8 @@ var mainState = {
         var specialBullets2;
         var spikes1;
         var spikes2;
+        var iceorbs1;
+        var iceorbs2;
 
         var floor;
         
@@ -122,6 +124,7 @@ var mainState = {
             specialBullets1 = player1.specialBullets;
         }else if(player1.charName == "SIMON") {
         	spikes1 = player1.spikes;
+        	iceorbs1 = player1.iceorbs;
         }
         fist2 = player2.fists;
         if(player2.charName == "SECURITY") {
@@ -129,6 +132,7 @@ var mainState = {
             specialBullets2 = player2.specialBullets;
         }else if(player2.charName == "SIMON") {
         	spikes2 = player2.spikes;
+        	iceorbs2 = player2.iceorbs;
         }
         //---Text Stuff---//
         
@@ -193,7 +197,9 @@ var mainState = {
         this.transitionStarted = false;
 
         //Music
-        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka']; //,'Parisian'];
+
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka','exit_the_premises','ouroboros','kick_shock']; //,'Parisian'];
+
         index = game.rnd.between(0,3);
         main_music = game.add.audio(fight_music_choices[index]);
         main_music.play('',0, 1, true);
@@ -401,7 +407,8 @@ var mainState = {
         }
         
         if(player1.introFinished){
-            player1.addToSpecialBar(.0003);
+            //player1.addToSpecialBar(.0003);
+            player1.addToSpecialBar(1);
             player2.addToSpecialBar(.0003);
         }
         
@@ -498,11 +505,20 @@ var mainState = {
         }
 
         //simon's heavy NH
+
         if(player2.charName == "SIMON"){
-            game.physics.arcade.overlap(player1,spikes2,mainState.SimonHeavy, null, this);
+        	for(let k=0; k< spikes2.children.length; k++){
+
+            	game.physics.arcade.overlap(player1,spikes2.children[k],mainState.SimonHeavy, null, this);
+            	
+            }
+            game.physics.arcade.overlap(player1,iceorbs2,mainState.SimonSpecial, null, this);
         }
         if(player1.charName == "SIMON"){
-            game.physics.arcade.overlap(player2,spikes1,mainState.SimonHeavy, null, this);
+        	for(let l=0; l< spikes1.children.length; l++){
+            	game.physics.arcade.overlap(player2,spikes1.children[l],mainState.SimonHeavy, null, this);
+            }
+            game.physics.arcade.overlap(player2,iceorbs1,mainState.SimonSpecial, null, this);
         }
 
 
@@ -517,7 +533,7 @@ var mainState = {
 
         
         if (player1.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player2.action.dive && player1.alive && !player2.action.attacking && !player1.staggered){
+        	&& !player2.action.dive && player1.alive && !player2.action.attacking && !player1.staggered && (player2.position.y < 600)){
         	//player2.body.velocity.y -= 300;
         	if (player2.faceRIGHT){
         		player2.position.x +=50;
@@ -528,8 +544,8 @@ var mainState = {
 
         }
 
-        if (player2.body.touching.up && player2.body.touching.down && player1.body.touching.down 
-        	&& !player1.action.dive && player2.alive && !player1.action.attacking && !player2.staggered){
+        if (player2.body.touching.up && player1.body.touching.down && player2.body.touching.down 
+        	&& !player1.action.dive && player2.alive && !player1.action.attacking && !player2.staggered && (player1.position.y < 600)){
         	//player1.body.velocity.y -= 300;
         	if (player1.faceRIGHT){
         		player1.position.x +=50;
@@ -698,9 +714,37 @@ var mainState = {
     },
 
     SimonHeavy: function(player,hitbox){
-    	mainState.calcKnockBack(100,300,player.playerNum);
 
-        player.takeDamage(10,200);
+    	var attackingPlayer;
+        var hitPlayerNum = player.playerNum;
+        
+        //AG: Determines out who is attacking
+        if(hitPlayerNum == 1){
+            attackingPlayer = player2;
+        }else{
+            attackingPlayer = player1;
+        }
+
+	    if (!hitbox.justHit){
+	    	hitbox.justHit = true;
+			mainState.calcKnockBack(100,1000,player.playerNum);
+
+	        player.takeDamage(5,200);
+	        this.heavySound.play();
+
+	    }
+		
+    	
+    },
+
+    SimonSpecial: function(player, hitbox){
+    	mainState.calcKnockBack(50,50,player.playerNum);
+        player.takeDamage(20,200);
+
+        if(!player.action.block && !player1.action.down && !player2.action.down){
+        	game.camera.shake(0.007, 100);
+        }
+
     },
     
 

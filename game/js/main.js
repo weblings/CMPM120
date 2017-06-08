@@ -464,14 +464,14 @@ var mainState = {
         
         //Handling SECURITY's Projectiles
         if(player2.charName == "SECURITY"){
-            console.log("Bullets1 length: "+bullets2.children.length);
+            //console.log("Bullets1 length: "+bullets2.children.length);
             for(let i=0; i< bullets2.children.length; i++){
                 game.physics.arcade.overlap(player1,bullets2.children[i],mainState.SecurityLightAttack, null, this);
             }
             //game.physics.arcade.overlap(player1,bullets2,mainState.SecurityLightAttack, null, this);
         }
         if(player1.charName == "SECURITY"){
-            console.log("Bullets2 length: "+bullets1.children.length);
+            //console.log("Bullets2 length: "+bullets1.children.length);
             for(let i=0; i< bullets1.children.length; i++){
                 game.physics.arcade.overlap(player2,bullets1.children[i],mainState.SecurityLightAttack, null, this);
             }

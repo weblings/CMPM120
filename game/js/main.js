@@ -19,6 +19,8 @@ var mainState = {
         var bullets2;
         var spikes1;
         var spikes2;
+        var iceorbs1;
+        var iceorbs2;
 
         var floor;
         
@@ -119,12 +121,14 @@ var mainState = {
         	bullets1 = player1.bullets;
         }else if(player1.charName == "SIMON") {
         	spikes1 = player1.spikes;
+        	iceorbs1 = player1.iceorbs;
         }
         fist2 = player2.fists;
         if(player2.charName == "SECURITY") {
         	bullets2 = player2.bullets;
         }else if(player2.charName == "SIMON") {
         	spikes2 = player2.spikes;
+        	iceorbs2 = player2.iceorbs;
         }
         //---Text Stuff---//
         
@@ -189,7 +193,7 @@ var mainState = {
         this.transitionStarted = false;
 
         //Music
-        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka'];
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka','exit_the_premises','ouroboros','kick_shock'];
         index = game.rnd.between(0,3);
         main_music = game.add.audio(fight_music_choices[index]);
         main_music.play('',0, 1, true);
@@ -488,11 +492,13 @@ var mainState = {
             	game.physics.arcade.overlap(player1,spikes2.children[k],mainState.SimonHeavy, null, this);
             	
             }
+            game.physics.arcade.overlap(player1,iceorbs2,mainState.SimonSpecial, null, this);
         }
         if(player1.charName == "SIMON"){
         	for(let l=0; l< spikes1.children.length; l++){
             	game.physics.arcade.overlap(player2,spikes1.children[l],mainState.SimonHeavy, null, this);
             }
+            game.physics.arcade.overlap(player2,iceorbs1,mainState.SimonSpecial, null, this);
         }
 
 
@@ -735,6 +741,16 @@ var mainState = {
 	    }
 		
     	
+    },
+
+    SimonSpecial: function(player, hitbox){
+    	mainState.calcKnockBack(50,50,player.playerNum);
+        player.takeDamage(20,200);
+
+        if(!player.action.block && !player1.action.down && !player2.action.down){
+        	game.camera.shake(0.007, 100);
+        }
+
     },
     
 

@@ -15,6 +15,13 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.jumpHeight = -1550; //AG: was -350 but players couldn't jump over eachother to test collision on multiple sides
     this.floorLevel = game.world.height - 20;
 
+    this.specialEmitter = game.add.emitter(0,0,100);
+    this.specialEmitter.makeParticles('rabbit_curse');
+    game.physics.enable(this.specialEmitter);
+    this.specialEmitter.enableBody = true;
+    this.specialEmitter.blendMode = 1;
+    this.specialEmitter.alpha = 0.75;
+
     //Animations
     if (this.copy){
         this.rabBlock = 0;
@@ -62,6 +69,8 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.emitter.blendMode = 2;
     this.emitter.alpha = 0.8;
     //this.emitter.gravity = 400;
+
+
 
 
     //Physics
@@ -302,10 +311,15 @@ Simon.prototype.preState =function (){
         this.fist.scale.x = 0.60;
         this.action.dive = false;
         this.char.body.angularVelocity = 0;
-        this.char.body.rotation = 0;
+        
         this.action.castingIce = false;
         this.spikes.forEachAlive(this.lowerSpikes,this);
     }
+
+    if (this.state != this.heavyAttack && this.state != this.special){
+        this.char.body.rotation = 0;
+    }
+
 
     //check if in air
     //if (!this.body.touching.down){
@@ -632,7 +646,6 @@ Simon.prototype.heavyAttack = function(){
             if(!this.action.castingIce){
                 this.iceSpikes(this.position.x -250);
                 this.iceSpikes(this.position.x +250); 
-                this.cryomancy();
                 this.action.castingIce = true;
             }
             
@@ -698,19 +711,27 @@ Simon.prototype.special = function(){
                 this.chain.play('scorpion_special');
                 this.specialstart = false;
                 */
-                this.cryomancy();
+                
+                this.specialstart = false;
+                
             }
-            /*
+            
             this.specialEmitter.x = this.position.x;
             this.specialEmitter.y = this.position.y-75;
             this.specialEmitter.start(true, 2000, null, 10);
-            */
+            
+            this.char.position.x += game.rnd.between(-5,5);
+            this.char.position.y += game.rnd.between(-5,5);
 
-        }else{
+        }else {
+            if(this.faceRIGHT){
 
+                this.char.body.angularVelocity = 800;
+            }else{
+                this.char.body.angularVelocity = -800;
+            }
 
         }
-
         if (this.timer.timerDone('spec')){// || this.chainHit){
             this.cryomancy();
 
@@ -854,12 +875,20 @@ Simon.prototype.projectile = function(){
 }
 
 Simon.prototype.cryomancy = function(){
-    var iceorb = game.add.sprite(this.position.x, this.position.y-275, 'rabbit_cryomancy');
+    var iceorb = game.add.sprite(this.position.x, this.position.y-200, 'rabbit_cryomancy');
     this.iceorbs.add(iceorb);
     game.physics.arcade.enable(iceorb);
     iceorb.startLocation = this.position.x;
     iceorb.scale.setTo(.3,.3);
     iceorb.anchor.setTo(0.5,0.5);
+    iceorb.Emitter = game.add.emitter(0,0,100);
+    iceorb.Emitter.makeParticles('rabbit_trail');
+    iceorb.Emitter.alpha = 0.5;
+    iceorb.Emitter.blendMode = 1;
+    iceorb.Emitter.x = this.position.x;
+    iceorb.Emitter.y = this.position.y-200;
+    iceorb.Emitter.start(false, 5000, 100, 25);
+
 
 
     if (this.faceRIGHT){
@@ -876,6 +905,10 @@ Simon.prototype.cryomancy = function(){
 }
 
 Simon.prototype.killBullets = function(b){
+    b.Emitter.x = b.position.x;
+    b.Emitter.y = b.position.y;
+    //b.Emitter.start(false, 2000, 100, 10);
+
     if (b.headingRight){
         if (b.position.x - b.startLocation > 1200){
             b.kill();
@@ -1296,8 +1329,8 @@ Simon.prototype.input = function(){
             }
 
             if (game.input.keyboard.justPressed(this.keyB) && game.input.keyboard.justPressed(this.keyA) && !this.action.block){
-                this.timer.startTimer('specialCharge',200);
-                this.timer.startTimer('spec',1000);
+                this.timer.startTimer('specialCharge',400);
+                this.timer.startTimer('spec',600);
                 this.specialstart = true;
                 
 

@@ -17,6 +17,8 @@ var mainState = {
         var fist2;
         var bullets1;
         var bullets2;
+        var spikes1;
+        var spikes2;
 
         var floor;
         
@@ -113,10 +115,17 @@ var mainState = {
 	    //ground.add(plat);
         
         fist1 = player1.fists;
-        if(player1.charName == "SECURITY") bullets1 = player1.bullets;
+        if(player1.charName == "SECURITY") {
+        	bullets1 = player1.bullets;
+        }else if(player1.charName == "SIMON") {
+        	spikes1 = player1.spikes;
+        }
         fist2 = player2.fists;
-        if(player2.charName == "SECURITY") bullets2 = player2.bullets;
-        
+        if(player2.charName == "SECURITY") {
+        	bullets2 = player2.bullets;
+        }else if(player2.charName == "SIMON") {
+        	spikes2 = player2.spikes;
+        }
         //---Text Stuff---//
         
         //AG: Intro Text
@@ -477,6 +486,16 @@ var mainState = {
                 }
             }
         }
+
+        //simon's heavy NH
+        if(player2.charName == "SIMON"){
+            game.physics.arcade.overlap(player1,spikes2,mainState.SimonHeavy, null, this);
+        }
+        if(player1.charName == "SIMON"){
+            game.physics.arcade.overlap(player2,spikes1,mainState.SimonHeavy, null, this);
+        }
+
+
         
         //Dive kicks
         if(player1.action.dive){
@@ -666,6 +685,12 @@ var mainState = {
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.001, 100);
         }
+    },
+
+    SimonHeavy: function(player,hitbox){
+    	mainState.calcKnockBack(100,300,player.playerNum);
+
+        player.takeDamage(10,200);
     },
     
 

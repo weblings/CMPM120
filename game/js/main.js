@@ -55,6 +55,8 @@ var mainState = {
         var SpecialBorders;
         var charText1;
         var charText2;
+        
+        var simonSpecialSoundPlayed;
     },
 
 	create: function() {
@@ -164,6 +166,8 @@ var mainState = {
         this.heavySound = game.add.audio('heavy');
         this.diveSound = game.add.audio('dive');
         this.lightSound = game.add.audio('light');
+        this.frozenSound = game.add.audio('frozen');
+        this.chainSound = game.add.audio('chain_hit');
         
         this.heavySoundPlayed = false;
         this.diveSoundPlayed = false;
@@ -198,7 +202,7 @@ var mainState = {
 
         //Music
 
-        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka','exit_the_premises','ouroboros','kick_shock','Parisian'];
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka','exit_the_premises','ouroboros','kick_shock','parisian','patriotism'];
         this.ParisianIndex = 7;
 
         index = game.rnd.between(0,fight_music_choices.length-1);
@@ -289,6 +293,9 @@ var mainState = {
         charText2 = game.add.text(29 * (game.world.width/30), game.world.height/50-5, "", { font: "24px Arial", fill: "#081102", align: "center" });
         charText2.text = player2.charName;
         charText2.anchor.setTo(1,0);
+        
+        simonSpecialSoundPlayed = false;
+        scorpSpecialSoundPlayed = false;
     },
 
 	update: function() {        
@@ -798,6 +805,17 @@ var mainState = {
     	mainState.calcKnockBack(50,50,player.playerNum);
         player.takeDamage(20,200);
 
+        
+        if(!simonSpecialSoundPlayed){
+            timer.startTimer("orbs",1200);
+            simonSpecialSoundPlayed = true;
+            this.frozenSound.play();
+        }
+        
+        if(timer.timerDone("orbs")){
+            simonSpecialSoundPlayed = false;
+        }
+        
         if(!player.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.007, 200);
         }
@@ -840,7 +858,17 @@ var mainState = {
     scorpionChain: function(player,hitbox,location){
     	player.takeDamage(25,100);
     	player.chained(location);
-
+        
+        if(!scorpSpecialSoundPlayed){
+            timer.startTimer("chain",1200);
+            scorpSpecialSoundPlayed = true;
+            this.chainSound.play();
+        }
+        
+        if(timer.timerDone("chain")){
+            scorpSpecialSoundPlayed = false;
+        }
+        
     	if(!player.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.007, 200);
         }

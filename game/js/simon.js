@@ -17,11 +17,22 @@ Simon = function(game, key, x, y, playerNum, dup){
 
     //Animations
     if (this.copy){
+        this.rabBlock = 0;
+        this.rabLight = 2;
+        this.rabHev = 1;
+        this.rabDown = 5;
+        this.rabIdle = 3
+
         this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
         //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
         this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
 
     }else{
+        this.rabBlock = 0;
+        this.rabLight = 2;
+        this.rabHev = 1;
+        this.rabDown = 5;
+        this.rabIdle = 3
         this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
         this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
 
@@ -146,6 +157,7 @@ Simon = function(game, key, x, y, playerNum, dup){
     //projectile
     this.bullets = game.add.group(); //= game.add.sprite(this.position.x,this.position.y,'player');
     this.spikes = game.add.group();
+    this.iceorbs = game.add.group();
 
 
     
@@ -182,6 +194,9 @@ Simon = function(game, key, x, y, playerNum, dup){
     //down stuff NH
     this.downCount = 0;
     this.downFactor = 700;
+
+    //special stuff
+    this.specialstart = false;
 
 
 
@@ -313,7 +328,7 @@ Simon.prototype.preState =function (){
     if (!this.timer.timerDone('downed') && this.action.down){
          //insert sprite change here
          //this.char.loadTexture('scorpion_down');
-         this.char.frame = 3;//'Simon_Down';
+         this.char.frame = this.rabDown;//'Simon_Down';
          //this.action.down = false;
     }
 
@@ -352,6 +367,8 @@ Simon.prototype.preState =function (){
     else{
         this.padControl = false;
     }
+
+    this.iceorbs.forEachAlive(this.killBullets,this);
     
     
 }
@@ -376,7 +393,7 @@ Simon.prototype.dead = function(){
         this.body.velocity.y = 0;
     }
     this.fist.exists = false;
-    this.char.frame = 3;
+    this.char.frame = this.rabDown;
 }
 
 Simon.prototype.downed = function(){
@@ -416,7 +433,7 @@ Simon.prototype.lightAttack = function(){
     
     //insert attack animation here
     //this.char.loadTexture('scorpion_A');
-    this.char.frame= 0;//('Simon_LightAttack');
+    this.char.frame= this.rabLight;//('Simon_LightAttack');
 
     this.fist.exists = true;
     this.fist.position.x = this.position.x;
@@ -475,7 +492,7 @@ Simon.prototype.lightAttack = function(){
         //this.debugText.text = 'done';
         //this.projectile();
         //this.char.loadTexture('scorpion_idle');
-        this.char.frame= 0;//('Simon_Idle');
+        this.char.frame= this.rabIdle;//('Simon_Idle');
         this.timer.startTimer('antispam', 500);
         this.changeState(this.input);
         this.action.attacking = false;
@@ -494,7 +511,7 @@ Simon.prototype.heavyAttack = function(){
         //dive kick
         if ( this.action.divable){
             this.fist.exists = false;
-            this.char.frame = 0;
+            this.char.frame = this.rabHev;
 
         
             this.body.velocity.y = 1700;
@@ -572,8 +589,8 @@ Simon.prototype.heavyAttack = function(){
         }
 
         if(!this.timer.timerDone('heavy_cast') && !this.action.dive){
-            this.char.position.x = this.char.xPosPreShake + game.rnd.between(-1,1);
-            this.char.position.y = this.char.yPosPreShake + game.rnd.between(-1,1);
+            this.char.position.x = this.char.xPosPreShake + game.rnd.between(-5,5);
+            this.char.position.y = this.char.yPosPreShake + game.rnd.between(-5,5);
             if(!this.heavyChargeSoundPlayed){
                 this.heavyChargeSound.loop = true;
                 this.heavyChargeSound.play();
@@ -596,7 +613,7 @@ Simon.prototype.heavyAttack = function(){
                 this.heavySoundPlayed = true;
             }
 
-            this.char.frame=0;//('Simon_HeavyAttack');
+            this.char.frame=this.rabHev;//('Simon_HeavyAttack');
             this.fist.exists = true;
             
             this.fist.position.x = this.position.x; //AG: Brings fist back on screen
@@ -615,6 +632,7 @@ Simon.prototype.heavyAttack = function(){
             if(!this.action.castingIce){
                 this.iceSpikes(this.position.x -250);
                 this.iceSpikes(this.position.x +250); 
+                this.cryomancy();
                 this.action.castingIce = true;
             }
             
@@ -668,38 +686,33 @@ Simon.prototype.special = function(){
         }else{
             this.chain.scale.x = 0.7;
             var mir = -1;
-        }
+        }*/
 
         if (this.specialstart){
             if (this.timer.timerDone('specialCharge')){
+                /*
                 this.fist.exists = true;
                 this.chain.exists = true;
                 this.chain.position.x = this.position.x;
                 this.chain.position.y = this.position.y;
                 this.chain.play('scorpion_special');
                 this.specialstart = false;
+                */
+                this.cryomancy();
             }
+            /*
             this.specialEmitter.x = this.position.x;
             this.specialEmitter.y = this.position.y-75;
             this.specialEmitter.start(true, 2000, null, 10);
+            */
 
         }else{
-            if(this.faceRIGHT){
-                if (this.fist.position.x - this.position.x < 735){
-                    this.fist.position.x += (mir*35);
-                }
-
-            }else{
-                if (this.position.x - this.fist.position.x < 735){
-                    this.fist.position.x += (mir*35);
-                }
-
-            }
 
 
-        }*/
+        }
 
         if (this.timer.timerDone('spec')){// || this.chainHit){
+            this.cryomancy();
 
             this.specialHappening = false;
             /*if (this.chainHit){
@@ -713,6 +726,7 @@ Simon.prototype.special = function(){
 
             //}else{
                 this.changeState(this.input);
+                this.inSpecial = false;
                 /*this.chain.exists = false;
                 this.action.attacking = false;
                 this.fist.exists = false;
@@ -787,6 +801,7 @@ Simon.prototype.iceSpikes = function(x){
     game.physics.arcade.enable(spike);
     spike.body.velocity.y = -1200;
     spike.lower = false;
+    spike.justHit = false;
     
 
 
@@ -795,6 +810,7 @@ Simon.prototype.iceSpikes = function(x){
 Simon.prototype.checkSpikes = function(s){
     if (s.position.y < 550 && !s.lower){
         s.body.velocity.y = 0;
+        s.justHit = true;
     }
 }
 
@@ -802,10 +818,11 @@ Simon.prototype.checkSpikes = function(s){
 Simon.prototype.lowerSpikes = function(kek){
     
     if (kek.position.y < 550){
+        kek.justHit = true;
         kek.lower = true;
         kek.checkWorldBounds = true;
         kek.outOfBoundsKill = true;
-        kek.body.velocity.y = 100;
+        kek.body.velocity.y = 250;
     }
     /*
     if (kek.body.velocity.y < 0){
@@ -836,13 +853,35 @@ Simon.prototype.projectile = function(){
     
 }
 
+Simon.prototype.cryomancy = function(){
+    var iceorb = game.add.sprite(this.position.x, this.position.y-275, 'rabbit_cryomancy');
+    this.iceorbs.add(iceorb);
+    game.physics.arcade.enable(iceorb);
+    iceorb.startLocation = this.position.x;
+    iceorb.scale.setTo(.3,.3);
+    iceorb.anchor.setTo(0.5,0.5);
+
+
+    if (this.faceRIGHT){
+        iceorb.body.velocity.x = 800;
+        iceorb.headingRight = true;
+        iceorb.body.angularVelocity = 800;
+    }else{
+        iceorb.body.velocity.x = -800;
+        iceorb.headingRight = false;
+        iceorb.body.angularVelocity = -800;
+    }
+
+    
+}
+
 Simon.prototype.killBullets = function(b){
     if (b.headingRight){
-        if (b.position.x - b.startLocation > 500){
+        if (b.position.x - b.startLocation > 1200){
             b.kill();
         }
     }else{
-        if (b.startLocation - b.position.x > 500){
+        if (b.startLocation - b.position.x > 1200){
             b.kill();
         }
     }
@@ -1107,7 +1146,7 @@ Simon.prototype.input = function(){
 
                 if (this.action.jump && !this.staggered){
                     //this.char.setTexture('scorpion_jump');
-                    this.char.frame= 0;//('Simon_Jump');
+                    this.char.frame= this.rabIdle;//('Simon_Jump');
                 }else if(this.staggered) {
                     //this.char.setTexture('scorpion_stagger');
                     this.char.animation.play('rabbit_stagger');
@@ -1115,7 +1154,7 @@ Simon.prototype.input = function(){
                     //this.char.loadTexture('scorpion_idle');
                     //this.char.setTexture('scorp_walk');
                     //this.char.animations.add('scorpion_walk',[0,1], 10, true);
-                    this.char.frame = 0;
+                    this.char.frame = this.rabIdle;
                 }
                 
                 
@@ -1159,14 +1198,14 @@ Simon.prototype.input = function(){
 
                 if (this.action.jump){
                     //this.char.setTexture('scorpion_jump');
-                    this.char.frame= 0;//('Simon_Jump');
+                    this.char.frame= this.rabIdle;//('Simon_Jump');
                 }else{
                     //this.char.loadTexture('scorpion_idle');
                     
                     //this.char.setTexture('scorp_walk');
                     //this.char.animations.add('scorpion_walk',[0,1], 10, true);
                     //this.char.animations.play('scorpion_walk');
-                    this.char.frame= 0;
+                    this.char.frame= this.rabIdle;
                 }
 
                 this.prev_anim = 1;
@@ -1177,17 +1216,17 @@ Simon.prototype.input = function(){
 
                 if (this.action.jump && !this.action.stagfall){
                     //this.char.setTexture('scorpion_jump');
-                    this.char.frame=0;//('Simon_Jump');
+                    this.char.frame=this.rabIdle;//('Simon_Jump');
                 }else if (this.action.block){
                     //this.char.setTexture('scorpion_crouch');
                     //this.char.frame=('Simon_crouch');
-                    this.char.frame=2;
+                    this.char.frame=this.rabBlock;
                 }else if(this.action.stagfall) {
                     //this.char.setTexture('scorpion_stagger');
                     this.char.animations.play('rabbit_stagger');
                 }else {
                     //this.char.setTexture('scorpion_idle');
-                    this.char.frame=0;//('Simon_Idle');
+                    this.char.frame=this.rabIdle;//('Simon_Idle');
                 }
 
              
@@ -1256,6 +1295,19 @@ Simon.prototype.input = function(){
 
             }
 
+            if (game.input.keyboard.justPressed(this.keyB) && game.input.keyboard.justPressed(this.keyA) && !this.action.block){
+                this.timer.startTimer('specialCharge',200);
+                this.timer.startTimer('spec',1000);
+                this.specialstart = true;
+                
+
+                this.changeState(this.special);
+
+
+            }
+
+
+
             //projectile 
 
             //this.bullets.forEachAlive(this.killBullets,this);
@@ -1276,7 +1328,7 @@ Simon.prototype.input = function(){
 
                 if (this.action.jump && !this.staggered){
                     //this.char.setTexture('scorpion_jump');
-                    this.char.frame= 0;//('Simon_Jump');
+                    this.char.frame = this.rabIdle;//('Simon_Jump');
                 }else if(this.staggered) {
                     //this.char.setTexture('scorpion_stagger');
                     this.char.animation.play('rabbit_stagger');
@@ -1284,7 +1336,7 @@ Simon.prototype.input = function(){
                     //this.char.loadTexture('scorpion_idle');
                     //this.char.setTexture('scorp_walk');
                     //this.char.animations.add('scorpion_walk',[0,1], 10, true);
-                    this.char.frame = 0;
+                    this.char.frame = this.rabIdle;
                 }
                 
                 
@@ -1328,14 +1380,14 @@ Simon.prototype.input = function(){
 
                 if (this.action.jump){
                     //this.char.setTexture('scorpion_jump');
-                    this.char.frame= 0;//('Simon_Jump');
+                    this.char.frame= this.rabIdle;//('Simon_Jump');
                 }else{
                     //this.char.loadTexture('scorpion_idle');
                     
                     //this.char.setTexture('scorp_walk');
                     //this.char.animations.add('scorpion_walk',[0,1], 10, true);
                     //this.char.animations.play('scorpion_walk');
-                    this.char.frame= 0;
+                    this.char.frame= this.rabIdle;
                 }
 
                 this.prev_anim = 1;
@@ -1346,17 +1398,17 @@ Simon.prototype.input = function(){
 
                 if (this.action.jump && !this.action.stagfall){
                     //this.char.setTexture('scorpion_jump');
-                    this.char.frame=0;//('Simon_Jump');
+                    this.char.frame=this.rabIdle;//('Simon_Jump');
                 }else if (this.action.block){
                     //this.char.setTexture('scorpion_crouch');
                     //this.char.frame=('Simon_crouch');
-                    this.char.frame=2;
+                    this.char.frame=this.rabBlock;
                 }else if(this.action.stagfall) {
                     //this.char.setTexture('scorpion_stagger');
                     this.char.animations.play('rabbit_stagger');
                 }else {
                     //this.char.setTexture('scorpion_idle');
-                    this.char.frame=0;//('Simon_Idle');
+                    this.char.frame=this.rabIdle;//('Simon_Idle');
                 }
 
              

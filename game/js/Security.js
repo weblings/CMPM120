@@ -627,12 +627,10 @@ Security.prototype.special = function(){
         }
 
 
-        this.action.attacking = true;
-
         if (!this.action.attacking){
             this.fist.position.x = -300; //AG: Keeps fist offscreen
             this.action.attacking = true;
-            this.inLightAttack = true; //AG: Adding for knockback
+            this.inSpecial = true; //AG: Adding for knockback
             this.projectile(); //launches projectile
             this.char.animations.play('security_light');
             //this.ui.alpha = 0;
@@ -640,14 +638,16 @@ Security.prototype.special = function(){
                 this.lightSound.play();
             }
         }
+        
+        this.action.attacking = true;
 
-        if (this.timer.timerDone('light')){
+        /*if (this.timer.timerDone('light')){
             this.char.frame = this.idleFrame;
             this.changeState(this.input);
             this.action.attacking = false;
-            this.canLightAttack = false;
-            this.inLightAttack = false; //AG: Adding for knockback
-        }
+            //this.canLightAttack = false;
+            //this.inLightAttack = false; //AG: Adding for knockback
+        }*/
         
         /*if (this.faceRIGHT){
             this.chain.scale.x = -0.7;
@@ -699,12 +699,14 @@ Security.prototype.special = function(){
                 this.inSpecial = false;*/
 
             //}else{
+                this.char.frame = this.idleFrame;
                 this.changeState(this.input);
+                this.inSpecial = false;
                 /*this.chain.exists = false;
                 this.action.attacking = false;
                 this.fist.exists = false;
                 this.chainHit = false;
-                this.inSpecial = false;
+                
 
             }*/
 
@@ -776,6 +778,31 @@ Security.prototype.projectile = function(){
         bullet.frame = 5;
     }
     bullet.scale.setTo(1.3,1.3);
+    bullet.anchor.setTo(0.5,0.5);
+    this.bullets.add(bullet);
+    console.log("In Security: "+this.bullets.length);
+    game.physics.arcade.enable(bullet);
+    bullet.startLocation = this.position.x;
+    var projectileSpeed = 800;
+
+    if (this.faceRIGHT){
+        bullet.body.velocity.x = projectileSpeed;
+        bullet.body.angularVelocity = 800;
+        bullet.headingRight = true;
+    }else{
+        bullet.body.velocity.x = -projectileSpeed;
+        bullet.body.angularVelocity = -800;
+        bullet.headingRight = false;
+    }
+
+    
+}
+
+//projectile
+Security.prototype.specialProjectile = function(){
+    var choice = game.rnd.between(0,this.possibleThrowingObjects.length);
+    var bullet = game.add.sprite(this.position.x,this.position.y-200,this.possibleThrowingObjects[choice]);
+    //bullet.scale.setTo(1.3,1.3);
     bullet.anchor.setTo(0.5,0.5);
     this.bullets.add(bullet);
     game.physics.arcade.enable(bullet);

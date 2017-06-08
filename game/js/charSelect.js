@@ -181,7 +181,7 @@ var charSelect = {
         battleCryTextY3 = 100;
         
         //		sprites = [scorpID, guardID, rabbitID];
-        battleCries = ["*SNIP* *SNIP*","TESTOTERONE!!!","*ICE RABBIT NOISES*"]
+        battleCries = ["*SNIP* *SNIP*","   TESTOTERONE!!!","*ICE RABBIT NOISES*"]
         
         battleCryText1 = game.add.text(battleCryText1X,battleCryTextY,"", {fontSize: '32px', fill: '#000'});
         battleCryText2 = game.add.text(battleCryText2X,battleCryTextY,"", {fontSize: '32px', fill: '#000'});

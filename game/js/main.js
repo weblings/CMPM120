@@ -198,9 +198,12 @@ var mainState = {
 
         //Music
 
-        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka','exit_the_premises','ouroboros','kick_shock']; //,'Parisian'];
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka','exit_the_premises','ouroboros','kick_shock','Parisian'];
+        this.ParisianIndex = 7;
 
-        index = game.rnd.between(0,3);
+        index = game.rnd.between(0,fight_music_choices.length-1);
+        if(index == this.ParisianIndex) this.Parisian = true;
+        else this.Parisian = false;
         main_music = game.add.audio(fight_music_choices[index]);
         main_music.play('',0, 1, true);
         main_music.mute = false;  

@@ -113,6 +113,7 @@ var preloaderState = {
         game.load.audio('select',['assets/audio/select.mp3','assets/audio/select.ogg']);
         game.load.audio('deselect',['assets/audio/deselect.mp3','assets/audio/deselect.ogg']);
         game.load.audio('frozen',['assets/audio/frozen.mp3','assets/audio/frozen.ogg']);
+        game.load.audio('chain_hit',['assets/audio/ScorpSpecial.mp3','assets/audio/ScorpSpecial.ogg']);
 
         
         //music

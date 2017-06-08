@@ -167,6 +167,7 @@ var mainState = {
         this.diveSound = game.add.audio('dive');
         this.lightSound = game.add.audio('light');
         this.frozenSound = game.add.audio('frozen');
+        this.chainSound = game.add.audio('chain_hit');
         
         this.heavySoundPlayed = false;
         this.diveSoundPlayed = false;
@@ -294,6 +295,7 @@ var mainState = {
         charText2.anchor.setTo(1,0);
         
         simonSpecialSoundPlayed = false;
+        scorpSpecialSoundPlayed = false;
     },
 
 	update: function() {        
@@ -856,7 +858,17 @@ var mainState = {
     scorpionChain: function(player,hitbox,location){
     	player.takeDamage(25,100);
     	player.chained(location);
-
+        
+        if(!scorpSpecialSoundPlayed){
+            timer.startTimer("chain",1200);
+            scorpSpecialSoundPlayed = true;
+            this.chainSound.play();
+        }
+        
+        if(timer.timerDone("chain")){
+            scorpSpecialSoundPlayed = false;
+        }
+        
     	if(!player.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.007, 200);
         }

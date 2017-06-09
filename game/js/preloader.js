@@ -68,7 +68,7 @@ var preloaderState = {
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');
         game.load.atlas('rabbit_atlas2','assets/img/simon/alt/spritesheet.png','assets/img/simon/alt/sprites.json');
         game.load.image('rabbit_blood','assets/img/simon/FrozenRabbit_blood.png');
-        game.load.image('rabbit_cryomancy','assets/img/simon/FrozenRabbit_Heavy.png');
+        game.load.image('rabbit_cryomancy','assets/img/simon/FrozenRabbit_heavy.png');
         game.load.image('rabbit_trail','assets/img/simon/FrozenRabbit_part.png');
         game.load.image('rabbit_curse','assets/img/simon/FrozenRabbit_curse.png');
         game.load.image('ice_spikes','assets/img/simon/icespikes.png');

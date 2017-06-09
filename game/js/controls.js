@@ -387,10 +387,10 @@ var controlState = {
         
 		if(game.input.keyboard.justPressed(ESCKey)){
             main_music.mute = true;
-			game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+			game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,P1CostumeIndex,P2CostumeIndex,round);
 		}
 
-		if(this.timer.timerDone('controlExit')) game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+		if(this.timer.timerDone('controlExit')) game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,P1CostumeIndex,P2CostumeIndex,round);
             
         //update Text
        // P1Text.text = characters[P1index];

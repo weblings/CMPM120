@@ -6,6 +6,9 @@ var preloaderState = {
 		game.load.image('fist', 'assets/img/fist.jpg');
 		game.load.image('hitbox', 'assets/img/hitbox.png');
 		game.load.image('bg', 'assets/img/bg.png');
+                game.load.image('sky', 'assets/img/menubg/background.png');
+                game.load.image('clouds', 'assets/img/menubg/clouds.png');
+                game.load.image('plane', 'assets/img/menubg/foreground.png');
         game.load.image('health_full','assets/img/health_full.png');
         game.load.image('health_empty','assets/img/health_empty.png');
         game.load.image('health_damage','assets/img/health_damage.png');
@@ -27,7 +30,7 @@ var preloaderState = {
 		game.load.image('arrow','assets/img/Arrow.png');
 		game.load.image('selectBox','assets/img/selectBox.png');
 		game.load.image('selectBox2','assets/img/selectBox2.png');
-        game.load.image('health_border','assets/img/health_border.png');
+        //game.load.image('health_border','assets/img/health_border.png');
         game.load.image('special_full','assets/img/special_full.png');
         game.load.image('special_empty','assets/img/special_empty.png');
         game.load.image('special_used','assets/img/special_used.png');
@@ -130,7 +133,8 @@ var preloaderState = {
 
 	create: function(){
 		//game.state.start('main');
-        game.state.start('charSelect');
+                //game.state.start('charSelect');
+                game.state.start('title');
 	}
 
 };

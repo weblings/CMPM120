@@ -194,7 +194,8 @@ Security = function(game, key, x, y, playerNum,dup){
     //Special
     this.specialstart = false;
     this.possibleThrowingObjects = ['logo','rabbit_ID','guard_ID','scorp_ID','controller','A','B','X','Y','Start_Button','Joystick_Left','beret1','beret2','beret3','beret4','moustache1','moustache2','moustache3','moustache4','bg'];
-
+	
+	
     //set timer
     this.timer = new setTime();
 
@@ -268,7 +269,12 @@ Security = function(game, key, x, y, playerNum,dup){
 
     //Parisian
     this.Parisian = false;
+	this.bagette = false; //turns off the hat making
+	this.beretaret = ["beret1", "beret2", "beret3", "beret4"];
+	this.moustachearray = ["moustache1", "moustache2", "moustache3", "moustache4"];
 }
+
+
 
 Security.prototype = Object.create(Phaser.Sprite.prototype);
 Security.prototype.constructor = Player;
@@ -786,6 +792,16 @@ Security.prototype.chainStop = function(){
     }
 }
 
+Security.prototype.ParisianOn = function(){
+	if(this.Parisian && !this.bagette){
+		this.bagette = true;
+		var choice = game.rnd.between(0,this.beretaret.length-1);
+		var moustache = game.add.sprite(this.position.x,this.position.y-200,this.moustachearray[choice]);
+		var beret = game.add.sprite(this.position.x,this.position.y-200,this.beretaret[choice]);
+		
+	}
+}
+
 //projectile
 Security.prototype.projectile = function(){
     var choice = game.rnd.between(0,1);
@@ -1034,7 +1050,8 @@ Security.prototype.wallKnockBack = function(x,y,wallFrames){
 //Handles player input and change state accordingly NH
 Security.prototype.input = function(){
 
-
+		this.ParisianOn();
+		
         //this.debugText.text = this.position.y;
 
         if(!this.introFinished){

@@ -269,9 +269,6 @@ Security = function(game, key, x, y, playerNum,dup){
 
     //Parisian
     this.Parisian = false;
-	this.bagette = false; //turns off the hat making
-	this.beretaret = ["beret1", "beret2", "beret3", "beret4"];
-	this.moustachearray = ["moustache1", "moustache2", "moustache3", "moustache4"];
 }
 
 
@@ -793,12 +790,7 @@ Security.prototype.chainStop = function(){
 }
 
 Security.prototype.ParisianOn = function(){
-	if(this.Parisian && !this.bagette){
-		this.bagette = true;
-		var choice = game.rnd.between(0,this.beretaret.length-1);
-		var moustache = game.add.sprite(this.position.x,this.position.y-200,this.moustachearray[choice]);
-		var beret = game.add.sprite(this.position.x,this.position.y-200,this.beretaret[choice]);
-		
+	if(this.Parisian){
 	}
 }
 

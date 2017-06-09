@@ -1,5 +1,5 @@
-Security = function(game, key, x, y, playerNum,dup){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup);
+Security = function(game, key, x, y, playerNum,dup,french){
+    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup,french);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -26,7 +26,8 @@ Security = function(game, key, x, y, playerNum,dup){
     
     //this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
     if(!this.copy){
-        this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
+        if(french)             this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlasP');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
         this.idleFrame = 10;
         this.downedFrame = 5;
         this.blockFrame = 4;
@@ -39,7 +40,8 @@ Security = function(game, key, x, y, playerNum,dup){
         this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
         this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
     }else{
-        this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
+        if(french)             this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2P');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
         this.idleFrame = 0;
         this.downedFrame = 8;
         this.blockFrame = 7;
@@ -88,6 +90,14 @@ Security = function(game, key, x, y, playerNum,dup){
     this.emitter.enableBody = true;
     this.emitter.blendMode = 2;
     this.emitter.alpha = 0.8;
+
+    this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
+
+
+    
+    this.icecube.anchor.setTo(0.5, 1);
+    this.icecube.scale.setTo(0.15,0.25);
+    this.icecube.exists = false;
 
     //Physics
     game.physics.enable(this);
@@ -221,6 +231,8 @@ Security = function(game, key, x, y, playerNum,dup){
 
     this.action.stagfall = false;
 
+    this.action.iced = false;
+
     //down stuff NH
     this.downCount = 0;
     this.downFactor = 700;
@@ -266,12 +278,6 @@ Security = function(game, key, x, y, playerNum,dup){
     
     this.lightSound.volume = this.missVolume;
     this.heavySound.volume = this.missVolume;
-
-    //Parisian
-    this.Parisian = false;
-	this.bagette = false; //turns off the hat making
-	this.beretaret = ["beret1", "beret2", "beret3", "beret4"];
-	this.moustachearray = ["moustache1", "moustache2", "moustache3", "moustache4"];
 }
 
 
@@ -388,6 +394,14 @@ Security.prototype.preState =function (){
     }
     else{
         this.padControl = false;
+    }
+
+    if(this.action.iced){
+        this.icecube.exists = true;
+        this.icecube.position.x = this.char.position.x;
+        this.icecube.position.y = this.char.position.y;
+    }else{
+        this.icecube.exists = false;
     }
     
 }
@@ -792,28 +806,45 @@ Security.prototype.chainStop = function(){
     }
 }
 
-Security.prototype.ParisianOn = function(){
-	if(this.Parisian && !this.bagette){
-		this.bagette = true;
-		var choice = game.rnd.between(0,this.beretaret.length-1);
-		var moustache = game.add.sprite(this.position.x,this.position.y-200,this.moustachearray[choice]);
-		var beret = game.add.sprite(this.position.x,this.position.y-200,this.beretaret[choice]);
-		
-	}
+Security.prototype.frozenStun = function(){
+    this.action.dive = false;
+    if (!this.action.block){
+        this.timer.startTimer('frozenStun', 2500);
+        this.changeState(this.frozenStop);
+        this.action.iced = true;
+
+    }
+
 }
+
+Security.prototype.frozenStop = function(){
+    this.body.velocity.x = 0;
+    //this.body.velocity.y = 0;
+    this.action.iced = true;
+    this.action.attacking = false;
+    if(this.timer.timerDone('shamed')){
+        this.shamed = false;
+    }
+    if (this.timer.timerDone('frozenStun')){
+        this.action.iced = false;
+        this.changeState(this.input);
+    }
+
+}
+
 
 //projectile
 Security.prototype.projectile = function(){
     var choice = game.rnd.between(0,1);
     var bullet;
     if(choice == 0){
-        bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas');//water_bottle'); //'player');
-        bullet.frame = 2;
+        bullet = game.add.sprite(this.position.x,this.position.y-200,'water_bottle');//water_bottle'); //'player');
+        //bullet.frame = 2;
     }else if(choice == 1){
-        bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas2');//water_bottle'); //'player');
-        bullet.frame = 5;
+        bullet = game.add.sprite(this.position.x,this.position.y-200,'pepsi');//water_bottle'); //'player');
+        //bullet.frame = 5;
     }
-    bullet.scale.setTo(1.3,1.3);
+    bullet.scale.setTo(0.04,0.04);
     bullet.anchor.setTo(0.5,0.5);
     this.bullets.add(bullet);
     //console.log("In Security: "+this.bullets.length);
@@ -917,12 +948,12 @@ Security.prototype.takeDamage = function(damage,staggerLength){
             this.health = 0;
             this.alive = false;
         }else this.damage(damage*def);
-        this.addToSpecialBar((damage*def)/80);
+        this.addToSpecialBar((damage*def)/100);
         this.shamed = true;
         this.staggered = true;
         
         //count for down NH
-        if (!this.action.block && !this.action.down){
+        if (!this.action.block && !this.action.down && !this.action.iced){
             this.timer.startTimer('downWindow',2000);
             if (!this.inHeavyAttack){
                 this.downCount++;
@@ -1049,9 +1080,7 @@ Security.prototype.wallKnockBack = function(x,y,wallFrames){
 
 //Handles player input and change state accordingly NH
 Security.prototype.input = function(){
-
-		this.ParisianOn();
-		
+	
         //this.debugText.text = this.position.y;
 
         if(!this.introFinished){
@@ -1234,7 +1263,7 @@ Security.prototype.input = function(){
 
             }else{
                 this.body.velocity.x = 0;
-                if (this.action.jump){
+                if (this.action.jump && !this.action.block){
                     //this.char.loadTexture('scorpion_jump');
                 }else if (this.action.block){
                     this.char.frame = this.blockFrame;
@@ -1396,7 +1425,7 @@ Security.prototype.input = function(){
 
             }else{
                 this.body.velocity.x = 0;
-                if (this.action.jump){
+                if (this.action.jump && !this.action.block){
                     //this.char.loadTexture('scorpion_jump');
                 }else if (this.action.block){
                     this.char.frame = this.blockFrame;

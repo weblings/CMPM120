@@ -1,5 +1,5 @@
-Simon = function(game, key, x, y, playerNum, dup){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum, dup);
+Simon = function(game, key, x, y, playerNum, dup, french){
+    Phaser.Sprite.call(this, game, x, y, key, playerNum, dup, french);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -30,7 +30,8 @@ Simon = function(game, key, x, y, playerNum, dup){
         this.rabDown = 5;
         this.rabIdle = 3
 
-        this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
+        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2P');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
         //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
         this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
 
@@ -40,7 +41,9 @@ Simon = function(game, key, x, y, playerNum, dup){
         this.rabHev = 1;
         this.rabDown = 5;
         this.rabIdle = 3
-        this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
+        
+        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlasP');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
         this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
 
     }
@@ -69,6 +72,17 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.emitter.blendMode = 2;
     this.emitter.alpha = 0.8;
     //this.emitter.gravity = 400;
+
+    //frozen
+    if (this.copy){
+        this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
+    }else{
+        this.icecube = game.add.sprite(this.position.x, this.position.y, 'alt_frozen_ice');
+    }
+    this.icecube.anchor.setTo(0.5, 0.5);
+    this.icecube.scale.setTo(0.25,0.25);
+    this.icecube.exists = false;
+
 
 
 
@@ -199,6 +213,8 @@ Simon = function(game, key, x, y, playerNum, dup){
     this.action.castingIce = false;
 
     this.action.stagfall = false;
+
+    this.action.iced = false;
 
     //down stuff NH
     this.downCount = 0;
@@ -383,6 +399,14 @@ Simon.prototype.preState =function (){
     }
     else{
         this.padControl = false;
+    }
+
+    if(this.action.iced){
+        this.icecube.exists = true;
+        this.icecube.position.x = this.char.position.x;
+        this.icecube.position.y = this.char.position.y;
+    }else{
+        this.icecube.exists = false;
     }
 
     this.iceorbs.forEachAlive(this.killBullets,this);
@@ -776,6 +800,35 @@ Simon.prototype.special = function(){
     
 }
 
+Simon.prototype.frozenStun = function(){
+    this.action.dive = false;
+    if (!this.action.block){
+        this.timer.startTimer('frozenStun', 2500);
+        this.changeState(this.frozenStop);
+        this.action.iced = true;
+
+    }
+
+}
+
+Simon.prototype.frozenStop = function(){
+    this.body.velocity.x = 0;
+    //this.body.velocity.y = 0;
+    this.action.iced = true;
+    this.action.attacking = false;
+    if(this.timer.timerDone('shamed')){
+        this.shamed = false;
+    }
+    if (this.timer.timerDone('frozenStun')){
+        this.action.iced = false;
+        this.changeState(this.input);
+    }
+
+
+}
+
+
+
 //AG: Enter decimals
 Simon.prototype.addToSpecialBar = function(amount){
     if(this.specialBarScaleMaster + amount >= 1){
@@ -956,12 +1009,12 @@ Simon.prototype.takeDamage = function(damage,staggerLength){
             this.health = 0;
             this.alive = false;
         }else this.damage(damage*def);
-        this.addToSpecialBar((damage*def)/80);
+        this.addToSpecialBar((damage*def)/100);
         this.shamed = true;
         this.staggered = true;
 
         //count for down NH
-        if (!this.action.block && !this.action.down){
+        if (!this.action.block && !this.action.down && !this.action.iced){
             this.timer.startTimer('downWindow',2000);
             this.downCount++;
             console.log(this.downCount);
@@ -1276,7 +1329,7 @@ Simon.prototype.input = function(){
             }else{
                 this.body.velocity.x = 0;
 
-                if (this.action.jump && !this.action.stagfall){
+                if (this.action.jump && !this.action.stagfall && !this.action.block){
                     //this.char.setTexture('scorpion_jump');
                     this.char.frame=this.rabIdle;//('Simon_Jump');
                 }else if (this.action.block){
@@ -1458,7 +1511,7 @@ Simon.prototype.input = function(){
             }else{
                 this.body.velocity.x = 0;
 
-                if (this.action.jump && !this.action.stagfall){
+                if (this.action.jump && !this.action.stagfall && !this.action.block){
                     //this.char.setTexture('scorpion_jump');
                     this.char.frame=this.rabIdle;//('Simon_Jump');
                 }else if (this.action.block){

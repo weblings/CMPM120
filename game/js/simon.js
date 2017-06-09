@@ -1329,7 +1329,7 @@ Simon.prototype.input = function(){
             }else{
                 this.body.velocity.x = 0;
 
-                if (this.action.jump && !this.action.stagfall){
+                if (this.action.jump && !this.action.stagfall && !this.action.block){
                     //this.char.setTexture('scorpion_jump');
                     this.char.frame=this.rabIdle;//('Simon_Jump');
                 }else if (this.action.block){
@@ -1511,7 +1511,7 @@ Simon.prototype.input = function(){
             }else{
                 this.body.velocity.x = 0;
 
-                if (this.action.jump && !this.action.stagfall){
+                if (this.action.jump && !this.action.stagfall && !this.action.block){
                     //this.char.setTexture('scorpion_jump');
                     this.char.frame=this.rabIdle;//('Simon_Jump');
                 }else if (this.action.block){

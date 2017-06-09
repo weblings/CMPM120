@@ -1274,7 +1274,7 @@ Scorpion.prototype.input = function(){
             }else{
                 this.body.velocity.x = 0;
 
-                if (this.action.jump && !this.action.stagfall){
+                if (this.action.jump && !this.action.stagfall && !this.action.block){
                     //this.char.setTexture('scorpion_jump');
                     this.char.frame=10;//('Scorpion_Jump');
                 }else if (this.action.block){
@@ -1448,7 +1448,7 @@ Scorpion.prototype.input = function(){
             }else{
                 this.body.velocity.x = 0;
 
-                if (this.action.jump && !this.action.stagfall){
+                if (this.action.jump && !this.action.stagfall && !this.action.block){
                     //this.char.setTexture('scorpion_jump');
                     this.char.frame=10;//('Scorpion_Jump');
                 }else if (this.action.block){

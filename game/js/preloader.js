@@ -32,6 +32,8 @@ var preloaderState = {
         game.load.image('special_empty','assets/img/special_empty.png');
         game.load.image('special_used','assets/img/special_used.png');
         game.load.image('special_border','assets/img/special_border.png');
+        game.load.image('frozen_ice','assets/img/frozen.png');
+        game.load.image('alt_frozen_ice','assets/img/frozen2.png');
         
         //Xbox
         game.load.image('controller','assets/img/controller.png');

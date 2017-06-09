@@ -686,7 +686,7 @@ var mainState = {
         }
 
         if(!player.staggered && !player.action.down){
-        	attackingPlayer.addToSpecialBar(5/100);
+        	attackingPlayer.addToSpecialBar(5/120);
         }
 
         mainState.calcKnockBack(35,10,player.playerNum);
@@ -719,7 +719,7 @@ var mainState = {
         player.takeDamage(15,200);
 
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
-        	game.camera.shake(0.005, 100);
+        	game.camera.shake(0.005, 120);
         }
         
 
@@ -755,7 +755,7 @@ var mainState = {
         }
 
         if(!player.staggered && !player.action.down){
-        	attackingPlayer.addToSpecialBar(5/100);
+        	attackingPlayer.addToSpecialBar(5/120);
         }
 
         mainState.calcKnockBack(10,10,player.playerNum);
@@ -787,7 +787,7 @@ var mainState = {
 	        player.takeDamage(5,200);
 	        this.heavySound.play();
 			if(!player.action.down){
-        		attackingPlayer.addToSpecialBar(5/100);
+        		attackingPlayer.addToSpecialBar(5/120);
         	}
         	if(!player.action.block && !player1.action.down && !player2.action.down){
         		game.camera.shake(0.003, 100);
@@ -802,6 +802,7 @@ var mainState = {
     SimonSpecial: function(player, hitbox){
     	mainState.calcKnockBack(50,50,player.playerNum);
         player.takeDamage(20,200);
+        player.frozenStun();
 
         
         if(!simonSpecialSoundPlayed){
@@ -833,7 +834,7 @@ var mainState = {
         }
 
         if(!player.staggered && !player.action.down){
-        	attackingPlayer.addToSpecialBar(5/100);
+        	attackingPlayer.addToSpecialBar(5/120);
         }
 
         mainState.calcKnockBack(40,30,player.playerNum);
@@ -923,7 +924,7 @@ var mainState = {
         player.takeDamage(5,100);
 
         if (!player.action.down){
-        	attackingPlayer.addToSpecialBar(5/100);
+        	attackingPlayer.addToSpecialBar(5/120);
         }
         
         
@@ -991,7 +992,7 @@ var mainState = {
         player.takeDamage(15,400); 
 
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
-        	game.camera.shake(0.005, 100);
+        	game.camera.shake(0.005, 120);
     	}
     },
     

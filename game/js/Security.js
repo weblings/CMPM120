@@ -91,6 +91,14 @@ Security = function(game, key, x, y, playerNum,dup,french){
     this.emitter.blendMode = 2;
     this.emitter.alpha = 0.8;
 
+    this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
+
+
+    
+    this.icecube.anchor.setTo(0.5, 1);
+    this.icecube.scale.setTo(0.15,0.25);
+    this.icecube.exists = false;
+
     //Physics
     game.physics.enable(this);
     this.gravFactor = 3000;
@@ -222,6 +230,8 @@ Security = function(game, key, x, y, playerNum,dup,french){
     this.action.noCollide =false;
 
     this.action.stagfall = false;
+
+    this.action.iced = false;
 
     //down stuff NH
     this.downCount = 0;
@@ -384,6 +394,14 @@ Security.prototype.preState =function (){
     }
     else{
         this.padControl = false;
+    }
+
+    if(this.action.iced){
+        this.icecube.exists = true;
+        this.icecube.position.x = this.char.position.x;
+        this.icecube.position.y = this.char.position.y;
+    }else{
+        this.icecube.exists = false;
     }
     
 }
@@ -788,6 +806,33 @@ Security.prototype.chainStop = function(){
     }
 }
 
+Security.prototype.frozenStun = function(){
+    this.action.dive = false;
+    if (!this.action.block){
+        this.timer.startTimer('frozenStun', 2500);
+        this.changeState(this.frozenStop);
+        this.action.iced = true;
+
+    }
+
+}
+
+Security.prototype.frozenStop = function(){
+    this.body.velocity.x = 0;
+    //this.body.velocity.y = 0;
+    this.action.iced = true;
+    this.action.attacking = false;
+    if(this.timer.timerDone('shamed')){
+        this.shamed = false;
+    }
+    if (this.timer.timerDone('frozenStun')){
+        this.action.iced = false;
+        this.changeState(this.input);
+    }
+
+}
+
+
 //projectile
 Security.prototype.projectile = function(){
     var choice = game.rnd.between(0,1);
@@ -903,12 +948,12 @@ Security.prototype.takeDamage = function(damage,staggerLength){
             this.health = 0;
             this.alive = false;
         }else this.damage(damage*def);
-        this.addToSpecialBar((damage*def)/80);
+        this.addToSpecialBar((damage*def)/100);
         this.shamed = true;
         this.staggered = true;
         
         //count for down NH
-        if (!this.action.block && !this.action.down){
+        if (!this.action.block && !this.action.down && !this.action.iced){
             this.timer.startTimer('downWindow',2000);
             if (!this.inHeavyAttack){
                 this.downCount++;

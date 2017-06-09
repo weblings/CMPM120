@@ -34,6 +34,9 @@ var preloaderState = {
         game.load.image('special_border','assets/img/special_border.png');
         game.load.image('frozen_ice','assets/img/frozen.png');
         game.load.image('alt_frozen_ice','assets/img/frozen2.png');
+        game.load.image('croissant','assets/img/croissant.png');
+        game.load.image('eiffel','assets/img/Eiffel_Tower.png');
+
         
         //Xbox
         game.load.image('controller','assets/img/controller.png');

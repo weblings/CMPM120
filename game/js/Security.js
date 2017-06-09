@@ -54,6 +54,7 @@ Security = function(game, key, x, y, playerNum,dup,french){
         this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
         this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
     }
+    this.isFrench = french;
 
     //gamepad
     game.input.gamepad.start();
@@ -837,14 +838,25 @@ Security.prototype.frozenStop = function(){
 Security.prototype.projectile = function(){
     var choice = game.rnd.between(0,1);
     var bullet;
-    if(choice == 0){
-        bullet = game.add.sprite(this.position.x,this.position.y-200,'water_bottle');//water_bottle'); //'player');
-        //bullet.frame = 2;
-    }else if(choice == 1){
-        bullet = game.add.sprite(this.position.x,this.position.y-200,'pepsi');//water_bottle'); //'player');
-        //bullet.frame = 5;
+    if(!this.isFrench){
+        if(choice == 0){
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'water_bottle');//water_bottle'); //'player');
+            //bullet.frame = 2;
+        }else if(choice == 1){
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'pepsi');//water_bottle'); //'player');
+            //bullet.frame = 5;
+        }
+        bullet.scale.setTo(0.04,0.04);
+    }else{
+        if(choice == 0){
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'croissant');//water_bottle'); //'player');
+            //bullet.frame = 2;
+        }else if(choice == 1){
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'eiffel');//water_bottle'); //'player');
+            //bullet.frame = 5;
+        }
+        bullet.scale.setTo(0.1,0.1);
     }
-    bullet.scale.setTo(0.04,0.04);
     bullet.anchor.setTo(0.5,0.5);
     this.bullets.add(bullet);
     //console.log("In Security: "+this.bullets.length);

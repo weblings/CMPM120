@@ -101,6 +101,17 @@ var preloaderState = {
         game.load.atlas('security_atlas', 'assets/img/Security/security_spritesheet.png','assets/img/Security/security_spritesheet.json');
         game.load.atlas('security_atlas2','assets/img/Security/security_alt_spritesheet.png','assets/img/Security/security_alt_spritesheet.json');
         game.load.image('security_blood','assets/img/Security/securityguard_blood.png');
+        game.load.image('water_bottle','assets/img/Water_Bottle.png');
+        game.load.image('pepsi','assets/img/Pepsi.png')
+
+        //Parisian
+        game.load.atlas('scorpion_atlasP', 'assets/img/Scorpion/scorpion_spritesheet_parisian.png','assets/img/Scorpion/sprites.json');
+        game.load.atlas('scorpion_atlas2P', 'assets/img/Scorpion/alt/Scorpion_alt_spritesheet_parisian.png','assets/img/Scorpion/sprites.json');
+        game.load.atlas('security_atlasP', 'assets/img/Security/security_spritesheet_Parisian.png','assets/img/Security/security_spritesheet.json');
+         game.load.atlas('security_atlas2P','assets/img/Security/security_alt_spritesheet_parisian.png','assets/img/Security/security_alt_spritesheet.json');
+        game.load.atlas('rabbit_atlasP','assets/img/simon/spritesheet_parisian.png','assets/img/simon/sprites.json');
+        game.load.atlas('rabbit_atlas2P','assets/img/simon/alt/spritesheet_parisian.png','assets/img/simon/alt/sprites.json');
+        
         
         //audio 
         game.load.audio('jump_sound', ['assets/audio/jump.mp3','assets/audio/jump.ogg']); 

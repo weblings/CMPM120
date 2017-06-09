@@ -1,5 +1,5 @@
-Simon = function(game, key, x, y, playerNum, dup){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum, dup);
+Simon = function(game, key, x, y, playerNum, dup, french){
+    Phaser.Sprite.call(this, game, x, y, key, playerNum, dup, french);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -30,7 +30,8 @@ Simon = function(game, key, x, y, playerNum, dup){
         this.rabDown = 5;
         this.rabIdle = 3
 
-        this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
+        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2P');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
         //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
         this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
 
@@ -40,7 +41,9 @@ Simon = function(game, key, x, y, playerNum, dup){
         this.rabHev = 1;
         this.rabDown = 5;
         this.rabIdle = 3
-        this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
+        
+        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlasP');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
         this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
 
     }

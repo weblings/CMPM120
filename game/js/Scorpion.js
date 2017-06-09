@@ -839,7 +839,7 @@ Scorpion.prototype.frozenStun = function(){
 
 Scorpion.prototype.frozenStop = function(){
     this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
+    //this.body.velocity.y = 0;
     this.action.iced = true;
     this.action.attacking = false;
     if(this.timer.timerDone('shamed')){

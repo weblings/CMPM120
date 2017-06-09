@@ -1,6 +1,6 @@
-Scorpion = function(game, key, x, y, playerNum, dup){
+Scorpion = function(game, key, x, y, playerNum, dup, french){
 
-    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup);
+    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup,french);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -25,11 +25,13 @@ Scorpion = function(game, key, x, y, playerNum, dup){
 
     //Animations
     if (this.copy){
-        this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2');
+        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2P');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2');
         this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
         this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
     }else{
-        this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas');
+        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlasP');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas');
         this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
         this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
     }

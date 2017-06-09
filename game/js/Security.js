@@ -1,5 +1,5 @@
-Security = function(game, key, x, y, playerNum,dup){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup);
+Security = function(game, key, x, y, playerNum,dup,french){
+    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup,french);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -26,7 +26,8 @@ Security = function(game, key, x, y, playerNum,dup){
     
     //this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
     if(!this.copy){
-        this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
+        if(french)             this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlasP');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
         this.idleFrame = 10;
         this.downedFrame = 5;
         this.blockFrame = 4;
@@ -39,7 +40,8 @@ Security = function(game, key, x, y, playerNum,dup){
         this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
         this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
     }else{
-        this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
+        if(french)             this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2P');
+        else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
         this.idleFrame = 0;
         this.downedFrame = 8;
         this.blockFrame = 7;
@@ -266,9 +268,6 @@ Security = function(game, key, x, y, playerNum,dup){
     
     this.lightSound.volume = this.missVolume;
     this.heavySound.volume = this.missVolume;
-
-    //Parisian
-    this.Parisian = false;
 }
 
 
@@ -789,23 +788,18 @@ Security.prototype.chainStop = function(){
     }
 }
 
-Security.prototype.ParisianOn = function(){
-	if(this.Parisian){
-	}
-}
-
 //projectile
 Security.prototype.projectile = function(){
     var choice = game.rnd.between(0,1);
     var bullet;
     if(choice == 0){
-        bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas');//water_bottle'); //'player');
-        bullet.frame = 2;
+        bullet = game.add.sprite(this.position.x,this.position.y-200,'water_bottle');//water_bottle'); //'player');
+        //bullet.frame = 2;
     }else if(choice == 1){
-        bullet = game.add.sprite(this.position.x,this.position.y-200,'security_atlas2');//water_bottle'); //'player');
-        bullet.frame = 5;
+        bullet = game.add.sprite(this.position.x,this.position.y-200,'pepsi');//water_bottle'); //'player');
+        //bullet.frame = 5;
     }
-    bullet.scale.setTo(1.3,1.3);
+    bullet.scale.setTo(0.04,0.04);
     bullet.anchor.setTo(0.5,0.5);
     this.bullets.add(bullet);
     //console.log("In Security: "+this.bullets.length);
@@ -1041,9 +1035,7 @@ Security.prototype.wallKnockBack = function(x,y,wallFrames){
 
 //Handles player input and change state accordingly NH
 Security.prototype.input = function(){
-
-		this.ParisianOn();
-		
+	
         //this.debugText.text = this.position.y;
 
         if(!this.introFinished){

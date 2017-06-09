@@ -71,22 +71,40 @@ var mainState = {
 		var bg = game.add.sprite(0,0,'bg');
 		bg.scale.setTo(0.8);
         
+        //Music
+
+        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka','exit_the_premises','ouroboros','kick_shock','parisian','patriotism'];
+        this.ParisianIndex = 7;
+
+        index = game.rnd.between(0,fight_music_choices.length-1);
+        if(index == this.ParisianIndex) this.Parisian = true;
+        else this.Parisian = false;
+        main_music = game.add.audio(fight_music_choices[index]);
+        main_music.play('',0, 1, true);
+        main_music.mute = false;  
+        main_music.loop = true;
+        main_music.volume = .7;
+            
+        deathSound = game.add.audio('shoegazer');
+        deathSound.volume = .7;
+        deathSound.mute = false;
+        
 		
         if(P1CharChosen == "SIMON"){
-	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
+	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false, this.Parisian);
         }else if(P1CharChosen == "LITERALLY A SCORPION"){
-            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
+            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false, this.Parisian);
         }else{
-            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false);
+            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false, this.Parisian);
         }
 	    game.add.existing(player1);
 	    
         if(P2CharChosen == "SIMON"){
-	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate);
+	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate, this.Parisian);
         }else if(P2CharChosen == "LITERALLY A SCORPION"){
-            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate);
+            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate, this.Parisian);
         }else{
-            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate);
+            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate, this.Parisian);
         }
 	    game.add.existing(player2);
 
@@ -102,8 +120,6 @@ var mainState = {
 
 
 	    floor.body.immovable = true;
-	    
-
 	    
 	    //AG: Attempt to get physics working
         //var plat = game.add.sprite(0, game.height-32, 'player');
@@ -200,24 +216,6 @@ var mainState = {
         //Transition
         this.transitionStarted = false;
 
-        //Music
-
-        fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka','exit_the_premises','ouroboros','kick_shock','parisian','patriotism'];
-        this.ParisianIndex = 7;
-
-        index = game.rnd.between(0,fight_music_choices.length-1);
-        if(index == this.ParisianIndex) this.Parisian = true;
-        else this.Parisian = false;
-        main_music = game.add.audio(fight_music_choices[index]);
-        main_music.play('',0, 1, true);
-        main_music.mute = false;  
-        main_music.loop = true;
-        main_music.volume = .7;
-        
-        deathSound = game.add.audio('shoegazer');
-        deathSound.volume = .7;
-        deathSound.mute = false;
-        
         //Rounds won UI
         var roundUIHeight = 112;
         p2wins1 = game.add.sprite(game.world.width/2+225,102,'round_unresolved');

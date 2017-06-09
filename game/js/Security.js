@@ -202,7 +202,8 @@ Security = function(game, key, x, y, playerNum,dup){
     //Special
     this.specialstart = false;
     this.possibleThrowingObjects = ['logo','rabbit_ID','guard_ID','scorp_ID','controller','A','B','X','Y','Start_Button','Joystick_Left','beret1','beret2','beret3','beret4','moustache1','moustache2','moustache3','moustache4','bg'];
-
+	
+	
     //set timer
     this.timer = new setTime();
 
@@ -279,6 +280,8 @@ Security = function(game, key, x, y, playerNum,dup){
     //Parisian
     this.Parisian = false;
 }
+
+
 
 Security.prototype = Object.create(Phaser.Sprite.prototype);
 Security.prototype.constructor = Player;
@@ -804,6 +807,7 @@ Security.prototype.chainStop = function(){
     }
 }
 
+
 Security.prototype.frozenStun = function(){
     this.action.dive = false;
     if (!this.action.block){
@@ -828,8 +832,8 @@ Security.prototype.frozenStop = function(){
         this.changeState(this.input);
     }
 
-
 }
+
 
 //projectile
 Security.prototype.projectile = function(){
@@ -1079,7 +1083,8 @@ Security.prototype.wallKnockBack = function(x,y,wallFrames){
 //Handles player input and change state accordingly NH
 Security.prototype.input = function(){
 
-
+		this.ParisianOn();
+		
         //this.debugText.text = this.position.y;
 
         if(!this.introFinished){

@@ -237,6 +237,7 @@ var controlState = {
         if(padControl1){
             startButton.alpha = 1;
             if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
+                main_music.mute = true;
 			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round)
             }
         }
@@ -244,6 +245,7 @@ var controlState = {
         if(padControl2){
             startButton.alpha = 1;
             if(pad2.isDown(Phaser.Gamepad.XBOX360_START)){
+                main_music.mute = true;
 			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
             }
         }

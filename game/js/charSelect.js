@@ -166,9 +166,9 @@ var charSelect = {
         JoyStickDown.anchor.setTo(.5,.5);
         JoyStickDown.alpha = 0;
         
-        upJoyTween = game.add.tween(upArrow).to( { y: 250 }, 450, "Linear", true, 450);
+        upJoyTween = game.add.tween(JoyStickUp).to( { y: 450 }, 450, "Linear", true, 450);
         upJoyTween.yoyo(true,200).loop();
-        downJoyTween =  game.add.tween(downArrow).to( { y: 450 }, 450, "Linear", true, 450);
+        downJoyTween =  game.add.tween(JoyStickDown).to( { y: 250 }, 450, "Linear", true, 450);
         downJoyTween.yoyo(true,200).loop();
         
         padControls1Shown = false;

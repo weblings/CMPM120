@@ -1263,7 +1263,7 @@ Security.prototype.input = function(){
 
             }else{
                 this.body.velocity.x = 0;
-                if (this.action.jump){
+                if (this.action.jump && !this.action.block){
                     //this.char.loadTexture('scorpion_jump');
                 }else if (this.action.block){
                     this.char.frame = this.blockFrame;
@@ -1425,7 +1425,7 @@ Security.prototype.input = function(){
 
             }else{
                 this.body.velocity.x = 0;
-                if (this.action.jump){
+                if (this.action.jump && !this.action.block){
                     //this.char.loadTexture('scorpion_jump');
                 }else if (this.action.block){
                     this.char.frame = this.blockFrame;

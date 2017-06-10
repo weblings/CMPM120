@@ -54,8 +54,9 @@ var preloaderState = {
         game.load.image('Joystick_Down','assets/img/Xbox_Controls/Joystick_Down.png');
 		game.load.image('JoystickL','assets/img/Xbox_Controls/JoystickL.png');
 		game.load.image('JoystickR','assets/img/Xbox_Controls/JoystickR.png');
-        game.load.image('bumpers','assets/img/Xbox_Controls/Bumpers.png');
-
+        game.load.image('bumperL','assets/img/Xbox_Controls/Left_Bumper.png');
+        game.load.image('bumperR','assets/img/Xbox_Controls/Right_Bumper.png');
+        
 
         //Parisian
         game.load.image('beret1','assets/img/Parisian/Red_Beret.png');

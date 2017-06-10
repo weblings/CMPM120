@@ -99,8 +99,10 @@ var controlState = {
 	   Xbutton.scale.setTo(.08, .08);
 	   var Bbutton = game.add.sprite(475, 640-30, "B");
 	   Bbutton.scale.setTo(.08, .08);
-        //var Bumpers = game.add.sprite(475, 690-30, "bumpers");
-        //Bumpers.scale.setTo(.3,.3);
+       var BumperL = game.add.sprite(350, 690-25, "bumperL");
+       BumperL.scale.setTo(.3,.3);
+       var BumperR = game.add.sprite(465, 690-25, "bumperR");
+       BumperR.scale.setTo(.3,.3);
 	   
 	   var Abutton2 = game.add.sprite(835, 410-30,"A");
 	   Abutton2.scale.setTo(.08, .08);
@@ -114,6 +116,10 @@ var controlState = {
 	   Xbutton2.scale.setTo(.08, .08);
 	   var Bbutton2 = game.add.sprite(1155, 640-30, "B");
 	   Bbutton2.scale.setTo(.08, .08);
+        var BumperL2 = game.add.sprite(1020, 690-25, "bumperL");
+       BumperL2.scale.setTo(.3,.3);
+       var BumperR2 = game.add.sprite(1140, 690-25, "bumperR");
+       BumperR2.scale.setTo(.3,.3);
         //var Bumpers2 = game.add.sprite(980, 690-30, "bumpers");
         //Bumpers2.scale.setTo(.3,.3);
 	   
@@ -203,7 +209,7 @@ var controlState = {
         P1GuardButton.text = "Y";
         P1LightButton.text = "X";
         P1HeavyButton.text = "B";
-        P1SpecialButton.text = "LB  +  RB";
+        P1SpecialButton.text = "        +  ";
         
         layoutSelect2.alpha = 0;
         controls2_2.alpha = 0;
@@ -214,7 +220,7 @@ var controlState = {
         P2GuardButton.text = "Y";
         P2LightButton.text = "X";
         P2HeavyButton.text = "B";
-        P2SpecialButton.text = "LB  +  RB";
+        P2SpecialButton.text = "         +  ";
         
         //Controllers
         var pad1;

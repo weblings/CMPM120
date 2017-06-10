@@ -278,10 +278,10 @@ var mainState = {
         this.menu.anchor.setTo(0.5,0.5);
         this.menu.alpha = 0;
         this.menu.scale.setTo(.8,.8);
-		this.control1 = game.add.sprite(38, 120, "controls1_menu");
+		this.control1 = game.add.sprite(38, 110, "controls1_menu");
 		this.control1.scale.setTo(.5, .5);
 		this.control1.alpha = 0;
-		this.control2 = game.add.sprite(825, 120, "controls2_menu");
+		this.control2 = game.add.sprite(825, 110, "controls2_menu");
 		this.control2.scale.setTo(.5, .5);
 		this.control2.alpha = 0;
         

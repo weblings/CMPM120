@@ -11,17 +11,26 @@ titleState.prototype = {
         var padControl2; 
 
         var timer;
-        var beta = false; //keep track of where A button registers
         
         //AG: Adding bg for Sammys
         var bg;
+        var plane;
+
+        var button1;
+        var button2;
+        var button3;
 
 	},
 
 	create: function(){
         //AG: Adding bg for Sammys
-		bg_GC = game.add.sprite(0,-30,'CharBG_GC');
-		bg_GC.scale.setTo(1, .8);
+		/*bg_GC = game.add.sprite(0,-30,'CharBG_GC');
+		bg_GC.scale.setTo(1, .8);*/
+
+        bg = game.add.sprite(0, 0, 'sky');
+        this.clouds = game.add.tileSprite(0, 0, 1280, 720, 'clouds');
+        plane = game.add.sprite(0, 0, 'plane');
+
         
         main_music = game.add.audio('parisian');
         //solution for looping bug from http://www.html5gamedevs.com/topic/13947-audio-not-looping-in-chrome/
@@ -31,7 +40,6 @@ titleState.prototype = {
         main_music.loop = true;
         main_music.volume = 0.7;
         
-        //Logo = game.add.sprite(100, game.world.height/2, 'logo');
         
 		game.input.gamepad.start();
         pad1 = game.input.gamepad.pad1;
@@ -40,7 +48,7 @@ titleState.prototype = {
         timer = new setTime();
 
 		//temporary bg for readability
-		game.stage.backgroundColor = '#827b7c';
+		//game.stage.backgroundColor = '#827b7c';
 
 		//add logo
 		//var logo = game.add.sprite(640, 50, 'logo');
@@ -48,10 +56,10 @@ titleState.prototype = {
 		game.state.disableVisibilityChange = true; //prevent pausing on this screen
 
 		//add route to character select by clicking on "play" text; input enabled for mouse
-		var playText = game.add.text(game.world.centerX-100, game.world.centerY-100, "P L A Y", {fontSize: '50px', fill: '#1a4064'});
-		playText.inputEnabled = true;
+		var playText = game.add.text(100, game.world.centerY-100, "P L A Y", {fontSize: '40px', fill: '#fff'});
+		/*playText.inputEnabled = true;
 		//mouse input
-		/*playText.events.onInputUp.add(function(){
+		playText.events.onInputUp.add(function(){
 			game.state.start('charSelect');
 		});
 		playText.events.onInputOver.add(function(target){
@@ -63,9 +71,9 @@ titleState.prototype = {
 
 
 		//add route to controls page
-		var controlText = game.add.text(game.world.centerX-100, game.world.centerY, "C O N T R O L S", {fontSize: '50px', fill: '#1a4064'});
-		controlText.inputEnabled = true;
-		/*controlText.events.onInputUp.add(function(){
+		var controlText = game.add.text(100, game.world.centerY, "C O N T R O L S", {fontSize: '40px', fill: '#fff'});
+		/*controlText.inputEnabled = true;
+		controlText.events.onInputUp.add(function(){
 			game.state.start('controls');
 		});
 		controlText.events.onInputOver.add(function(target){
@@ -77,8 +85,8 @@ titleState.prototype = {
 
 
 		//add route to credits page
-		/*var creditText = game.add.text(game.world.centerX, game.world.centerY+200, "C R E D I T S", {fontSize: '40px', fill: '#1a4064'});
-		creditText.inputEnabled = true;
+		var creditText = game.add.text(100, game.world.centerY+100, "C R E D I T S", {fontSize: '40px', fill: '#fff'});
+		/*creditText.inputEnabled = true;
 		creditText.events.onInputUp.add(function(){
 			game.state.start('credits');
 		});
@@ -90,9 +98,36 @@ titleState.prototype = {
 		});*/
 
 
+        padControls1Shown = false;
+        padControls2Shown = false;
+
+        onPlay = true;
+        onControls = false;
+        onCredits = false;
+
+        button1 = game.add.sprite(50, game.world.centerY-75, 'A');
+        button1.anchor.setTo(0.5, 0.5);
+        button1.scale.setTo(0.1);
+        button1.alpha = 1;
+
+        button2 = game.add.sprite(50, game.world.centerY+25, 'A');
+        button2.anchor.setTo(0.5, 0.5);
+        button2.scale.setTo(0.1);
+        button2.alpha = 0;
+
+        button3 = game.add.sprite(50, game.world.centerY+125, 'A');
+        button3.anchor.setTo(0.5, 0.5);
+        button3.scale.setTo(0.1);
+        button3.alpha = 0;
+
 	},
 
 	update: function(){
+
+        this.clouds.tilePosition.x += 0.4;
+
+
+
 
 		if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
             //console.log("connected");
@@ -110,20 +145,30 @@ titleState.prototype = {
             padControl2 = false;
         }
 
-       if(padControl1){
+        if(padControl1){
+
+            if(!padControls1Shown){
+                button1.alpha = 1;
+                button2.alpha = 0;
+                button3.alpha = 0;
+                padControls1Shown = true;                
+            }
+
 
        		//move button up
-       	    //if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock1')){
-        	//	timer.startTimer('selectLock1',100);
-        		//console.log("you moved up");
-        		var button1 = game.add.sprite(game.world.centerX-150, game.world.centerY-75, 'X');
-				button1.anchor.setTo(0.5, 0.5);
-				button1.scale.setTo(0.1);
-        	//	beta = false;
-        	//}
+       	    if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
+        		timer.startTimer('selectLock1',200);
+        		console.log("you are on Play");
+                button1.alpha = 1;
+                button2.alpha = 0;
+                button3.alpha = 0;
+                onPlay = true;
+                onControls = false;
+                onCredits = false;
+        	}
 
 
-			if(pad1.isDown(Phaser.Gamepad.XBOX360_X) /*&& !beta*/){ //change back to A later
+			if(pad1.isDown(Phaser.Gamepad.XBOX360_A) && onPlay && !onControls && !onCredits){ //change back to A later
                 //console.log("you pressed A");
                 main_music.mute = true;
                 game.state.start('charSelect');
@@ -131,53 +176,48 @@ titleState.prototype = {
            
 
             //move button down
-        	//if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock1')){
-        	//	timer.startTimer('selectLock1',100);
-        		//console.log("you moved down");
-        		var button2 = game.add.sprite(game.world.centerX-150, game.world.centerY+25, 'Y');
-        		button2.anchor.setTo(0.5, 0.5);
-        		button2.scale.setTo(0.1);
-        		//beta = true;
-        	//}
-
-        	if (pad1.isDown(Phaser.Gamepad.XBOX360_Y) /*&& beta*/){ //change back to A later
-        		game.state.start('controls');
+        	if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock1') && onPlay && !onControls && !onCredits){
+        		timer.startTimer('selectLock1',200);
+        		console.log("you are on Controls");
+                button1.alpha = 0;
+                button2.alpha = 1;
+                button3.alpha = 0;
+                onControls = true;
+                onPlay = false;
+                onCredits = false;
         	}
 
-        }
-
-        if(padControl2){
-
-       		//move button up
-       	    //if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock1')){
-        	//	timer.startTimer('selectLock1',100);
-        		//console.log("you moved up");
-        		var button1 = game.add.sprite(game.world.centerX-50, game.world.centerY+25, 'X');
-				button1.anchor.setTo(0.5, 0.5);
-				button1.scale.setTo(0.1);
-        	//	beta = false;
-        	//}
-
-
-			if(pad2.isDown(Phaser.Gamepad.XBOX360_X) /*&& !beta*/){ //change back to A later
-                //console.log("you pressed A");
-                game.state.start('charSelect');
+            if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock1') && !onPlay && !onControls && onCredits){
+                timer.startTimer('selectLock1',200);
+                console.log("you are on Controls");
+                button1.alpha = 0;
+                button2.alpha = 1;
+                button3.alpha = 0;
+                onControls = true;
+                onPlay = false;
+                onCredits = false;
             }
 
-            //move button down
-        	//if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock1')){
-        	//	timer.startTimer('selectLock1',100);
-        		//console.log("you moved down");
-        		var button2 = game.add.sprite(game.world.centerX-50, game.world.centerY+125, 'Y');
-        		button2.anchor.setTo(0.5, 0.5);
-        		button2.scale.setTo(0.1);
-        		//beta = true;
-        	//}
-
-        	if (pad2.isDown(Phaser.Gamepad.XBOX360_Y) /*&& beta*/){ //change back to A later
-        		game.state.start('controls');
+        	if (pad1.isDown(Phaser.Gamepad.XBOX360_A) && onControls && !onPlay && !onCredits){ //change back to A later
+        		//console.log("you pressed A");
+                game.state.start('controls');
         	}
 
+            if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
+                timer.startTimer('selectLock1',200);
+                console.log("you are on Credits");
+                button1.alpha = 0;
+                button2.alpha = 0;
+                button3.alpha = 1;
+                onControls = false;
+                onPlay = false;
+                onCredits = true;
+            }
+
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_A) && !onPlay && !onControls && onCredits){
+                console.log("you pressed A");
+                game.state.start('credits');
+            }
         }
 
 	}

@@ -1,6 +1,6 @@
-Scorpion = function(game, key, x, y, playerNum, dup, french){
+Scorpion = function(game, key, x, y, playerNum, costumeIndex, french){
 
-    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup,french);
+    Phaser.Sprite.call(this, game, x, y, key, playerNum, costumeIndex,french);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -8,7 +8,7 @@ Scorpion = function(game, key, x, y, playerNum, dup, french){
     //Vars
     this.charName = "LITERALLY A SCORPION";
     this.playerNum = playerNum; //Player number
-    this.copy = dup;
+    //this.copy = dup;
     this.speed = 60; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 720;
     this.diveLimit = 400;
@@ -24,17 +24,32 @@ Scorpion = function(game, key, x, y, playerNum, dup, french){
     this.specialEmitter.alpha = 0.75;
 
     //Animations
-    if (this.copy){
-        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2P');
-        else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2');
-        this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
-        this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
+    if (this.playerNum == 1){
+        if(costumeIndex == 1){
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2P');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2');
+            this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
+            this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
+        }else{
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlasP');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas');
+            this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
+            this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
+        }
     }else{
-        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlasP');
-        else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas');
-        this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
-        this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
+        if(costumeIndex == 1){
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2P');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2');
+            this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
+            this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
+        }else{
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlasP');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas');
+            this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
+            this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
+        }
     }
+
 
 
     this.scaleFactor = 0.4;
@@ -839,7 +854,7 @@ Scorpion.prototype.frozenStun = function(){
 
 Scorpion.prototype.frozenStop = function(){
     this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
+    //this.body.velocity.y = 0;
     this.action.iced = true;
     this.action.attacking = false;
     if(this.timer.timerDone('shamed')){
@@ -1274,7 +1289,7 @@ Scorpion.prototype.input = function(){
             }else{
                 this.body.velocity.x = 0;
 
-                if (this.action.jump && !this.action.stagfall){
+                if (this.action.jump && !this.action.stagfall && !this.action.block){
                     //this.char.setTexture('scorpion_jump');
                     this.char.frame=10;//('Scorpion_Jump');
                 }else if (this.action.block){
@@ -1448,7 +1463,7 @@ Scorpion.prototype.input = function(){
             }else{
                 this.body.velocity.x = 0;
 
-                if (this.action.jump && !this.action.stagfall){
+                if (this.action.jump && !this.action.stagfall && !this.action.block){
                     //this.char.setTexture('scorpion_jump');
                     this.char.frame=10;//('Scorpion_Jump');
                 }else if (this.action.block){

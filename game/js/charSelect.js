@@ -820,7 +820,7 @@ var charSelect = {
                 }
             }
         }
-        console.log(P1CostumeIndex)
+        //console.log(P1CostumeIndex)
     },
     
     decrCostumeIndex: function(playerNum){

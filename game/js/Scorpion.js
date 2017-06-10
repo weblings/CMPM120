@@ -8,7 +8,7 @@ Scorpion = function(game, key, x, y, playerNum, costumeIndex, french){
     //Vars
     this.charName = "LITERALLY A SCORPION";
     this.playerNum = playerNum; //Player number
-    this.copy = dup;
+    //this.copy = dup;
     this.speed = 60; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 720;
     this.diveLimit = 400;
@@ -25,7 +25,7 @@ Scorpion = function(game, key, x, y, playerNum, costumeIndex, french){
 
     //Animations
     if (this.playerNum == 1){
-        if(costumeIndex == 0){
+        if(costumeIndex == 1){
             if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2P');
             else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2');
             this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);
@@ -37,7 +37,7 @@ Scorpion = function(game, key, x, y, playerNum, costumeIndex, french){
             this.char.animations.add('scorpion_stagger',Phaser.Animation.generateFrameNames('Scorpion_stagger',1,2,'',1), 10, false);
         }
     }else{
-        if(costumeIndex == 0){
+        if(costumeIndex == 1){
             if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2P');
             else this.char = game.add.sprite(this.position.x, this.position.y, 'scorpion_atlas2');
             this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Scorpion_walk_',1,2,'',1), 10, false);

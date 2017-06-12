@@ -398,8 +398,8 @@ var charSelect = {
                     P1InstructionText2.alpha = 1;
                     P1InstructionText2.text = "Deselect with B";
                     if(P2Chose){
-                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex){
-                            charSelect.incrCostumeIndex(2);
+                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex && P2Chose){
+                            charSelect.incrCostumeIndex(1);
                         }
                     }
                     costume[P1index][P1CostumeIndex].alpha = 1;
@@ -489,8 +489,8 @@ var charSelect = {
                     P1InstructionText2.alpha = 1;
                     P1InstructionText2.text = "Deselect with R";
                     if(P1Chose){
-                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex){
-                            charSelect.incrCostumeIndex(2);
+                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex && P2Chose){
+                            charSelect.incrCostumeIndex(1);
                         }
                     }
                     costume[P1index][P1CostumeIndex].alpha = 1;
@@ -583,7 +583,7 @@ var charSelect = {
                     P2InstructionText2.alpha = 1;
                     P2InstructionText2.text = "Deselect with B";
                     if(P1Chose){
-                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex){
+                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex && P1Chose){
                             charSelect.incrCostumeIndex(2);
                         }
                     }
@@ -670,7 +670,7 @@ var charSelect = {
                 if(!P2Chose){ //Costume Handling
                     P2Chose = true;
                     if(P1Chose){
-                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex){
+                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex && P1Chose){
                             charSelect.incrCostumeIndex(2);
                         }
                     }
@@ -795,6 +795,8 @@ var charSelect = {
     
     //Used if two players select same character so that they can't have the costume
     incrCostumeIndex: function(playerNum){
+        if(playerNum == 1) console.log("P1 Entering: "+P1CostumeIndex);
+        else console.log("P2 Entering: "+P2CostumeIndex);
         if(playerNum == 1){
             if(P1CostumeIndex + 2 > costume[P1index].length){
                 P1CostumeIndex = 0;
@@ -820,7 +822,8 @@ var charSelect = {
                 }
             }
         }
-        //console.log(P1CostumeIndex)
+        if(playerNum == 1) console.log("P1 Leaving: "+P1CostumeIndex);
+        else console.log("P2 Leaving: "+P2CostumeIndex);
     },
     
     decrCostumeIndex: function(playerNum){

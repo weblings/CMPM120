@@ -24,7 +24,7 @@ Simon = function(game, key, x, y, playerNum, costumeIndex, french){
 
     //Animations
     if (this.playerNum == 1){
-        if(costumeIndex == 0){
+        if(costumeIndex == 1){
             this.rabBlock = 0;
             this.rabLight = 2;
             this.rabHev = 1;
@@ -49,7 +49,7 @@ Simon = function(game, key, x, y, playerNum, costumeIndex, french){
 
         }
     }else{
-        if(costumeIndex == 0){
+        if(costumeIndex == 1){
             this.rabBlock = 0;
             this.rabLight = 2;
             this.rabHev = 1;

@@ -8,6 +8,8 @@ var creditState = {
         var padControl1;
         var padControl2;
 
+        var pressB;
+
 	},
 
 	create: function(){
@@ -37,9 +39,17 @@ var creditState = {
 		var robin = game.add.text(game.world.centerX+150, game.world.centerY+150, 'Robin Hunicke', textStyle);
 
 		var back = game.add.text(950, 650, 'Press B to go back', textStyle);
+
+        pressB = Phaser.Keyboard.B;
 	},
 
 	update: function(){
+
+
+        if(game.input.keyboard.justPressed(pressB)){
+            game.state.start('title');
+        }
+
 
 		if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
             //console.log("connected");

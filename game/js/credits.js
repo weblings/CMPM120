@@ -69,12 +69,14 @@ var creditState = {
 
         if(padControl1){
         	if(pad1.isDown(Phaser.Gamepad.XBOX360_B)){
+                main_music.mute = true;
         		game.state.start('title');
         	}
         }
 
         if(padControl2){
         	if(pad2.isDown(Phaser.Gamepad.XBOX360_B)){
+                main_music.mute = true;
         		game.state.start('title');
         	}
         }

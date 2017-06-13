@@ -27,6 +27,9 @@ titleState.prototype = {
         var arrow1;
         var arrow2;
         var arrow3;
+        
+        var padControls1Shown;
+        var padControls2Shown;
 
 	},
 
@@ -158,7 +161,7 @@ titleState.prototype = {
 
 	update: function(){
 
-        this.clouds.tilePosition.x += 0.4;
+        /*this.clouds.tilePosition.x += 0.4;
 
         //keyboard input
         if(game.input.keyboard.justPressed(P1keyUp) && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
@@ -213,7 +216,7 @@ titleState.prototype = {
         if(game.input.keyboard.justPressed(P1Chose) && !onPlay && !onControls && onCredits){
                 //console.log("you pressed A");
                 game.state.start('credits');
-        }
+        }*/
 
 
         //controller
@@ -249,7 +252,7 @@ titleState.prototype = {
        		//move button up
        	    if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
         		timer.startTimer('selectLock1',200);
-        		//console.log("you are on Play");
+        		console.log("P1: you are on Play");
                 button1.alpha = 1;
                 button2.alpha = 0;
                 button3.alpha = 0;
@@ -269,7 +272,7 @@ titleState.prototype = {
             //move button down
         	if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock1') && onPlay && !onControls && !onCredits){
         		timer.startTimer('selectLock1',200);
-        		//console.log("you are on Controls");
+        		console.log("P1: you are on Controls (1)");
                 button1.alpha = 0;
                 button2.alpha = 1;
                 button3.alpha = 0;
@@ -280,7 +283,7 @@ titleState.prototype = {
 
             if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock1') && !onPlay && !onControls && onCredits){
                 timer.startTimer('selectLock1',200);
-                //console.log("you are on Controls");
+                console.log("P2: you are on Controls (2)");
                 button1.alpha = 0;
                 button2.alpha = 1;
                 button3.alpha = 0;
@@ -296,7 +299,7 @@ titleState.prototype = {
 
             if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
                 timer.startTimer('selectLock1',200);
-                //console.log("you are on Credits");
+                console.log("P1: you are on Credits");
                 button1.alpha = 0;
                 button2.alpha = 0;
                 button3.alpha = 1;
@@ -319,14 +322,14 @@ titleState.prototype = {
                 button2.alpha = 0;
                 button3.alpha = 0;
                 arrow1.alpha = 0;
-                padControls1Shown = true;                
+                padControls2Shown = true;                
             }
 
 
             //move button up
-            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
-                timer.startTimer('selectLock1',200);
-                //console.log("you are on Play");
+            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock2') && onControls && !onPlay && !onCredits){
+                timer.startTimer('selectLock2',200);
+                console.log("P2: you are on Play");
                 button1.alpha = 1;
                 button2.alpha = 0;
                 button3.alpha = 0;
@@ -344,9 +347,9 @@ titleState.prototype = {
            
 
             //move button down
-            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock1') && onPlay && !onControls && !onCredits){
-                timer.startTimer('selectLock1',200);
-                //console.log("you are on Controls");
+            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock2') && onPlay && !onControls && !onCredits){
+                timer.startTimer('selectLock2',200);
+                console.log("P2: you are on Controls (1)");
                 button1.alpha = 0;
                 button2.alpha = 1;
                 button3.alpha = 0;
@@ -355,9 +358,9 @@ titleState.prototype = {
                 onCredits = false;
             }
 
-            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock1') && !onPlay && !onControls && onCredits){
-                timer.startTimer('selectLock1',200);
-                //console.log("you are on Controls");
+            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && timer.timerDone('selectLock2') && !onPlay && !onControls && onCredits){
+                timer.startTimer('selectLock2',200);
+                console.log("P2: you are on Controls (2)");
                 button1.alpha = 0;
                 button2.alpha = 1;
                 button3.alpha = 0;
@@ -371,9 +374,9 @@ titleState.prototype = {
                 game.state.start('controls');
             }
 
-            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
-                timer.startTimer('selectLock1',200);
-                //console.log("you are on Credits");
+            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && timer.timerDone('selectLock2') && onControls && !onPlay && !onCredits){
+                timer.startTimer('selectLock2',200);
+                console.log("P2: you are on Credits");
                 button1.alpha = 0;
                 button2.alpha = 0;
                 button3.alpha = 1;
@@ -385,6 +388,65 @@ titleState.prototype = {
             if(pad2.isDown(Phaser.Gamepad.XBOX360_A) && !onPlay && !onControls && onCredits){
                 console.log("you pressed A");
                 game.state.start('credits');
+            }
+        }
+        
+        if(!padControl1 && !padControl2){
+            this.clouds.tilePosition.x += 0.4;
+
+            //keyboard input
+            if(game.input.keyboard.justPressed(P1keyUp) && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
+                timer.startTimer('selectLock1',200);
+                //console.log("you are on play");
+                arrow1.alpha = 1;
+                arrow2.alpha = 0;
+                arrow3.alpha = 0;
+                onControls = false;
+                onPlay = true;
+                onCredits = false;
+            }
+            if(game.input.keyboard.justPressed(P1keyDown) && timer.timerDone('selectLock1') && onPlay && !onControls && !onCredits){
+                timer.startTimer('selectLock1',200);
+                //console.log("you are on Controls");
+                arrow1.alpha = 0;
+                arrow2.alpha = 1;
+                arrow3.alpha = 0;
+                onControls = true;
+                onPlay = false;
+                onCredits = false;
+            }
+            if(game.input.keyboard.justPressed(P1keyDown) && timer.timerDone('selectLock1') && !onPlay && onControls && !onCredits){
+                timer.startTimer('selectLock1',200);
+                //console.log("you are on Credits");
+                arrow1.alpha = 0;
+                arrow2.alpha = 0;
+                arrow3.alpha = 1;
+                onControls = false;
+                onPlay = false;
+                onCredits = true;
+            }
+            if(game.input.keyboard.justPressed(P1keyUp) && timer.timerDone('selectLock1') && !onControls && !onPlay && onCredits){
+                timer.startTimer('selectLock1',200);
+                //console.log("you are on play");
+                arrow1.alpha = 0;
+                arrow2.alpha = 1;
+                arrow3.alpha = 0;
+                onControls = true;
+                onPlay = false;
+                onCredits = false;
+            }
+
+            //go to appropriate states
+            if(game.input.keyboard.justPressed(P1Chose) && onPlay && !onControls && !onCredits){
+                main_music.mute = true;
+                game.state.start('charSelect');
+            }
+            if(game.input.keyboard.justPressed(P1Chose) && !onPlay && onControls && !onCredits){
+                game.state.start('altControls');
+            }
+            if(game.input.keyboard.justPressed(P1Chose) && !onPlay && !onControls && onCredits){
+                    //console.log("you pressed A");
+                    game.state.start('credits');
             }
         }
 

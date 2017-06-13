@@ -311,13 +311,13 @@ var initControls = {
         var padControl1;
         var padControl2;
         
-        ContinuingText = game.add.text(game.world.width/2,50,"PUSH ESC TO CONTINUE", {fontSize: '16px', fill: '#fff'});
+        ContinuingText = game.add.text(game.world.width/2-20,50,"PUSH ESC TO GO BACK", {fontSize: '16px', fill: '#fff'});
         ContinuingText.anchor.setTo(.5,.5);
         
-        startButton = game.add.sprite(game.world.width/2-33,46,'Start_Button');
-        startButton.anchor.setTo(.5,.5);
-        startButton.scale.setTo(.07,.07);
-        startButton.alpha = 0;
+        BButton3 = game.add.sprite(592,46,'B');
+        BButton3.anchor.setTo(.5,.5);
+        BButton3.scale.setTo(.07,.07);
+        BButton3alpha = 0;
 
         
         this.timer = new setTime();
@@ -345,11 +345,11 @@ var initControls = {
         }
         
         if((padControl1 || padControl2) && !escTweenStarted){
-            ContinuingText.text = "PUSH          TO CONTINUE"
-            startButton.alpha = 1;
+            ContinuingText.text = "PUSH          TO GO BACK"
+            BButton3.alpha = 1;
             escTween = game.add.tween(ContinuingText).to( { alpha: 0 }, 600, "Linear", true, 600);
             escTween.yoyo(true,600).loop();
-            escTween2 = game.add.tween(startButton).to( { alpha: 0 }, 600, "Linear", true, 600);
+            escTween2 = game.add.tween(BButton3).to( { alpha: 0 }, 600, "Linear", true, 600);
             escTween2.yoyo(true,600).loop();
             escTweenStarted = true;
         }else if(!escTweenStarted){
@@ -379,9 +379,9 @@ var initControls = {
                 P1ControlText[i].fill = '#fff';       
             } 
             
-            if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_B)){
                 main_music.mute = true;
-			     game.state.start('charSelect');
+			     game.state.start('title');
             }
         }else{
             for(let i=0; i < P1Keys.length; i++){
@@ -412,9 +412,9 @@ var initControls = {
                 P2ControlText[i].fill = '#fff';       
             } 
             
-            if(pad2.isDown(Phaser.Gamepad.XBOX360_START)){
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_B)){
                 main_music.mute = true;
-			     game.state.start('charSelect');
+			     game.state.start('title');
             }
         }else{
             for(let i=0; i < P2Keys.length; i++){

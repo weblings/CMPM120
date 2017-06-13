@@ -161,64 +161,6 @@ titleState.prototype = {
 
 	update: function(){
 
-        /*this.clouds.tilePosition.x += 0.4;
-
-        //keyboard input
-        if(game.input.keyboard.justPressed(P1keyUp) && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
-            timer.startTimer('selectLock1',200);
-            //console.log("you are on play");
-            arrow1.alpha = 1;
-            arrow2.alpha = 0;
-            arrow3.alpha = 0;
-            onControls = false;
-            onPlay = true;
-            onCredits = false;
-        }
-        if(game.input.keyboard.justPressed(P1keyDown) && timer.timerDone('selectLock1') && onPlay && !onControls && !onCredits){
-            timer.startTimer('selectLock1',200);
-            //console.log("you are on Controls");
-            arrow1.alpha = 0;
-            arrow2.alpha = 1;
-            arrow3.alpha = 0;
-            onControls = true;
-            onPlay = false;
-            onCredits = false;
-        }
-		if(game.input.keyboard.justPressed(P1keyDown) && timer.timerDone('selectLock1') && !onPlay && onControls && !onCredits){
-            timer.startTimer('selectLock1',200);
-            //console.log("you are on Credits");
-            arrow1.alpha = 0;
-            arrow2.alpha = 0;
-            arrow3.alpha = 1;
-            onControls = false;
-            onPlay = false;
-            onCredits = true;
-        }
-        if(game.input.keyboard.justPressed(P1keyUp) && timer.timerDone('selectLock1') && !onControls && !onPlay && onCredits){
-            timer.startTimer('selectLock1',200);
-            //console.log("you are on play");
-            arrow1.alpha = 0;
-            arrow2.alpha = 1;
-            arrow3.alpha = 0;
-            onControls = true;
-            onPlay = false;
-            onCredits = false;
-        }
-
-        //go to appropriate states
-        if(game.input.keyboard.justPressed(P1Chose) && onPlay && !onControls && !onCredits){
-            main_music.mute = true;
-            game.state.start('charSelect');
-        }
-        if(game.input.keyboard.justPressed(P1Chose) && !onPlay && onControls && !onCredits){
-            game.state.start('altControls');
-        }
-        if(game.input.keyboard.justPressed(P1Chose) && !onPlay && !onControls && onCredits){
-                //console.log("you pressed A");
-                game.state.start('credits');
-        }*/
-
-
         //controller
         if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
             //console.log("connected");

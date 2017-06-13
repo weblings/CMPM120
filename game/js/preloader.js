@@ -6,6 +6,9 @@ var preloaderState = {
 		game.load.image('fist', 'assets/img/fist.jpg');
 		game.load.image('hitbox', 'assets/img/hitbox.png');
 		game.load.image('bg', 'assets/img/bg.png');
+                game.load.image('sky', 'assets/img/menubg/background.png');
+                game.load.image('clouds', 'assets/img/menubg/clouds.png');
+                game.load.image('plane', 'assets/img/menubg/foreground.png');
         game.load.image('health_full','assets/img/health_full.png');
         game.load.image('health_empty','assets/img/health_empty.png');
         game.load.image('health_damage','assets/img/health_damage.png');
@@ -34,6 +37,9 @@ var preloaderState = {
         game.load.image('special_border','assets/img/special_border.png');
         game.load.image('frozen_ice','assets/img/frozen.png');
         game.load.image('alt_frozen_ice','assets/img/frozen2.png');
+        game.load.image('croissant','assets/img/croissant.png');
+        game.load.image('eiffel','assets/img/Eiffel_Tower.png');
+
         
         //Xbox
         game.load.image('controller','assets/img/controller.png');
@@ -48,6 +54,9 @@ var preloaderState = {
         game.load.image('Joystick_Down','assets/img/Xbox_Controls/Joystick_Down.png');
 		game.load.image('JoystickL','assets/img/Xbox_Controls/JoystickL.png');
 		game.load.image('JoystickR','assets/img/Xbox_Controls/JoystickR.png');
+        game.load.image('bumperL','assets/img/Xbox_Controls/Left_Bumper.png');
+        game.load.image('bumperR','assets/img/Xbox_Controls/Right_Bumper.png');
+        
 
         //Parisian
         game.load.image('beret1','assets/img/Parisian/Red_Beret.png');
@@ -59,13 +68,12 @@ var preloaderState = {
         game.load.image('moustache3','assets/img/Parisian/Moustache3.png');
         game.load.image('moustache4','assets/img/Parisian/Moustache4.png');
 
-
         
         //simon
         game.load.atlas('rabbit_atlas','assets/img/simon/spritesheet.png','assets/img/simon/sprites.json');
         game.load.atlas('rabbit_atlas2','assets/img/simon/alt/spritesheet.png','assets/img/simon/alt/sprites.json');
         game.load.image('rabbit_blood','assets/img/simon/FrozenRabbit_blood.png');
-        game.load.image('rabbit_cryomancy','assets/img/simon/FrozenRabbit_Heavy.png');
+        game.load.image('rabbit_cryomancy','assets/img/simon/FrozenRabbit_heavy.png');
         game.load.image('rabbit_trail','assets/img/simon/FrozenRabbit_part.png');
         game.load.image('rabbit_curse','assets/img/simon/FrozenRabbit_curse.png');
         game.load.image('ice_spikes','assets/img/simon/icespikes.png');
@@ -143,7 +151,8 @@ var preloaderState = {
 
 	create: function(){
 		//game.state.start('main');
-        game.state.start('charSelect');
+                //game.state.start('charSelect');
+                game.state.start('title');
 	}
 
 };

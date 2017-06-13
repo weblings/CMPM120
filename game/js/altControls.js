@@ -1,4 +1,4 @@
-var controlState = {
+var initControls = {
 
     preload: function() {
 	 	
@@ -311,21 +311,22 @@ var controlState = {
         var padControl1;
         var padControl2;
         
-        ContinuingText = game.add.text(game.world.width/2,50,"PUSH ESC TO CONTINUE", {fontSize: '16px', fill: '#fff'});
+        ContinuingText = game.add.text(game.world.width/2-20,50,"PUSH ESC TO GO BACK", {fontSize: '16px', fill: '#fff'});
         ContinuingText.anchor.setTo(.5,.5);
         
-        startButton = game.add.sprite(game.world.width/2-33,46,'Start_Button');
-        startButton.anchor.setTo(.5,.5);
-        startButton.scale.setTo(.07,.07);
-        startButton.alpha = 0;
+        BButton3 = game.add.sprite(592,46,'B');
+        BButton3.anchor.setTo(.5,.5);
+        BButton3.scale.setTo(.07,.07);
+        BButton3.alpha = 0;
 
+        
         this.timer = new setTime();
         this.timer.startTimer('controlExit', 20000);
         
         escTweenStarted = false;
-	            
+
     },
-    
+
     update: function(){
         
         //Detect Controls
@@ -344,11 +345,11 @@ var controlState = {
         }
         
         if((padControl1 || padControl2) && !escTweenStarted){
-            ContinuingText.text = "PUSH          TO CONTINUE"
-            startButton.alpha = 1;
+            ContinuingText.text = "PUSH          TO GO BACK"
+            BButton3.alpha = 1;
             escTween = game.add.tween(ContinuingText).to( { alpha: 0 }, 600, "Linear", true, 600);
             escTween.yoyo(true,600).loop();
-            escTween2 = game.add.tween(startButton).to( { alpha: 0 }, 600, "Linear", true, 600);
+            escTween2 = game.add.tween(BButton3).to( { alpha: 0 }, 600, "Linear", true, 600);
             escTween2.yoyo(true,600).loop();
             escTweenStarted = true;
         }else if(!escTweenStarted){
@@ -378,9 +379,9 @@ var controlState = {
                 P1ControlText[i].fill = '#fff';       
             } 
             
-            if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_B)){
                 main_music.mute = true;
-                game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,P1CostumeIndex,P2CostumeIndex,round);
+			     game.state.start('title');
             }
         }else{
             for(let i=0; i < P1Keys.length; i++){
@@ -411,9 +412,9 @@ var controlState = {
                 P2ControlText[i].fill = '#fff';       
             } 
             
-            if(pad2.isDown(Phaser.Gamepad.XBOX360_START)){
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_B)){
                 main_music.mute = true;
-                game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,P1CostumeIndex,P2CostumeIndex,round);
+			     game.state.start('title');
             }
         }else{
             for(let i=0; i < P2Keys.length; i++){
@@ -421,154 +422,11 @@ var controlState = {
                 P2Keys[i].alpha = 1;
             }
         }
-        //P1 keys
-        /*if(game.input.keyboard.justPressed(P1keyDown)){
-            if(P1index + 2 > selectBoxes.length){
-               selectBoxes[P1index].alpha = 0;
-			   P1index = 0;
-			   selectBoxes[P1index].alpha = 1;
-            }else{
-				selectBoxes[P1index].alpha = 0;
-                P1index++;
-				selectBoxes[P1index].alpha = 1;
-            }
-        }
-        
-        if(game.input.keyboard.justPressed(P1keyUp)){
-            if(P1index - 1 < 0){
-				selectBoxes[P1index].alpha = 0;
-                P1index = selectBoxes.length-1;
-				selectBoxes[P1index].alpha = 1;
-            }else{
-				selectBoxes[P1index].alpha = 0;
-                P1index--;
-				selectBoxes[P1index].alpha = 1;
-            }
-        }
-		
-		if(game.input.keyboard.justPressed(P1keyA)){
-			//P1Chose = true;
-			console.log("Im selected!");
-			if(sprites[0].alpha == 1){ //switch to 1 hand
-				sprites[0].alpha = 0;
-				sprites[1].alpha = 1;
-				sprites[2].alpha = 0;
-			
-				P1JumpButton.text = "W";
-				P1LeftButton.text = "A";
-				P1RightButton.text = "D";
-				P1GuardButton.text = "S";
-				P1LightButton.text = "E";
-				P1HeavyButton.text = "R";
-				
-			}else if(sprites[2].alpha == 1){ //switch to 2 hands
-				sprites[0].alpha = 1;
-				sprites[1].alpha = 0;
-				sprites[2].alpha = 0;
-				
-				P1JumpButton.text = "W";
-				P1LeftButton.text = "A";
-				P1RightButton.text = "D";
-				P1GuardButton.text = "S";
-				P1LightButton.text = "E";
-				P1HeavyButton.text = "Q";
-			}else if(sprites[1].alpha == 1){ //switch to controller
-				sprites[0].alpha = 0;
-				sprites[1].alpha = 0;
-				sprites[2].alpha = 1;
-				
-				P1JumpButton.text = "A";
-				P1LeftButton.text = "JOYSTICK L";
-				P1RightButton.text = "JOYSTICK R";
-				P1GuardButton.text = "Y";
-				P1LightButton.text = "X";
-				P1HeavyButton.text = "B";
-			}
-		}*/
 
-        
-        
-        //P2 keys
-        /*if(game.input.keyboard.justPressed(P2keyDown)){
-            if(P2index + 2 > selectBoxes2.length){
-               selectBoxes2[P2index].alpha = 0;
-			   P2index = 0;
-			   selectBoxes2[P2index].alpha = 1;
-            }else{
-				selectBoxes2[P2index].alpha = 0;
-                P2index++;
-				selectBoxes2[P2index].alpha = 1;
-            }
-        }
-        
-        if(game.input.keyboard.justPressed(P2keyUp)){
-            if(P2index - 1 < 0){
-				selectBoxes2[P2index].alpha = 0;
-                P2index = selectBoxes2.length-1;
-				selectBoxes2[P2index].alpha = 1;
-            }else{
-				selectBoxes2[P2index].alpha = 0;
-                P2index--;
-				selectBoxes2[P2index].alpha = 1;
-            }
-        }
-		
-		if(game.input.keyboard.justPressed(P2keyA)){
-			//P1Chose = true;
-			console.log("Im selected!");
-			if(sprites2[0].alpha == 1){ //switch to 1 hand
-				sprites2[0].alpha = 0;
-				sprites2[1].alpha = 1;
-				sprites2[2].alpha = 0;
-			
-				P2JumpButton.text = "O";
-				P2LeftButton.text = "K";
-				P2RightButton.text = ";";
-				P2GuardButton.text = "L";
-				P2LightButton.text = "I";
-				P2HeavyButton.text = "P";
-				
-			}else if(sprites2[2].alpha == 1){ //switch to 2 hands
-				sprites2[0].alpha = 1;
-				sprites2[1].alpha = 0;
-				sprites2[2].alpha = 0;
-				
-				P2JumpButton.text = "O";
-				P2LeftButton.text = "K";
-				P2RightButton.text = ";";
-				P2GuardButton.text = "L";
-				P2LightButton.text = "I";
-				P2HeavyButton.text = "U";
-			}else if(sprites2[1].alpha == 1){//switch to controller
-				sprites2[0].alpha = 0;
-				sprites2[1].alpha = 0;
-				sprites2[2].alpha = 1;
-				
-				P2JumpButton.text = "A";
-				P2LeftButton.text = "JOYSTICK L";
-				P2RightButton.text = "JOYSTICK R";
-				P2GuardButton.text = "Y";
-				P2LightButton.text = "X";
-				P2HeavyButton.text = "B";
-			}
-		}*/
-        
-        
-		if(game.input.keyboard.justPressed(ESCKey)){
+        //keyboard
+        if(game.input.keyboard.justPressed(ESCKey)){
             main_music.mute = true;
-			game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,P1CostumeIndex,P2CostumeIndex,round);
+			game.state.start('title',false);
 		}
-
-		if(this.timer.timerDone('controlExit')){
-            main_music.mute = true;
-            game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,P1CostumeIndex,P2CostumeIndex,round);
-        }
-            
-        //update Text
-       // P1Text.text = characters[P1index];
-        //P2Text.text = characters[P2index];
-		
-
     }
-    
-};
+}

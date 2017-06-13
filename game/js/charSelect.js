@@ -8,12 +8,20 @@ var charSelect = {
         var P1index;
         var P1Chose;
         var P1CharChosen;
+        var P1Costume;
+        var P1CostumeIndex;
+        var P1CostumeChose;
+        var P1CostumeChosen;
         
         var P2keyUp;
         var P2keyDown;
         var P2Index;
         var P2Chose;
         var P2CharChosen;
+        var P2Costume;
+        var P2CostumeIndex;
+        var P2CostumeChose;
+        var P2CostumeChosen;
         
         var P1Text;
         var P1InstructionText;
@@ -43,6 +51,9 @@ var charSelect = {
         var selectSound;
         var deselectSound;
         var moveSound;
+        
+        var waiting;
+        var waited;
     },
     
     create: function(){
@@ -104,6 +115,8 @@ var charSelect = {
         P1keyB = Phaser.Keyboard.R;
         P1index = 0;
         P1Chose = false;
+        P1CostumeIndex = 0;
+        P1CostumeChose = false;
         
         P2keyUp = Phaser.Keyboard.O;
         P2keyDown = Phaser.Keyboard.L;
@@ -111,6 +124,8 @@ var charSelect = {
         P2keyB = Phaser.Keyboard.U;//Phaser.Keyboard.CLOSED_BRACKET;
         P2index = 0;
         P2Chose = false;
+        P2CostumeIndex = 0;
+        P2CostumeChose = false;
         
 
         game.stage.backgroundColor = "#162160";//"#000";
@@ -119,6 +134,11 @@ var charSelect = {
         P1InstructionText = game.add.text(game.width/5,(3 * game.height)/4,"Select with E", {fontSize: '32px', fill: '#000'});
      //   P2Text = game.add.text((3 * game.width)/5,game.height/2,characters[P2index], {fontSize: '32px', fill: '#fff'});
         P2InstructionText = game.add.text(3 * game.width/5,(3 * game.height)/4,"Select with I", {fontSize: '32px', fill: '#000'});
+        
+        P1InstructionText2 = game.add.text(game.width/5,(3 * game.height)/4+75,"Deslect with R", {fontSize: '32px', fill: '#000'});
+        P1InstructionText2.alpha = 0;
+        P2InstructionText2 = game.add.text(3 * game.width/5,(3 * game.height)/4+75,"Deselect with U", {fontSize: '32px', fill: '#000'});
+        P2InstructionText2.alpha = 0;
 
         p1win = 0;
         p2win = 0;
@@ -149,6 +169,10 @@ var charSelect = {
         p1BButton.scale.setTo(.1, .1);
         p1BButton.alpha = 0;
         
+        p1BButton2 = game.add.sprite(game.width/5+210,((3 * game.height)/4-5)+75,'B');
+        p1BButton2.scale.setTo(.1, .1);
+        p1BButton2.alpha = 0;
+        
         p2AButton = game.add.sprite(3 * game.width/5+175,(3 * game.height)/4-5,'A');
         p2AButton.scale.setTo(.1, .1);
         p2AButton.alpha = 0;
@@ -156,6 +180,10 @@ var charSelect = {
         p2BButton = game.add.sprite(3 * game.width/5+210,(3 * game.height)/4-5,'B');
         p2BButton.scale.setTo(.1, .1);
         p2BButton.alpha = 0;
+        
+        p2BButton2 = game.add.sprite(3 * game.width/5+210,((3 * game.height)/4-5)+75,'B');
+        p2BButton2.scale.setTo(.1, .1);
+        p2BButton2.alpha = 0;
         
         JoyStickUp = game.add.sprite(610,425,'Joystick_Up');
         JoyStickUp.scale.setTo(.2,.2);
@@ -201,10 +229,90 @@ var charSelect = {
         deselectSound.volume = .7;
         moveSound = game.add.audio('throw');
         moveSound.volume = 1;
+        
+        //Costumes
+        
+            //Player 1
+            Scorp1 = game.add.sprite(175,220, 'scorpion_atlas');
+            Scorp1.scale.setTo(.4,.4);
+            Scorp1.frame = 4;
+            Scorp1.alpha = 0;
+
+            Scorp2 = game.add.sprite(175,220, 'scorpion_atlas2');
+            Scorp2.scale.setTo(.4,.4);
+            Scorp2.frame = 4;
+            Scorp2.alpha = 0;
+
+            scorpCostume = [Scorp1,Scorp2];
+
+            Security1 =  game.add.sprite(275,220, 'security_atlas');
+            Security1.frame = 10;
+            Security1.alpha = 0;
+
+            Security2 =  game.add.sprite(275,220, 'security_atlas2');
+            Security2.alpha = 0;
+
+            securityCostume = [Security1, Security2];
+
+            Simon1 = game.add.sprite(225,240, 'rabbit_atlas');
+            Simon1.scale.setTo(.32,.32);
+            Simon1.alpha = 0;
+
+            Simon2 = game.add.sprite(225,240, 'rabbit_atlas2');
+            Simon2.scale.setTo(.32,.32);
+            Simon2.alpha = 0;
+
+            simonCostume = [Simon1,Simon2];
+
+            costume = [scorpCostume, securityCostume, simonCostume];
+        
+            //Player2
+            Scorp1_2 = game.add.sprite(175+520,220, 'scorpion_atlas');
+            Scorp1_2.scale.setTo(.4,.4);
+            Scorp1_2.frame = 4;
+            Scorp1_2.alpha = 0;
+
+            Scorp2_2 = game.add.sprite(175+520,220, 'scorpion_atlas2');
+            Scorp2_2.scale.setTo(.4,.4);
+            Scorp2_2.frame = 4;
+            Scorp2_2.alpha = 0;
+
+            scorpCostume_2 = [Scorp1_2,Scorp2_2];
+
+            Security1_2 =  game.add.sprite(275+520,220, 'security_atlas');
+            Security1_2.frame = 10;
+            Security1_2.alpha = 0;
+
+            Security2_2 =  game.add.sprite(275+520,220, 'security_atlas2');
+            Security2_2.alpha = 0;
+
+            securityCostume_2 = [Security1_2, Security2_2];
+
+            Simon1_2 = game.add.sprite(225+520,240, 'rabbit_atlas');
+            Simon1_2.scale.setTo(.32,.32);
+            Simon1_2.alpha = 0;
+
+            Simon2_2 = game.add.sprite(225+520,240, 'rabbit_atlas2');
+            Simon2_2.scale.setTo(.32,.32);
+            Simon2_2.alpha = 0;
+
+            simonCostume_2 = [Simon1_2,Simon2_2];
+
+            costume_2 = [scorpCostume_2, securityCostume_2, simonCostume_2];
+            
+            //Preventing button input from carrying over from previous screen
+            waiting = timer.startTimer('waiting',100);
+            waited = false;
     },
     
     update: function(){
-
+        
+        if(timer.timerDone('waiting')){
+            waited = true;
+        }else{
+            return;
+        }
+        
         if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
             padControl1 = true;
         }
@@ -228,95 +336,178 @@ var charSelect = {
                 padControls1Shown = true;                
             }
             
-            if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && !P1Chose && timer.timerDone('selectLock1')){
+            if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && !P1CostumeChose && timer.timerDone('selectLock1')){
                 timer.startTimer('selectLock1',200);
                 moveSound.play();
-                if(P1index + 2 > characters.length){
-                   sprites[P1index].alpha = 0;
-                   P1index = 0;
-                   sprites[P1index].alpha = 1;
-                }else{
-                    sprites[P1index].alpha = 0;
-                    P1index++;
-                    sprites[P1index].alpha = 1;
+                if(!P1Chose){
+                    if(P1index + 2 > characters.length){
+                       sprites[P1index].alpha = 0;
+                       P1index = 0;
+                       sprites[P1index].alpha = 1;
+                    }else{
+                        sprites[P1index].alpha = 0;
+                        P1index++;
+                        sprites[P1index].alpha = 1;
+                    }
+                }else{ //Costume Handling
+                    costume[P1index][P1CostumeIndex].alpha = 0;
+                    charSelect.incrCostumeIndex(1);
+                    costume[P1index][P1CostumeIndex].alpha = 1;
                 }
             }
             
-            if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && !P1Chose && timer.timerDone('selectLock1')){
+            if(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && !P1CostumeChose && timer.timerDone('selectLock1')){
                 timer.startTimer('selectLock1',200);
                 moveSound.play();
-                if(P1index - 1 < 0){
-                    sprites[P1index].alpha = 0;
-                    P1index = characters.length-1;
-                    sprites[P1index].alpha = 1;
-                }else{
-                    sprites[P1index].alpha = 0;
-                    P1index--;
-                    sprites[P1index].alpha = 1;
+                if(!P1Chose){
+                    if(P1index - 1 < 0){
+                        sprites[P1index].alpha = 0;
+                        P1index = characters.length-1;
+                        sprites[P1index].alpha = 1;
+                    }else{
+                        sprites[P1index].alpha = 0;
+                        P1index--;
+                        sprites[P1index].alpha = 1;
+                    }
+                }else{ //Costume Handling
+                    costume[P1index][P1CostumeIndex].alpha = 0;
+                    charSelect.decrCostumeIndex(1);
+                    costume[P1index][P1CostumeIndex].alpha = 1;
                 }
             }
             
-            if(pad1.isDown(Phaser.Gamepad.XBOX360_A) && !P1Chose){
-                P1Chose = true;
-                P1InstructionText.text = "Deselect with B";
-                p1AButton.alpha = 0;
-                p1BButton.alpha = 1;
-                charSelect.battleCry(1);
-                selectSound.play();
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_A) && !P1CostumeChose && timer.timerDone('ALock1')){
+                timer.startTimer('ALock1',200);
+                if(!P1Chose){ //Costume Handling
+                    P1Chose = true;
+                    P1InstructionText.text = "Select with A";
+                    p1AButton.alpha = 1;
+                    p1BButton.alpha = 0;
+                    p1BButton2.alpha = 1;
+                    P1InstructionText2.alpha = 1;
+                    P1InstructionText2.text = "Deselect with B";
+                    if(P2Chose){
+                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex && P2Chose){
+                            charSelect.incrCostumeIndex(1);
+                        }
+                    }
+                    costume[P1index][P1CostumeIndex].alpha = 1;
+                    charSelect.battleCry(1);
+                    selectSound.play();
+                }else{
+                    P1InstructionText.text = "Deselect with B";
+                    p1AButton.alpha = 0;
+                    p1BButton.alpha = 1;
+                    p1BButton2.alpha = 0;
+                    P1InstructionText2.alpha = 0;
+                    P1CostumeChose = true;
+                    selectSound.play();
+                }
             }
             
-            if(pad1.isDown(Phaser.Gamepad.XBOX360_B) && P1Chose){
-                P1Chose = false;
-                P1InstructionText.text = "Select with A";
-                p1AButton.alpha = 1;
-                p1BButton.alpha = 0;
-                battleCry1Done = false;
-                deselectSound.play();
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_B) && (P1CostumeChose || P1Chose) && timer.timerDone('BLock1')){
+                timer.startTimer('BLock1',200);
+                
+                if(!P1CostumeChose){
+                    P1Chose = false;
+                    P1InstructionText.text = "Select with A";
+                    p1AButton.alpha = 1;
+                    p1BButton.alpha = 0;
+                    p1BButton2.alpha = 0;
+                    P1InstructionText2.alpha = 0;
+                    costume[P1index][P1CostumeIndex].alpha = 0;
+                    deselectSound.play();
+                }else{ //Costume Handling
+                    P1InstructionText.text = "Select with A";
+                    p1AButton.alpha = 1;
+                    p1BButton.alpha = 0;
+                    p1BButton2.alpha = 1;
+                    P1InstructionText2.alpha = 1;
+                    P1InstructionText2.text = "Deselect with B";
+                    P1CostumeChose = false;
+                    costume[P1index][P1CostumeIndex].alpha = 1;
+                    deselectSound.play();
+                }
+                
             }
         }else{
             
             //P1 keys
-            if(game.input.keyboard.justPressed(P1keyUp) && !P1Chose){
+            if(game.input.keyboard.justPressed(P1keyUp) && !P1CostumeChose){
                 moveSound.play();
-                if(P1index + 2 > characters.length){
-                   sprites[P1index].alpha = 0;
-    			   P1index = 0;
-    			   sprites[P1index].alpha = 1;
-                }else{
-    				sprites[P1index].alpha = 0;
-                    P1index++;
-    				sprites[P1index].alpha = 1;
+                if(!P1Chose){
+                    if(P1index + 2 > characters.length){
+                       sprites[P1index].alpha = 0;
+                       P1index = 0;
+                       sprites[P1index].alpha = 1;
+                    }else{
+                        sprites[P1index].alpha = 0;
+                        P1index++;
+                        sprites[P1index].alpha = 1;
+                    }
+                }else{ //Costume Handling
+                    costume[P1index][P1CostumeIndex].alpha = 0;
+                    charSelect.incrCostumeIndex(1);
+                    costume[P1index][P1CostumeIndex].alpha = 1;
                 }
             }
             
-            if(game.input.keyboard.justPressed(P1keyDown) && !P1Chose){
+            if(game.input.keyboard.justPressed(P1keyDown) && !P1CostumeChose){
                 moveSound.play();
-                if(P1index - 1 < 0){
-    				sprites[P1index].alpha = 0;
-                    P1index = characters.length-1;
-    				sprites[P1index].alpha = 1;
-                }else{
-    				sprites[P1index].alpha = 0;
-                    P1index--;
-    				sprites[P1index].alpha = 1;
+                if(!P1Chose){
+                    if(P1index - 1 < 0){
+                        sprites[P1index].alpha = 0;
+                        P1index = characters.length-1;
+                        sprites[P1index].alpha = 1;
+                    }else{
+                        sprites[P1index].alpha = 0;
+                        P1index--;
+                        sprites[P1index].alpha = 1;
+                    }
+                }else{ //Costume Handling
+                    costume[P1index][P1CostumeIndex].alpha = 0;
+                    charSelect.incrCostumeIndex(1);
+                    costume[P1index][P1CostumeIndex].alpha = 1;
                 }
             }
             
-            if(game.input.keyboard.justPressed(P1keyA) && !P1Chose){
-                P1Chose = true;
-                P1InstructionText.text = "Deselect with R";
-                //battleCryText1.text = battleCries[P1index]; 
-                charSelect.battleCry(1);
-                selectSound.play();
+            if(game.input.keyboard.justPressed(P1keyA) && !P1CostumeChose){
+                if(!P1Chose){ //Costume Handling
+                    P1Chose = true;
+                    P1InstructionText.text = "Select with E";
+                    P1InstructionText2.alpha = 1;
+                    P1InstructionText2.text = "Deselect with R";
+                    if(P1Chose){
+                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex && P2Chose){
+                            charSelect.incrCostumeIndex(1);
+                        }
+                    }
+                    costume[P1index][P1CostumeIndex].alpha = 1;
+                    charSelect.battleCry(1);
+                    selectSound.play();
+                }else{
+                    P1InstructionText.text = "Deselect with R";
+                    P1InstructionText2.alpha = 0;
+                    P1CostumeChose = true;
+                    selectSound.play();
+                }
             }
             
             if(game.input.keyboard.justPressed(P1keyB) && P1Chose){
-                P1Chose = false;
-                P1InstructionText.text = "Select with E";
-                battleCry1Done = false;
-                deselectSound.play();
-
-
+                if(!P1CostumeChose){
+                    P1Chose = false;
+                    P1InstructionText.text = "Select with E";
+                    P1InstructionText2.alpha = 0;
+                    costume[P1index][P1CostumeIndex].alpha = 0;
+                    deselectSound.play();
+                }else{ //Costume Handling
+                    P1InstructionText.text = "Select with E";
+                    P1InstructionText2.alpha = 1;
+                    P1InstructionText2.text = "Deselect with R";
+                    P1CostumeChose = false;
+                    costume[P1index][P1CostumeIndex].alpha = 1;
+                    deselectSound.play();
+                }
 
             }
         }
@@ -330,92 +521,177 @@ var charSelect = {
             }
             
             //P2 keys
-            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 && !P2Chose && timer.timerDone('selectLock2')){
+            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 &&  !P2CostumeChose && timer.timerDone('selectLock2')){
                 timer.startTimer('selectLock2',200);
                 moveSound.play();
-                if(P2index + 2 > characters.length){
-                    sprites2[P2index].alpha = 0;
-                    P2index = 0;
-                    sprites2[P2index].alpha = 1;
-                }else{
-                    sprites2[P2index].alpha = 0;
-                    P2index++;
-                    sprites2[P2index].alpha = 1;
+                if(!P2Chose){
+                    if(P2index + 2 > characters.length){
+                       sprites2[P2index].alpha = 0;
+                       P2index = 0;
+                       sprites2[P2index].alpha = 1;
+                    }else{
+                        sprites2[P2index].alpha = 0;
+                        P2index++;
+                        sprites2[P2index].alpha = 1;
+                    }
+                }else{ //Costume Handling
+                    costume_2[P2index][P2CostumeIndex].alpha = 0;
+                    charSelect.incrCostumeIndex(2);
+                    costume_2[P2index][P2CostumeIndex].alpha = 1;
                 }
             }
             
-            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && !P2Chose && timer.timerDone('selectLock2')){
+            if(pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 && !P2CostumeChose && timer.timerDone('selectLock2')){
                 timer.startTimer('selectLock2',200);
                 moveSound.play();
-                if(P2index - 1 < 0){
-                    sprites2[P2index].alpha = 0;
-                    P2index = characters.length-1;
-                    sprites2[P2index].alpha = 1;
-                }else{
-                    sprites2[P2index].alpha = 0;
-                    P2index--;
-                    sprites2[P2index].alpha = 1;
+                if(!P2Chose){
+                    if(P2index - 1 < 0){
+                        sprites2[P2index].alpha = 0;
+                        P2index = characters.length-1
+                        sprites2[P2index].alpha = 1;
+                    }else{
+                        sprites2[P2index].alpha = 0;
+                        P2index--;
+                        sprites2[P2index].alpha = 1;
+                    }
+                }else{ //Costume Handling
+                    costume_2[P2index][P2CostumeIndex].alpha = 0;
+                    charSelect.incrCostumeIndex(2);
+                    costume_2[P2index][P2CostumeIndex].alpha = 1;
                 }
             }
             
-            if(pad2.isDown(Phaser.Gamepad.XBOX360_A) && !P2Chose){
-                P2Chose = true;
-                P2InstructionText.text = "Deselect with B";
-                p2AButton.alpha = 0;
-                p2BButton.alpha = 1;
-                charSelect.battleCry(2);
-                selectSound.play();
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_A) && !P2CostumeChose && timer.timerDone('ALock2')){
+                timer.startTimer('ALock2',200);
+                if(!P2Chose){ //Costume Handling
+                    P2Chose = true;
+                    P2InstructionText.text = "Select with A";
+                    p2AButton.alpha = 1;
+                    p2BButton.alpha = 0;
+                    p2BButton2.alpha = 1;
+                    P2InstructionText2.alpha = 1;
+                    P2InstructionText2.text = "Deselect with B";
+                    if(P1Chose){
+                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex && P1Chose){
+                            charSelect.incrCostumeIndex(2);
+                        }
+                    }
+                    costume_2[P2index][P2CostumeIndex].alpha = 1;
+                    charSelect.battleCry(2);
+                    selectSound.play();
+                }else{
+                    P2InstructionText.text = "Deselect with B";
+                    p2AButton.alpha = 0;
+                    p2BButton.alpha = 1;
+                    p2BButton2.alpha = 0;
+                    P2InstructionText2.alpha = 0;
+                    P2CostumeChose = true;
+                    selectSound.play();
+                }
             }
             
-            if(pad2.isDown(Phaser.Gamepad.XBOX360_B) && P2Chose){
-                P2Chose = false;
-                P2InstructionText.text = "Select with A";
-                p2AButton.alpha = 1;
-                p2BButton.alpha = 0;
-                battleCry2Done = false;
-                deselectSound.play();
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_B) && (P2CostumeChose || P2Chose) && timer.timerDone('BLock2')){
+                timer.startTimer('BLock2',200);
+                
+                if(!P2CostumeChose){
+                    P2Chose = false;
+                    P2InstructionText.text = "Select with A";
+                    p2AButton.alpha = 1;
+                    p2BButton.alpha = 0;
+                    p2BButton2.alpha = 0;
+                    P2InstructionText2.alpha = 0;
+                    costume_2[P2index][P2CostumeIndex].alpha = 0;
+                    deselectSound.play();
+                }else{ //Costume Handling
+                    P2InstructionText.text = "Select with A";
+                    p2AButton.alpha = 1;
+                    p2BButton.alpha = 0;
+                    p2BButton2.alpha = 1;
+                    P2InstructionText2.alpha = 1;
+                    P2InstructionText2.text = "Deselect with B";
+                    P2CostumeChose = false;
+                    costume_2[P2index][P2CostumeIndex].alpha = 1;
+                    deselectSound.play();
+                }
             }
 
         }else{
             //P2 keys
-            if(game.input.keyboard.justPressed(P2keyUp) && !P2Chose){
+            if(game.input.keyboard.justPressed(P2keyUp) && !P2CostumeChose){
                 moveSound.play();
-                if(P2index + 2 > characters.length){
-    				sprites2[P2index].alpha = 0;
-                    P2index = 0;
-    				sprites2[P2index].alpha = 1;
-                }else{
-    				sprites2[P2index].alpha = 0;
-                    P2index++;
-    				sprites2[P2index].alpha = 1;
+                if(!P2Chose){
+                    if(P2index + 2 > characters.length){
+                       sprites2[P2index].alpha = 0;
+                       P2index = 0;
+                       sprites2[P2index].alpha = 1;
+                    }else{
+                        sprites2[P2index].alpha = 0;
+                        P2index++;
+                        sprites2[P2index].alpha = 1;
+                    }
+                }else{ //Costume Handling
+                    costume_2[P2index][P2CostumeIndex].alpha = 0;
+                    charSelect.incrCostumeIndex(2);
+                    costume_2[P2index][P2CostumeIndex].alpha = 1;
                 }
             }
             
-            if(game.input.keyboard.justPressed(P2keyDown) && !P2Chose){
+            if(game.input.keyboard.justPressed(P2keyDown) && !P2CostumeChose){
                 moveSound.play();
-                if(P2index - 1 < 0){
-    				sprites2[P2index].alpha = 0;
-                    P2index = characters.length-1;
-    				sprites2[P2index].alpha = 1;
-                }else{
-    				sprites2[P2index].alpha = 0;
-                    P2index--;
-    				sprites2[P2index].alpha = 1;
+                if(!P2Chose){
+                    if(P2index - 1 < 0){
+                        sprites2[P2index].alpha = 0;
+                        P2index = characters.length-1;
+                        sprites2[P2index].alpha = 1;
+                    }else{
+                        sprites2[P2index].alpha = 0;
+                        P2index--;
+                        sprites2[P2index].alpha = 1;
+                    }
+                }else{ //Costume Handling
+                    costume_2[P2index][P2CostumeIndex].alpha = 0;
+                    charSelect.incrCostumeIndex(2);
+                    costume_2[P2index][P2CostumeIndex].alpha = 1;
                 }
             }
             
-            if(game.input.keyboard.justPressed(P2keyA) && !P2Chose){
-                P2Chose = true;
-                P2InstructionText.text = "Deselect with U";
-                charSelect.battleCry(2);
-                selectSound.play();
+            if(game.input.keyboard.justPressed(P2keyA) && !P2CostumeChose){
+                if(!P2Chose){ //Costume Handling
+                    P2Chose = true;
+                    if(P1Chose){
+                        if(P1index == P2index && P1CostumeIndex == P2CostumeIndex && P1Chose){
+                            charSelect.incrCostumeIndex(2);
+                        }
+                    }
+                    P2InstructionText.text = "Select with I";
+                    P2InstructionText2.alpha = 1;
+                    P2InstructionText2.text = "Deselect with U";
+                    costume_2[P2index][P2CostumeIndex].alpha = 1;
+                    charSelect.battleCry(2);
+                    selectSound.play();
+                }else{
+                    P2InstructionText.text = "Deselect with U";
+                    P2InstructionText2.alpha = 0;
+                    P2CostumeChose = true;
+                    selectSound.play();
+                }
             }
             
             if(game.input.keyboard.justPressed(P2keyB) && P2Chose){
-                P2Chose = false;
-                P2InstructionText.text = "Select with I";
-                battleCry2Done = false;
-                deselectSound.play();   
+                if(!P2CostumeChose){
+                    P2Chose = false;
+                    P2InstructionText.text = "Select with I";
+                    P2InstructionText2.alpha = 0;
+                    costume_2[P2index][P2CostumeIndex].alpha = 0;
+                    deselectSound.play();
+                }else{ //Costume Handling
+                    P2InstructionText.text = "Select with I";
+                    P2InstructionText2.alpha = 1;
+                    P2InstructionText2.text = "Deselect with U";
+                    P2CostumeChose = false;
+                    costume_2[P2index][P2CostumeIndex].alpha = 1;
+                    deselectSound.play();
+                }
             }
         }
         //update Text
@@ -431,15 +707,19 @@ var charSelect = {
             JoyStickDown.alpha = 0;
         }
         
-        if(P1Chose && P2Chose && battleCry1Done && battleCry2Done){
+        if(P1Chose){
+            //charSelect.showCostume(1);
+        }
+        
+        if(P1CostumeChose && P2CostumeChose && battleCry1Done && battleCry2Done){
 			//backgroundSwitch();
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
-            if (P1CharChosen == P2CharChosen){
+            /*if (P1CharChosen == P2CharChosen){
                 duplicate = true;
             }else{
                 duplicate = false;
-            }
+            }*/
 			if(!steveSet){
                 timer.startTimer("tom",1500);
 				timer.startTimer("steve", 2200); 
@@ -451,7 +731,7 @@ var charSelect = {
             }
 			if(timer.timerDone("steve")){
 				//main_music.mute = true;
-				game.state.start("controls",true,false,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+				game.state.start("controls",true,false,P1CharChosen,P2CharChosen,p1win,p2win,P1CostumeIndex,P2CostumeIndex,round);
 				//game.state.start("main",true,false,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
 			}
 		}
@@ -500,7 +780,69 @@ var charSelect = {
         tween2_2 = game.add.tween(battleCryText2).to( { alpha: 0, y: battleCryTextY3 }, 600, "Linear", true, 600);
         tween2_2.onComplete.add(charSelect.resetBattleCryVars2, this);
         battleCry2Done = true;
+    },
+    
+    //Used if two players select same character so that they can't have the costume
+    incrCostumeIndex: function(playerNum){
+        if(playerNum == 1) console.log("P1 Entering: "+P1CostumeIndex);
+        else console.log("P2 Entering: "+P2CostumeIndex);
+        if(playerNum == 1){
+            if(P1CostumeIndex + 2 > costume[P1index].length){
+                P1CostumeIndex = 0;
+                if(P2Chose && P2index == P1index){
+                    if(P1CostumeIndex == P2CostumeIndex) charSelect.incrCostumeIndex(1);
+                }
+            }else{
+                P1CostumeIndex++;
+                if(P2Chose && P2index == P1index){
+                    if(P1CostumeIndex == P2CostumeIndex) charSelect.incrCostumeIndex(1);
+                }
+            }
+        }else{
+            if(P2CostumeIndex + 2 > costume_2[P2index].length){
+                P2CostumeIndex = 0;
+                if(P1Chose && P2index == P1index){
+                    if(P1CostumeIndex == P2CostumeIndex) charSelect.incrCostumeIndex(2);
+                }
+            }else{
+                P2CostumeIndex++;
+                if(P1Chose && P2index == P1index){
+                    if(P1CostumeIndex == P2CostumeIndex) charSelect.incrCostumeIndex(2);
+                }
+            }
+        }
+        if(playerNum == 1) console.log("P1 Leaving: "+P1CostumeIndex);
+        else console.log("P2 Leaving: "+P2CostumeIndex);
+    },
+    
+    decrCostumeIndex: function(playerNum){
+        if(playerNum == 1){
+            if(P1CostumeIndex - 1 < 0){
+               P1CostumeIndex = costume[P1index].length-1;
+                if(P2Chose && P2index == P1index){
+                    if(P1CostumeIndex == P2CostumeIndex) charSelect.decrCostumeIndex(1);
+                }
+            }else{
+                P1CostumeIndex--;
+                if(P2Chose && P2index == P1index){
+                    if(P1CostumeIndex == P2CostumeIndex) charSelect.decrCostumeIndex(1);
+                }
+            }
+        }else{
+            if(P2CostumeIndex - 1 < 0){
+               P2CostumeIndex = costume_2[P2index].length-1;
+                if(P1Chose && P2index == P1index){
+                    if(P1CostumeIndex == P2CostumeIndex) charSelect.decrCostumeIndex(2);
+                }
+            }else{
+                P2CostumeIndex--;
+                if(P1Chose && P2index == P1index){
+                    if(P1CostumeIndex == P2CostumeIndex) charSelect.decrCostumeIndex(2);
+                }
+            }
+        }
     }
+
 	
 
     

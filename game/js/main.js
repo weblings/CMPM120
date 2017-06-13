@@ -91,20 +91,20 @@ var mainState = {
         
 		
         if(P1CharChosen == "SIMON"){
-	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false, this.Parisian);
+	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1, P1CostumeIndex, this.Parisian);
         }else if(P1CharChosen == "LITERALLY A SCORPION"){
-            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false, this.Parisian);
+            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1, P1CostumeIndex, this.Parisian);
         }else{
-            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1,false, this.Parisian);
+            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1, P1CostumeIndex, this.Parisian);
         }
 	    game.add.existing(player1);
 	    
         if(P2CharChosen == "SIMON"){
-	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate, this.Parisian);
+	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2, P2CostumeIndex, this.Parisian);
         }else if(P2CharChosen == "LITERALLY A SCORPION"){
-            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate, this.Parisian);
+            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,  P2CostumeIndex, this.Parisian);
         }else{
-            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,duplicate, this.Parisian);
+            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,  P2CostumeIndex, this.Parisian);
         }
 	    game.add.existing(player2);
 
@@ -278,10 +278,10 @@ var mainState = {
         this.menu.anchor.setTo(0.5,0.5);
         this.menu.alpha = 0;
         this.menu.scale.setTo(.8,.8);
-		this.control1 = game.add.sprite(38, 120, "controls1_menu");
+		this.control1 = game.add.sprite(38, 110, "controls1_menu");
 		this.control1.scale.setTo(.5, .5);
 		this.control1.alpha = 0;
-		this.control2 = game.add.sprite(825, 120, "controls2_menu");
+		this.control2 = game.add.sprite(825, 110, "controls2_menu");
 		this.control2.scale.setTo(.5, .5);
 		this.control2.alpha = 0;
         

@@ -1,5 +1,5 @@
-Security = function(game, key, x, y, playerNum,dup,french){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum,dup,french);
+Security = function(game, key, x, y, playerNum,costumeIndex,french){
+    Phaser.Sprite.call(this, game, x, y, key, playerNum,costumeIndex,french);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -7,7 +7,7 @@ Security = function(game, key, x, y, playerNum,dup,french){
     //Vars
     this.charName = "SECURITY";
     this.playerNum = playerNum; //Player number
-    this.copy = dup;
+    //this.copy = dup;
     this.speed = 50; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 550;
     this.diveLimit = 400;
@@ -25,13 +25,26 @@ Security = function(game, key, x, y, playerNum,dup,french){
     this.specialEmitter.alpha = 0.75;
     
     //this.char = game.add.sprite(this.position.x, this.position.y, 'security_idle');
-    if(!this.copy){
-        if(french)             this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlasP');
-        else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
-        this.idleFrame = 10;
+    if(this.playerNum == 1){
+        if(costumeIndex == 0){
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlasP');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
+            this.idleFrame = 10;
+            this.downedFrame = 5;
+            this.blockFrame = 4;
+            this.diveFrame = 11;
+        }else if(costumeIndex == 1){
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2P');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
+            this.idleFrame = 0;
+            this.downedFrame = 8;
+            this.blockFrame = 7;
+            this.diveFrame = 1;
+        }
+        /*this.idleFrame = 10;
         this.downedFrame = 5;
         this.blockFrame = 4;
-        this.diveFrame = 11;
+        this.diveFrame = 11;*/
         //this.bottleFrame = 2;
         //this.uiFrame = 3;
         this.char.frame = this.idleFrame;
@@ -40,12 +53,25 @@ Security = function(game, key, x, y, playerNum,dup,french){
         this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
         this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
     }else{
-        if(french)             this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2P');
-        else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
-        this.idleFrame = 0;
+        if(costumeIndex == 0){
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlasP');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas');
+            this.idleFrame = 10;
+            this.downedFrame = 5;
+            this.blockFrame = 4;
+            this.diveFrame = 11;
+        }else if(costumeIndex == 1){
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2P');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'security_atlas2');
+            this.idleFrame = 0;
+            this.downedFrame = 8;
+            this.blockFrame = 7;
+            this.diveFrame = 1;
+        }
+        /*this.idleFrame = 0;
         this.downedFrame = 8;
         this.blockFrame = 7;
-        this.diveFrame = 1;
+        this.diveFrame = 1;*/
         //this.bottleFrame = 2;
         //this.uiFrame = 3;
         this.char.frame = this.idleFrame;
@@ -54,6 +80,7 @@ Security = function(game, key, x, y, playerNum,dup,french){
         this.char.animations.add('security_heavy_cast',Phaser.Animation.generateFrameNames('security_guard_heavy',1,2,'',1), 10, false);
         this.char.animations.add('security_heavy_attack',Phaser.Animation.generateFrameNames('security_guard_heavy',3,4,'',1), 10, false);
     }
+    this.isFrench = french;
 
     //gamepad
     game.input.gamepad.start();
@@ -837,14 +864,25 @@ Security.prototype.frozenStop = function(){
 Security.prototype.projectile = function(){
     var choice = game.rnd.between(0,1);
     var bullet;
-    if(choice == 0){
-        bullet = game.add.sprite(this.position.x,this.position.y-200,'water_bottle');//water_bottle'); //'player');
-        //bullet.frame = 2;
-    }else if(choice == 1){
-        bullet = game.add.sprite(this.position.x,this.position.y-200,'pepsi');//water_bottle'); //'player');
-        //bullet.frame = 5;
+    if(!this.isFrench){
+        if(choice == 0){
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'water_bottle');//water_bottle'); //'player');
+            //bullet.frame = 2;
+        }else if(choice == 1){
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'pepsi');//water_bottle'); //'player');
+            //bullet.frame = 5;
+        }
+        bullet.scale.setTo(0.04,0.04);
+    }else{
+        if(choice == 0){
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'croissant');//water_bottle'); //'player');
+            //bullet.frame = 2;
+        }else if(choice == 1){
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'eiffel');//water_bottle'); //'player');
+            //bullet.frame = 5;
+        }
+        bullet.scale.setTo(0.1,0.1);
     }
-    bullet.scale.setTo(0.04,0.04);
     bullet.anchor.setTo(0.5,0.5);
     this.bullets.add(bullet);
     //console.log("In Security: "+this.bullets.length);

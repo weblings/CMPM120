@@ -1,12 +1,12 @@
-Simon = function(game, key, x, y, playerNum, dup, french){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum, dup, french);
+Simon = function(game, key, x, y, playerNum, costumeIndex, french){
+    Phaser.Sprite.call(this, game, x, y, key, playerNum, costumeIndex, french);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
 
     //Vars
     this.charName = "SIMON";
-    this.copy = dup;
+    //this.copy = dup;
     this.playerNum = playerNum; //Player number
     this.speed = 60; //AG: Arbitrarily changing to 5, but having this as a var means we can do speed changes from an item or power later on if we want
     this.maxSpeed = 720;
@@ -22,30 +22,73 @@ Simon = function(game, key, x, y, playerNum, dup, french){
     this.specialEmitter.blendMode = 1;
     this.specialEmitter.alpha = 0.75;
 
+    
+
     //Animations
-    if (this.copy){
-        this.rabBlock = 0;
-        this.rabLight = 2;
-        this.rabHev = 1;
-        this.rabDown = 5;
-        this.rabIdle = 3
+    if (this.playerNum == 1){
+        if(costumeIndex == 1){
+            this.rabBlock = 0;
+            this.rabLight = 2;
+            this.rabHev = 1;
+            this.rabDown = 5;
+            this.rabIdle = 3
 
-        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2P');
-        else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
-        //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
-        this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2P');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
+            //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
+            this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+            this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
+            this.spike = "alt";
 
+
+
+        }else{
+            this.rabBlock = 0;
+            this.rabLight = 2;
+            this.rabHev = 1;
+            this.rabDown = 5;
+            this.rabIdle = 3
+
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlasP');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
+            this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+            this.icecube = game.add.sprite(this.position.x, this.position.y, 'alt_frozen_ice');
+            this.spike = "ice";
+
+
+        }
     }else{
-        this.rabBlock = 0;
-        this.rabLight = 2;
-        this.rabHev = 1;
-        this.rabDown = 5;
-        this.rabIdle = 3
-        
-        if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlasP');
-        else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
-        this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+        if(costumeIndex == 1){
+            this.rabBlock = 0;
+            this.rabLight = 2;
+            this.rabHev = 1;
+            this.rabDown = 5;
+            this.rabIdle = 3
 
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2P');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
+            //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
+            this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+            this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
+            this.spike = "alt";
+
+
+
+        }else{
+            this.rabBlock = 0;
+            this.rabLight = 2;
+            this.rabHev = 1;
+            this.rabDown = 5;
+            this.rabIdle = 3
+
+            if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlasP');
+            else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
+            this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+            this.icecube = game.add.sprite(this.position.x, this.position.y, 'alt_frozen_ice');
+            this.spike = "ice";
+
+
+        }
     }
 
     game.input.gamepad.start();
@@ -74,11 +117,11 @@ Simon = function(game, key, x, y, playerNum, dup, french){
     //this.emitter.gravity = 400;
 
     //frozen
-    if (this.copy){
+    /*if (this.copy){
         this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
     }else{
         this.icecube = game.add.sprite(this.position.x, this.position.y, 'alt_frozen_ice');
-    }
+    }*/
     this.icecube.anchor.setTo(0.5, 0.5);
     this.icecube.scale.setTo(0.25,0.25);
     this.icecube.exists = false;
@@ -870,7 +913,7 @@ Simon.prototype.chainStop = function(){
 }
 
 Simon.prototype.iceSpikes = function(x){
-    if (this.copy){
+    if (this.spike == 'alt'){
         var spike = game.add.sprite(x, 900, 'alt_ice_spikes');
     }else{
         var spike = game.add.sprite(x, 900, 'ice_spikes');

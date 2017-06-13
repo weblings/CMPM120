@@ -227,34 +227,35 @@ var mainState = {
 
         //Rounds won UI
         var roundUIHeight = 107;
-        p2wins1 = game.add.sprite(913,102,'round_unresolved');
-        p2wins1.scale.setTo(-1,1);
+        var roundScale = .9;
+        p2wins1 = game.add.sprite(913-5,102,'round_unresolved');
+        p2wins1.scale.setTo(-roundScale,roundScale);
         p2wins1.position.y = roundUIHeight;
-        p2wins2 = game.add.sprite(860,102,'round_unresolved');
-        p2wins2.scale.setTo(-1,1);
+        p2wins2 = game.add.sprite(860-5,102,'round_unresolved');
+        p2wins2.scale.setTo(-roundScale,roundScale);
         p2wins2.position.y = roundUIHeight;
-        p1wins1 = game.add.sprite(367,102,'round_unresolved');
-        p1wins1.scale.setTo(1,1);
+        p1wins1 = game.add.sprite(367+5,102,'round_unresolved');
+        p1wins1.scale.setTo(roundScale,roundScale);
         p1wins1.position.y = roundUIHeight;
-        p1wins2 = game.add.sprite(420,102,'round_unresolved');
-        p1wins2.scale.setTo(1,1);
+        p1wins2 = game.add.sprite(420+5,102,'round_unresolved');
+        p1wins2.scale.setTo(roundScale,roundScale);
         p1wins2.position.y = roundUIHeight;
         
-        p2won1 = game.add.sprite(913,102,'round_won');
-        p2won1.scale.setTo(-1,1);
+        p2won1 = game.add.sprite(913-5,102,'round_won');
+        p2won1.scale.setTo(-roundScale,roundScale);
         if(p2win < 1) p2won1.alpha = 0;
         p2won1.position.y = roundUIHeight;
-        p2won2 = game.add.sprite(860,102,'round_won');
-        p2won2.scale.setTo(-1,1);
-        //p2won2.scale.setTo(.3,.3);
+        p2won2 = game.add.sprite(860-5,102,'round_won');
+        p2won2.scale.setTo(-roundScale,roundScale);
+        p2won2.scale.setTo(roundScale,roundScale);
         p2won2.alpha = 0;
         p2won2.position.y = roundUIHeight;
-        p1won1 = game.add.sprite(367,102,'round_won');
-        //p1won1.scale.setTo(.3,.3);
+        p1won1 = game.add.sprite(367+5,102,'round_won');
+        p1won1.scale.setTo(roundScale,roundScale);
         p1won1.position.y = roundUIHeight;
         if(p1win < 1) p1won1.alpha = 0;
-        p1won2 = game.add.sprite(420,102,'round_won');
-        //p1won2.scale.setTo(.3,.3);
+        p1won2 = game.add.sprite(420+5,102,'round_won');
+        p1won2.scale.setTo(roundScale,roundScale);
         p1won2.alpha = 0;
         p1won2.position.y = roundUIHeight;
         

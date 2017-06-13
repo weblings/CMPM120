@@ -113,7 +113,7 @@ var creditState = {
         //keyboard
         if(game.input.keyboard.justPressed(ESCKey)){
             main_music.mute = true;
-			game.state.start('title',false);
+			game.state.start('title');
 		}
 
 	}

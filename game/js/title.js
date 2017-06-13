@@ -70,7 +70,7 @@ titleState.prototype = {
 		game.state.disableVisibilityChange = true; //prevent pausing on this screen
 
 		//add route to character select by clicking on "play" text; input enabled for mouse
-		var playText = game.add.text(100, game.world.centerY-100, "P L A Y", {fontSize: '40px', fill: '#fff'});
+		var playText = game.add.text(100, game.world.centerY-100+125, "P L A Y", {fontSize: '40px', fill: '#fff'});
 		/*playText.inputEnabled = true;
 		//mouse input
 		playText.events.onInputUp.add(function(){
@@ -85,7 +85,7 @@ titleState.prototype = {
 
 
 		//add route to controls page
-		var controlText = game.add.text(100, game.world.centerY, "C O N T R O L S", {fontSize: '40px', fill: '#fff'});
+		var controlText = game.add.text(100, game.world.centerY+125, "C O N T R O L S", {fontSize: '40px', fill: '#fff'});
 		/*controlText.inputEnabled = true;
 		controlText.events.onInputUp.add(function(){
 			game.state.start('controls');
@@ -99,7 +99,7 @@ titleState.prototype = {
 
 
 		//add route to credits page
-		var creditText = game.add.text(100, game.world.centerY+100, "C R E D I T S", {fontSize: '40px', fill: '#fff'});
+		var creditText = game.add.text(100, game.world.centerY+100+125, "C R E D I T S", {fontSize: '40px', fill: '#fff'});
 		/*creditText.inputEnabled = true;
 		creditText.events.onInputUp.add(function(){
 			game.state.start('credits');
@@ -120,42 +120,45 @@ titleState.prototype = {
         onCredits = false;
 
 
-        button1 = game.add.sprite(50, game.world.centerY-75, 'A');
+        button1 = game.add.sprite(50, game.world.centerY-75+125, 'A');
         button1.anchor.setTo(0.5, 0.5);
         button1.scale.setTo(0.1);
         button1.alpha = 0;
 
-        button2 = game.add.sprite(50, game.world.centerY+25, 'A');
+        button2 = game.add.sprite(50, game.world.centerY+25+125, 'A');
         button2.anchor.setTo(0.5, 0.5);
         button2.scale.setTo(0.1);
         button2.alpha = 0;
 
-        button3 = game.add.sprite(50, game.world.centerY+125, 'A');
+        button3 = game.add.sprite(50, game.world.centerY+125+125, 'A');
         button3.anchor.setTo(0.5, 0.5);
         button3.scale.setTo(0.1);
         button3.alpha = 0;
 
-        arrow1 = game.add.sprite(70, game.world.centerY-75, 'arrow');
+        arrow1 = game.add.sprite(70, game.world.centerY-75+125, 'arrow');
         arrow1.anchor.setTo(0.5, 0.5);
         arrow1.scale.setTo(0.15);
         arrow1.angle += 90;
         arrow1.tint = '#000'
         arrow1.alpha = 1;
 
-        arrow2 = game.add.sprite(70, game.world.centerY+25, 'arrow');
+        arrow2 = game.add.sprite(70, game.world.centerY+25+125, 'arrow');
         arrow2.anchor.setTo(0.5, 0.5);
         arrow2.scale.setTo(0.15);
         arrow2.angle += 90;
         arrow2.tint = '#000'
         arrow2.alpha = 0;
 
-        arrow3 = game.add.sprite(70, game.world.centerY+125, 'arrow');
+        arrow3 = game.add.sprite(70, game.world.centerY+125+125, 'arrow');
         arrow3.anchor.setTo(0.5, 0.5);
         arrow3.scale.setTo(0.15);
         arrow3.angle += 90;
         arrow3.tint = '#000'
         arrow3.alpha = 0;
         
+        Logo = game.add.sprite(game.width/4,game.height/4,"logo");
+        Logo.anchor.setTo(.5,.5);
+        Logo.scale.setTo(.7,.7);        
 
 	},
 

@@ -380,7 +380,7 @@ var controlState = {
             
             if(pad1.isDown(Phaser.Gamepad.XBOX360_START)){
                 main_music.mute = true;
-			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round)
+                game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,P1CostumeIndex,P2CostumeIndex,round);
             }
         }else{
             for(let i=0; i < P1Keys.length; i++){
@@ -413,7 +413,7 @@ var controlState = {
             
             if(pad2.isDown(Phaser.Gamepad.XBOX360_START)){
                 main_music.mute = true;
-			     game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,duplicate,round);
+                game.state.start('main',false,true,P1CharChosen,P2CharChosen,p1win,p2win,P1CostumeIndex,P2CostumeIndex,round);
             }
         }else{
             for(let i=0; i < P2Keys.length; i++){

@@ -51,6 +51,9 @@ var charSelect = {
         var selectSound;
         var deselectSound;
         var moveSound;
+        
+        var waiting;
+        var waited;
     },
     
     create: function(){
@@ -296,9 +299,19 @@ var charSelect = {
             simonCostume_2 = [Simon1_2,Simon2_2];
 
             costume_2 = [scorpCostume_2, securityCostume_2, simonCostume_2];
+            
+            //Preventing button input from carrying over from previous screen
+            waiting = timer.startTimer('waiting',100);
+            waited = false;
     },
     
     update: function(){
+        
+        if(timer.timerDone('waiting')){
+            waited = true;
+        }else{
+            return;
+        }
         
         if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
             padControl1 = true;
@@ -337,21 +350,9 @@ var charSelect = {
                         sprites[P1index].alpha = 1;
                     }
                 }else{ //Costume Handling
-                    if(P1CostumeIndex + 2 > costume[P1index].length){
-                       costume[P1index][P1CostumeIndex].alpha = 0;
-                       P1CostumeIndex = 0;
-                       // if(P1index == P2index && P1CostumeChose == P2CostumeChose){
-                            charSelect.incrCostumeIndex(1);
-                        //}
-                       costume[P1index][P1CostumeIndex].alpha = 1;
-                    }else{
-                        costume[P1index][P1CostumeIndex].alpha = 0;
-                        P1CostumeIndex++;
-                        //if(P1index == P2index && P1CostumeChose == P2CostumeChose){
-                            charSelect.incrCostumeIndex(1);
-                       // }
-                        costume[P1index][P1CostumeIndex].alpha = 1;
-                    }
+                    costume[P1index][P1CostumeIndex].alpha = 0;
+                    charSelect.incrCostumeIndex(1);
+                    costume[P1index][P1CostumeIndex].alpha = 1;
                 }
             }
             
@@ -369,21 +370,9 @@ var charSelect = {
                         sprites[P1index].alpha = 1;
                     }
                 }else{ //Costume Handling
-                    if(P1CostumeIndex - 1 < 0){
-                       costume[P1index][P1CostumeIndex].alpha = 0;
-                       P1CostumeIndex = costume[P1index].length-1;
-                       // if(P1index == P2index && P1CostumeChose == P2CostumeChose){
-                            charSelect.decrCostumeIndex(1);
-                        //}
-                       costume[P1index][P1CostumeIndex].alpha = 1;
-                    }else{
-                        costume[P1index][P1CostumeIndex].alpha = 0;
-                        P1CostumeIndex--;
-                        //if(P1index == P2index && P1CostumeChose == P2CostumeChose){
-                            charSelect.decrCostumeIndex(1);
-                        //}
-                        costume[P1index][P1CostumeIndex].alpha = 1;
-                    }
+                    costume[P1index][P1CostumeIndex].alpha = 0;
+                    charSelect.decrCostumeIndex(1);
+                    costume[P1index][P1CostumeIndex].alpha = 1;
                 }
             }
             

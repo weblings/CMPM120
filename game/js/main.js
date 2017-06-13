@@ -75,10 +75,19 @@ var mainState = {
 
         fight_music_choices = ['exit_the_premises','ouroboros','kick_shock','ultra_polka','exit_the_premises','ouroboros','kick_shock','parisian','patriotism'];
         this.ParisianIndex = 7;
+        this.MuricaIndex = 8;
 
         index = game.rnd.between(0,fight_music_choices.length-1);
         if(index == this.ParisianIndex) this.Parisian = true;
-        else this.Parisian = false;
+        else if(index == this.MuricaIndex){
+            this.Murica1 = game.add.sprite(0-5,game.height/4,'murica');
+            this.Murica1.scale.setTo(.5,.5);
+            this.Murica2 = game.add.sprite(game.width+5,game.height/4,'murica');
+            this.Murica2.scale.setTo(-.5,.5);
+        }else{
+            this.Parisian = false;
+        }
+        
         main_music = game.add.audio(fight_music_choices[index]);
         main_music.play('',0, 1, true);
         main_music.mute = false;  
@@ -217,34 +226,35 @@ var mainState = {
         this.transitionStarted = false;
 
         //Rounds won UI
-        var roundUIHeight = 112;
-        p2wins1 = game.add.sprite(game.world.width/2+225,102,'round_unresolved');
-        p2wins1.scale.setTo(.3,.3);
+        var roundUIHeight = 107;
+        p2wins1 = game.add.sprite(913,102,'round_unresolved');
+        p2wins1.scale.setTo(-1,1);
         p2wins1.position.y = roundUIHeight;
-        p2wins2 = game.add.sprite(game.world.width/2+185,102,'round_unresolved');
-        p2wins2.scale.setTo(.3,.3);
+        p2wins2 = game.add.sprite(860,102,'round_unresolved');
+        p2wins2.scale.setTo(-1,1);
         p2wins2.position.y = roundUIHeight;
-        p1wins1 = game.add.sprite(game.world.width/2-255,102,'round_unresolved');
-        p1wins1.scale.setTo(.3,.3);
+        p1wins1 = game.add.sprite(367,102,'round_unresolved');
+        p1wins1.scale.setTo(1,1);
         p1wins1.position.y = roundUIHeight;
-        p1wins2 = game.add.sprite(game.world.width/2-215,102,'round_unresolved');
-        p1wins2.scale.setTo(.3,.3);
+        p1wins2 = game.add.sprite(420,102,'round_unresolved');
+        p1wins2.scale.setTo(1,1);
         p1wins2.position.y = roundUIHeight;
         
-        p2won1 = game.add.sprite(game.world.width/2+225,102,'round_won');
-        p2won1.scale.setTo(.3,.3);
+        p2won1 = game.add.sprite(913,102,'round_won');
+        p2won1.scale.setTo(-1,1);
         if(p2win < 1) p2won1.alpha = 0;
         p2won1.position.y = roundUIHeight;
-        p2won2 = game.add.sprite(game.world.width/2+185,102,'round_won');
-        p2won2.scale.setTo(.3,.3);
+        p2won2 = game.add.sprite(860,102,'round_won');
+        p2won2.scale.setTo(-1,1);
+        //p2won2.scale.setTo(.3,.3);
         p2won2.alpha = 0;
         p2won2.position.y = roundUIHeight;
-        p1won1 = game.add.sprite(game.world.width/2-255,102,'round_won');
-        p1won1.scale.setTo(.3,.3);
+        p1won1 = game.add.sprite(367,102,'round_won');
+        //p1won1.scale.setTo(.3,.3);
         p1won1.position.y = roundUIHeight;
         if(p1win < 1) p1won1.alpha = 0;
-        p1won2 = game.add.sprite(game.world.width/2-215,102,'round_won');
-        p1won2.scale.setTo(.3,.3);
+        p1won2 = game.add.sprite(420,102,'round_won');
+        //p1won2.scale.setTo(.3,.3);
         p1won2.alpha = 0;
         p1won2.position.y = roundUIHeight;
         

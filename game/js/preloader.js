@@ -6,9 +6,9 @@ var preloaderState = {
 		game.load.image('fist', 'assets/img/fist.jpg');
 		game.load.image('hitbox', 'assets/img/hitbox.png');
 		game.load.image('bg', 'assets/img/bg.png');
-                game.load.image('sky', 'assets/img/menubg/background.png');
-                game.load.image('clouds', 'assets/img/menubg/clouds.png');
-                game.load.image('plane', 'assets/img/menubg/foreground.png');
+        game.load.image('sky', 'assets/img/menubg/background.png');
+        game.load.image('clouds', 'assets/img/menubg/clouds.png');
+        game.load.image('plane', 'assets/img/menubg/foreground.png');
         game.load.image('health_full','assets/img/health_full.png');
         game.load.image('health_empty','assets/img/health_empty.png');
         game.load.image('health_damage','assets/img/health_damage.png');
@@ -25,8 +25,8 @@ var preloaderState = {
 		game.load.image('CharBG_NB', 'assets/img/CharSelectBG_NB.png');
 		game.load.image('closed', 'assets/img/GateClosed.png');
 		game.load.image('boarding', 'assets/img/NowBoarding.png');
-        game.load.image('round_unresolved','assets/img/round_unresolved5.png');
-        game.load.image('round_won','assets/img/round_won5.png');
+        game.load.image('round_unresolved','assets/img/round_unresolved3.png');
+        game.load.image('round_won','assets/img/round_resolved3.png');
 		game.load.image('arrow','assets/img/Arrow.png');
 		game.load.image('selectBox','assets/img/selectBox.png');
 		game.load.image('selectBox2','assets/img/selectBox2.png');
@@ -39,6 +39,7 @@ var preloaderState = {
         game.load.image('alt_frozen_ice','assets/img/frozen2.png');
         game.load.image('croissant','assets/img/croissant.png');
         game.load.image('eiffel','assets/img/Eiffel_Tower.png');
+        game.load.image('murica','assets/img/murica.png');
 
         
         //Xbox

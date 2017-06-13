@@ -2,6 +2,7 @@
 var preloaderState = {
 	
 	preload: function(){
+		game.load.script('Fire', 'js/Fire.js');
 		game.load.spritesheet('player','assets/img/dude.png', 32, 48);
 		game.load.image('fist', 'assets/img/fist.jpg');
 		game.load.image('hitbox', 'assets/img/hitbox.png');

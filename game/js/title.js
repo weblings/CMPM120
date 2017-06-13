@@ -160,16 +160,16 @@ titleState.prototype = {
 
         
         hell = game.add.sprite(20,160);
-        hell.width = 610;
+        hell.width = 574;
         hell.height = 100;
-        filter = game.add.filter('Fire', 800, 600);
-        filter.alpha = 0.0; 
+        filter = game.add.filter('Fire', 800, 800);
+        filter.alpha = 0.7; 
         hell.filters = null; 
 
-        Logo = game.add.sprite(game.width/4,game.height/4,"logo");
+        Logo = game.add.sprite(game.width/4,game.height/4,"flogo");
         Logo.anchor.setTo(.5,.5);
         Logo.scale.setTo(.7,.7);  
-        Logo.tint = "#FFFFFF";
+        //Logo.tint = "#FFFFFF";
 
 	},
 

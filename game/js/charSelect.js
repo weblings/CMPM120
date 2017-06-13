@@ -784,8 +784,8 @@ var charSelect = {
     
     //Used if two players select same character so that they can't have the costume
     incrCostumeIndex: function(playerNum){
-        if(playerNum == 1) console.log("P1 Entering: "+P1CostumeIndex);
-        else console.log("P2 Entering: "+P2CostumeIndex);
+        //if(playerNum == 1) console.log("P1 Entering: "+P1CostumeIndex);
+        //else console.log("P2 Entering: "+P2CostumeIndex);
         if(playerNum == 1){
             if(P1CostumeIndex + 2 > costume[P1index].length){
                 P1CostumeIndex = 0;
@@ -811,8 +811,8 @@ var charSelect = {
                 }
             }
         }
-        if(playerNum == 1) console.log("P1 Leaving: "+P1CostumeIndex);
-        else console.log("P2 Leaving: "+P2CostumeIndex);
+        //if(playerNum == 1) console.log("P1 Leaving: "+P1CostumeIndex);
+        //else console.log("P2 Leaving: "+P2CostumeIndex);
     },
     
     decrCostumeIndex: function(playerNum){

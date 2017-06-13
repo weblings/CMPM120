@@ -22,6 +22,8 @@ Simon = function(game, key, x, y, playerNum, costumeIndex, french){
     this.specialEmitter.blendMode = 1;
     this.specialEmitter.alpha = 0.75;
 
+    
+
     //Animations
     if (this.playerNum == 1){
         if(costumeIndex == 1){
@@ -35,6 +37,10 @@ Simon = function(game, key, x, y, playerNum, costumeIndex, french){
             else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
             //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
             this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+            this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
+            this.spike = "alt";
+
+
 
         }else{
             this.rabBlock = 0;
@@ -46,6 +52,9 @@ Simon = function(game, key, x, y, playerNum, costumeIndex, french){
             if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlasP');
             else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
             this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+            this.icecube = game.add.sprite(this.position.x, this.position.y, 'alt_frozen_ice');
+            this.spike = "ice";
+
 
         }
     }else{
@@ -60,6 +69,10 @@ Simon = function(game, key, x, y, playerNum, costumeIndex, french){
             else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas2');
             //this.char.animations.add('scorpion_walk',Phaser.Animation.generateFrameNames('Simon_walk_',1,2,'',1), 10, false);
             this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+            this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
+            this.spike = "alt";
+
+
 
         }else{
             this.rabBlock = 0;
@@ -71,6 +84,10 @@ Simon = function(game, key, x, y, playerNum, costumeIndex, french){
             if(french) this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlasP');
             else this.char = game.add.sprite(this.position.x, this.position.y, 'rabbit_atlas');
             this.char.animations.add('rabbit_stagger',Phaser.Animation.generateFrameNames('FrozenRabbit',1,2,'',1), 10, false);
+            this.icecube = game.add.sprite(this.position.x, this.position.y, 'alt_frozen_ice');
+            this.spike = "ice";
+
+
         }
     }
 
@@ -100,11 +117,11 @@ Simon = function(game, key, x, y, playerNum, costumeIndex, french){
     //this.emitter.gravity = 400;
 
     //frozen
-    if (this.copy){
+    /*if (this.copy){
         this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
     }else{
         this.icecube = game.add.sprite(this.position.x, this.position.y, 'alt_frozen_ice');
-    }
+    }*/
     this.icecube.anchor.setTo(0.5, 0.5);
     this.icecube.scale.setTo(0.25,0.25);
     this.icecube.exists = false;
@@ -896,7 +913,7 @@ Simon.prototype.chainStop = function(){
 }
 
 Simon.prototype.iceSpikes = function(x){
-    if (this.copy){
+    if (this.spike == 'alt'){
         var spike = game.add.sprite(x, 900, 'alt_ice_spikes');
     }else{
         var spike = game.add.sprite(x, 900, 'ice_spikes');

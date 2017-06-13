@@ -38,7 +38,7 @@ var creditState = {
 		var nathan = game.add.text(game.world.centerX+150, game.world.centerY+100, 'Nathan Altice', textStyle);
 		var robin = game.add.text(game.world.centerX+150, game.world.centerY+150, 'Robin Hunicke', textStyle);
 
-		var back = game.add.text(950, 650, 'Press B to go back', textStyle);
+		var back = game.add.text(950, 650, 'Press ESC to go back', textStyle);
 
         pressB = Phaser.Keyboard.B;
 	},

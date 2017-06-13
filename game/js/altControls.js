@@ -426,7 +426,7 @@ var initControls = {
         //keyboard
         if(game.input.keyboard.justPressed(ESCKey)){
             main_music.mute = true;
-			game.state.start('charSelect');
+			game.state.start('title',false);
 		}
     }
 }

@@ -204,6 +204,7 @@ titleState.prototype = {
 
         //go to appropriate states
         if(game.input.keyboard.justPressed(P1Chose) && onPlay && !onControls && !onCredits){
+            main_music.mute = true;
             game.state.start('charSelect');
         }
         if(game.input.keyboard.justPressed(P1Chose) && !onPlay && onControls && !onCredits){

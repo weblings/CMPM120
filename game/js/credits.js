@@ -9,7 +9,12 @@ var creditState = {
         var padControl2;
 
         var pressB;
-
+        var back;
+        
+        var escTween;
+        var escTween2;
+        var escTweenStarted;
+        var BButton;
 	},
 
 	create: function(){
@@ -38,9 +43,19 @@ var creditState = {
 		var nathan = game.add.text(game.world.centerX+150, game.world.centerY+100, 'Nathan Altice', textStyle);
 		var robin = game.add.text(game.world.centerX+150, game.world.centerY+150, 'Robin Hunicke', textStyle);
 
-		var back = game.add.text(950, 650, 'Press ESC to go back', textStyle);
+		back = game.add.text(800, 650, 'Press ESC to go back', textStyle);
 
         pressB = Phaser.Keyboard.B;
+        
+        BButton = game.add.sprite(932,673,'B');
+        BButton.anchor.setTo(.5,.5);
+        BButton.scale.setTo(.07,.07);
+        BButton.alpha = 0;
+        
+        escTweenStarted = false;
+        
+        ESCKey = Phaser.Keyboard.ESC;
+
 	},
 
 	update: function(){
@@ -66,6 +81,20 @@ var creditState = {
         else{
             padControl2 = false;
         }
+        
+        if((padControl1 || padControl2) && !escTweenStarted){
+            back.text = "PUSH      TO GO BACK"
+            BButton.alpha = 1;
+            escTween = game.add.tween(back).to( { alpha: 0 }, 600, "Linear", true, 600);
+            escTween.yoyo(true,600).loop();
+            escTween2 = game.add.tween(BButton).to( { alpha: 0 }, 600, "Linear", true, 600);
+            escTween2.yoyo(true,600).loop();
+            escTweenStarted = true;
+        }else if(!escTweenStarted){
+            escTween = game.add.tween(back).to( { alpha: 0 }, 600, "Linear", true, 600);
+            escTween.yoyo(true,600).loop();
+            escTweenStarted = true;
+        }
 
         if(padControl1){
         	if(pad1.isDown(Phaser.Gamepad.XBOX360_B)){
@@ -80,6 +109,12 @@ var creditState = {
         		game.state.start('title');
         	}
         }
+        
+        //keyboard
+        if(game.input.keyboard.justPressed(ESCKey)){
+            main_music.mute = true;
+			game.state.start('title',false);
+		}
 
 	}
 }

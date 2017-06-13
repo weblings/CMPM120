@@ -317,7 +317,7 @@ var initControls = {
         BButton3 = game.add.sprite(592,46,'B');
         BButton3.anchor.setTo(.5,.5);
         BButton3.scale.setTo(.07,.07);
-        BButton3alpha = 0;
+        BButton3.alpha = 0;
 
         
         this.timer = new setTime();

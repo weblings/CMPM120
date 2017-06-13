@@ -338,7 +338,7 @@ titleState.prototype = {
 
             //keyboard input
             if(game.input.keyboard.justPressed(P1keyUp) && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
-                timer.startTimer('selectLock1',200);
+                timer.startTimer('selectLock1',100);
                 //console.log("you are on play");
                 arrow1.alpha = 1;
                 arrow2.alpha = 0;
@@ -348,7 +348,7 @@ titleState.prototype = {
                 onCredits = false;
             }
             if(game.input.keyboard.justPressed(P1keyDown) && timer.timerDone('selectLock1') && onPlay && !onControls && !onCredits){
-                timer.startTimer('selectLock1',200);
+                timer.startTimer('selectLock1',100);
                 //console.log("you are on Controls");
                 arrow1.alpha = 0;
                 arrow2.alpha = 1;
@@ -358,7 +358,7 @@ titleState.prototype = {
                 onCredits = false;
             }
             if(game.input.keyboard.justPressed(P1keyDown) && timer.timerDone('selectLock1') && !onPlay && onControls && !onCredits){
-                timer.startTimer('selectLock1',200);
+                timer.startTimer('selectLock1',100);
                 //console.log("you are on Credits");
                 arrow1.alpha = 0;
                 arrow2.alpha = 0;
@@ -368,7 +368,7 @@ titleState.prototype = {
                 onCredits = true;
             }
             if(game.input.keyboard.justPressed(P1keyUp) && timer.timerDone('selectLock1') && !onControls && !onPlay && onCredits){
-                timer.startTimer('selectLock1',200);
+                timer.startTimer('selectLock1',100);
                 //console.log("you are on play");
                 arrow1.alpha = 0;
                 arrow2.alpha = 1;

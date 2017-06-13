@@ -48,6 +48,13 @@ titleState.prototype = {
 
         P1keyUp = Phaser.Keyboard.W;
         P1keyDown = Phaser.Keyboard.S;
+        
+        P1keyUp2 = Phaser.Keyboard.UP;
+        P1keyDown2 = Phaser.Keyboard.DOWN;
+        
+        P1keyUp3 = Phaser.Keyboard.O;
+        P1keyDown3 = Phaser.Keyboard.L;
+        
         P1Chose = Phaser.Keyboard.ENTER
         
         main_music = game.add.audio('parisian');
@@ -375,7 +382,7 @@ titleState.prototype = {
             this.clouds.tilePosition.x += 0.4;
 
             //keyboard input
-            if(game.input.keyboard.justPressed(P1keyUp) && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
+            if((game.input.keyboard.justPressed(P1keyUp) || game.input.keyboard.justPressed(P1keyUp2) || game.input.keyboard.justPressed(P1keyUp3)) && timer.timerDone('selectLock1') && onControls && !onPlay && !onCredits){
                 timer.startTimer('selectLock1',100);
                 //console.log("you are on play");
                 arrow1.alpha = 1;
@@ -385,7 +392,7 @@ titleState.prototype = {
                 onPlay = true;
                 onCredits = false;
             }
-            if(game.input.keyboard.justPressed(P1keyDown) && timer.timerDone('selectLock1') && onPlay && !onControls && !onCredits){
+            if((game.input.keyboard.justPressed(P1keyDown) || game.input.keyboard.justPressed(P1keyDown2) || game.input.keyboard.justPressed(P1keyDown3)) && timer.timerDone('selectLock1') && onPlay && !onControls && !onCredits){
                 timer.startTimer('selectLock1',100);
                 //console.log("you are on Controls");
                 arrow1.alpha = 0;
@@ -395,7 +402,7 @@ titleState.prototype = {
                 onPlay = false;
                 onCredits = false;
             }
-            if(game.input.keyboard.justPressed(P1keyDown) && timer.timerDone('selectLock1') && !onPlay && onControls && !onCredits){
+            if((game.input.keyboard.justPressed(P1keyDown) || game.input.keyboard.justPressed(P1keyDown2) || game.input.keyboard.justPressed(P1keyDown3)) && timer.timerDone('selectLock1') && !onPlay && onControls && !onCredits){
                 timer.startTimer('selectLock1',100);
                 //console.log("you are on Credits");
                 arrow1.alpha = 0;
@@ -405,7 +412,7 @@ titleState.prototype = {
                 onPlay = false;
                 onCredits = true;
             }
-            if(game.input.keyboard.justPressed(P1keyUp) && timer.timerDone('selectLock1') && !onControls && !onPlay && onCredits){
+            if((game.input.keyboard.justPressed(P1keyUp) || game.input.keyboard.justPressed(P1keyUp2) || game.input.keyboard.justPressed(P1keyUp3)) && timer.timerDone('selectLock1') && !onControls && !onPlay && onCredits){
                 timer.startTimer('selectLock1',100);
                 //console.log("you are on play");
                 arrow1.alpha = 0;

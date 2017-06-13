@@ -154,8 +154,8 @@ var initControls = {
 	   preset1_1 = ['W', 'A', 'S', 'D', 'E', 'Q', 'E   +   Q'];
 	   preset1_2 = ['W', 'A', 'S', 'D', 'E', 'R', 'E   +   R'];
 	   
-	   preset2_1 = ['O', 'K', 'L', 'COLON', 'I', 'U', 'I   +   U'];
-	   preset2_2 = ['O', 'K', 'L', 'COLON', 'I', 'P', 'I   +   P'];
+	   preset2_1 = ['O', 'K', 'L', 'COLON', 'I', 'P', 'I   +   P'];
+	   preset2_2 = ['O', 'K', 'L', 'COLON', 'I', 'U', 'I   +   U'];
 	   
        //Pad Control Images
 	   Abutton = game.add.sprite(155, 410-30,"A");

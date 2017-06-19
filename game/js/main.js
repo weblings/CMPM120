@@ -57,7 +57,7 @@ var mainState = {
         var charText2;
         
         var simonSpecialSoundPlayed;
-    },
+},
 
 	create: function() {
 		Player1SpawnX = 215; //AG: TO-DO: Need to extend this once we get characters
@@ -305,6 +305,13 @@ var mainState = {
         
         simonSpecialSoundPlayed = false;
         scorpSpecialSoundPlayed = false;
+        
+        //Preventing Special Bar from being added to more than once per attack
+        this.P1heavyHitAlready = false;
+        this.P2heavyHitAlready = false;
+    
+        this.P1lightHitAlready = false;
+        this.P2lightHitAlready = false;
     },
 
 	update: function() {        
@@ -423,6 +430,23 @@ var mainState = {
             this.lightSoundPlayed = false;
             player1.attackHit = false;
             player2.attackHit = false;
+        }
+        
+        //Allow attacks to add to special bar again
+        if(this.timer.timerDone('P1heavyHit')){
+            this.P1heavyHitAlready = false;
+        }
+        
+        if(this.timer.timerDone('P2heavyHit')){
+            this.P2heavyHitAlready = false;
+        }
+        
+        if(this.timer.timerDone('P1lightHit')){
+            this.P1lightHitAlready = false;
+        }
+        
+        if(this.timer.timerDone('P2lightHit')){
+            this.P2lightHitAlready = false;
         }
         
         if(player1.introFinished){
@@ -650,7 +674,7 @@ var mainState = {
             
             if(attackingPlayer.charName == "SECURITY"){
                 mainState.SecurityHeavyAttack(player,hitbox);
-            }else{ //AG: Every other character's stuff is here rn (Should change by final)
+            }else{ //if(attackingPlayer.charName != "SIMON"){ //AG: Every other character's stuff is here rn (Should change by final)
                 mainState.heavyAttack(player,hitbox);
             }
         }else if(attackingPlayer.inLightAttack){
@@ -684,20 +708,29 @@ var mainState = {
     },
     
     lightAttack: function(player,hitbox){
-        
-        
-
+    
         var attackingPlayer;
         var hitPlayerNum = player.playerNum;
+        var lightHitAlready;
 
         if(hitPlayerNum == 1){
             attackingPlayer = player2;
+            lightHitAlready = this.P2lightHitAlready;
         }else{
             attackingPlayer = player1;
+            lightHitAlready = this.P1lightHitAlready;
         }
 
-        if(!player.staggered && !player.action.down){
-        	attackingPlayer.addToSpecialBar(5/120);
+        if(!player.staggered && !player.action.down && !lightHitAlready){//player.inHeavyAttack){
+            attackingPlayer.addToSpecialBar(5/100);
+            //console.log("getting called from lightAttack");
+            if(hitPlayerNum == 2){
+                this.P1lightHitAlready = true;
+                this.timer.startTimer("P1lightHit",100);
+            }else{
+                this.P2lightHitAlready = true;
+                this.timer.startTimer("P2lightHit",100);
+            }
         }
 
         mainState.calcKnockBack(35,10,player.playerNum);
@@ -710,24 +743,47 @@ var mainState = {
     },
   
     heavyAttack: function(player,hitbox){
-        
-
+            
         var attackingPlayer;
         var hitPlayerNum = player.playerNum;
+        var heavyHitAlready;
+        var timerDuration = 600;
+        var SimonSecondCall = false;
+        var damageToBeDealt = 15;
 
         if(hitPlayerNum == 1){
             attackingPlayer = player2;
+            heavyHitAlready = this.P2heavyHitAlready;
         }else{
             attackingPlayer = player1;
+            heavyHitAlready = this.P1heavyHitAlready;
         }
-
-        if(!player.staggered && !player.action.down){
-        	attackingPlayer.addToSpecialBar(15/100);
+        
+        //Simon calls this function. Should only be called once though
+        if(attackingPlayer.charName == "SIMON"){
+            timerDuration = 1000;
+            if(heavyHitAlready) SimonSecondCall = true;
+            damageToBeDealt = 10;
+        }
+        
+        if(!player.staggered && !player.action.down && !heavyHitAlready){//player.inHeavyAttack){
+            attackingPlayer.addToSpecialBar(damageToBeDealt/100);
+            //console.log("getting called from heavyAttack");
+            if(hitPlayerNum == 2){
+                this.P1heavyHitAlready = true;
+                this.timer.startTimer("P1heavyHit",timerDuration);
+            }else{
+                this.P2heavyHitAlready = true;
+                this.timer.startTimer("P2heavyHit",timerDuration);
+            }
         }
 
 		mainState.calcKnockBack(400,80,player.playerNum);
 
-        player.takeDamage(15,200);
+        if(!SimonSecondCall){
+            player.takeDamage(damageToBeDealt,200);
+            //console.log("damage from heavyAttack");
+        }
 
         if(!player1.action.block && !player2.action.block && !player1.action.down && !player2.action.down){
         	game.camera.shake(0.005, 120);
@@ -749,8 +805,6 @@ var mainState = {
         player2.body.velocity.y = 0;
         player2.body.velocity.x = 0;
         */
-        
-        
 
     },
 
@@ -758,15 +812,26 @@ var mainState = {
     	
         var attackingPlayer;
         var hitPlayerNum = player.playerNum;
+        var lightHitAlready;
 
         if(hitPlayerNum == 1){
             attackingPlayer = player2;
+            lightHitAlready = this.P2lightHitAlready;
         }else{
             attackingPlayer = player1;
+            lightHitAlready = this.P1lightHitAlready;
         }
 
-        if(!player.staggered && !player.action.down){
-        	attackingPlayer.addToSpecialBar(5/120);
+        if(!player.staggered && !player.action.down && !lightHitAlready){//player.inHeavyAttack){
+            attackingPlayer.addToSpecialBar(10/100);
+            //.log("getting called from dashAttack");
+            if(hitPlayerNum == 2){
+                this.P1lightHitAlready = true;
+                this.timer.startTimer("P1lightHit",1000);
+            }else{
+                this.P2lightHitAlready = true;
+                this.timer.startTimer("P2lightHit",1000);
+            }
         }
 
         mainState.calcKnockBack(10,10,player.playerNum);
@@ -779,17 +844,29 @@ var mainState = {
 
     SimonHeavy: function(player,hitbox){
 
-    	var attackingPlayer;
+        var attackingPlayer;
         var hitPlayerNum = player.playerNum;
-        
-        //AG: Determines out who is attacking
+        var heavyHitAlready;
+
         if(hitPlayerNum == 1){
             attackingPlayer = player2;
+            heavyHitAlready = this.P2heavyHitAlready;
         }else{
             attackingPlayer = player1;
+            heavyHitAlready = this.P1heavyHitAlready;
         }
-
-
+        
+        if(!player.staggered && !player.action.down && !heavyHitAlready){//player.inHeavyAttack){
+            attackingPlayer.addToSpecialBar(5/100);
+            console.log("getting called from SimonHeavy");
+            if(hitPlayerNum == 2){
+                this.P1heavyHitAlready = true;
+                this.timer.startTimer("P1heavyHit",2000);
+            }else{
+                this.P2heavyHitAlready = true;
+                this.timer.startTimer("P2heavyHit",2000);
+            }
+        }
 
 	    if (!hitbox.justHit){
 	    	hitbox.justHit = true;
@@ -797,9 +874,9 @@ var mainState = {
 
 	        player.takeDamage(5,200);
 	        this.heavySound.play();
-			if(!player.action.down){
+			/*if(!player.action.down){
         		attackingPlayer.addToSpecialBar(5/120);
-        	}
+        	}*/
         	if(!player.action.block && !player1.action.down && !player2.action.down){
         		game.camera.shake(0.003, 100);
         	}
@@ -846,6 +923,7 @@ var mainState = {
 
         if(!player.staggered && !player.action.down){
         	attackingPlayer.addToSpecialBar(5/120);
+            //console.log("getting called from divekick");
         }
 
         mainState.calcKnockBack(40,30,player.playerNum);
@@ -936,6 +1014,7 @@ var mainState = {
 
         if (!player.action.down){
         	attackingPlayer.addToSpecialBar(5/120);
+            //console.log("getting called from SecurityLightAttack");
         }
         
         
@@ -997,6 +1076,7 @@ var mainState = {
 
         if(!player.staggered && !player.action.down){
         	attackingPlayer.addToSpecialBar(15/100);
+            //console.log("getting called from SecurityHeavy");
         }
 
 		mainState.calcKnockBack(1200,300,player.playerNum);

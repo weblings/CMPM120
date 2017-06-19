@@ -858,7 +858,7 @@ var mainState = {
         
         if(!player.staggered && !player.action.down && !heavyHitAlready){//player.inHeavyAttack){
             attackingPlayer.addToSpecialBar(5/100);
-            console.log("getting called from SimonHeavy");
+            //console.log("getting called from SimonHeavy");
             if(hitPlayerNum == 2){
                 this.P1heavyHitAlready = true;
                 this.timer.startTimer("P1heavyHit",2000);

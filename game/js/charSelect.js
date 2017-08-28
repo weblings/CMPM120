@@ -307,6 +307,23 @@ var charSelect = {
     
     update: function(){
         
+        //If text reaches final point of tweens, reset it
+        if(battleCryText1.y <= battleCryTextY3){
+            battleCry1Done = false;
+            battleCryText1.position.y = battleCryTextY;
+            battleCryText1.position.x = battleCryText1X;
+            battleCryText1.fontSize = 32;
+            battleCryText1.alpha = 0;
+        }
+        
+        if(battleCryText2.y <= battleCryTextY3){
+            battleCry2Done = false;
+            battleCryText2.position.y = battleCryTextY;
+            battleCryText2.position.x = battleCryText2X;
+            battleCryText2.fontSize = 32;
+            battleCryText2.alpha = 0;
+        }
+        
         if(timer.timerDone('waiting')){
             waited = true;
         }else{
@@ -376,7 +393,7 @@ var charSelect = {
                 }
             }
             
-            if(pad1.isDown(Phaser.Gamepad.XBOX360_A) && !P1CostumeChose && timer.timerDone('ALock1')){
+            if(pad1.isDown(Phaser.Gamepad.XBOX360_A) && !P1CostumeChose && timer.timerDone('ALock1') && waited){
                 timer.startTimer('ALock1',200);
                 if(!P1Chose){ //Costume Handling
                     P1Chose = true;
@@ -561,7 +578,7 @@ var charSelect = {
                 }
             }
             
-            if(pad2.isDown(Phaser.Gamepad.XBOX360_A) && !P2CostumeChose && timer.timerDone('ALock2')){
+            if(pad2.isDown(Phaser.Gamepad.XBOX360_A) && !P2CostumeChose && timer.timerDone('ALock2') && waited){
                 timer.startTimer('ALock2',200);
                 if(!P2Chose){ //Costume Handling
                     P2Chose = true;
@@ -711,7 +728,7 @@ var charSelect = {
             //charSelect.showCostume(1);
         }
         
-        if(P1CostumeChose && P2CostumeChose && battleCry1Done && battleCry2Done){
+        if(P1CostumeChose && P2CostumeChose){// && battleCry1Done && battleCry2Done){
 			//backgroundSwitch();
             P1CharChosen = characters[P1index];
             P2CharChosen = characters[P2index];
@@ -740,46 +757,33 @@ var charSelect = {
     playMainMusic: function() {	main_music.play('', 0, 1, true);},
     
     battleCry: function(inputNumber){
-        if(!battleCry1Done && inputNumber == 1){
-            charSelect.resetBattleCryVars1();
+        if(!battleCry1Done && inputNumber == 1 && battleCryText1.fontSize == 32){
             battleCryText1.text = battleCries[P1index];
             var room = 50;
             if(P1index == 1 || P1index == 2) room = 150; 
             var tween1 = game.add.tween(battleCryText1).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText1X - room }, 200, "Linear", true, 400);
             tween1.onComplete.add(charSelect.Tween1completed, this);
-        }else if(!battleCry2Done && inputNumber == 2){
-            charSelect.resetBattleCryVars2();
+            battleCry1Done = false;
+        }else if(!battleCry2Done && inputNumber == 2 && battleCryText2.fontSize == 32){
             battleCryText2.text = battleCries[P2index];
             var room = 50;
             if(P2index == 1 || P2index == 2) room = 150;
             var tween1_2 = game.add.tween(battleCryText2).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText2X - room }, 200, "Linear", true, 400);
             tween1_2.onComplete.add(charSelect.Tween1_2completed, this);
+            battleCry2Done = false;
         }  
     },
     
-    resetBattleCryVars1: function(){
-            //battleCry1Done = false;
-            battleCryText1.position.y = battleCryTextY;
-            battleCryText1.position.x = battleCryText1X;
-            battleCryText1.fontSize = 32;
-    },    
-    
-    resetBattleCryVars2: function(){
-            battleCryText2.position.y = battleCryTextY;
-            battleCryText2.position.x = battleCryText2X;
-            battleCryText2.fontSize = 32;
-    },
-    
     Tween1completed: function(){
-        tween2 = game.add.tween(battleCryText1).to( { alpha: 0, y: battleCryTextY3 }, 600, "Linear", true, 600);
-        tween2.onComplete.add(charSelect.resetBattleCryVars1,this);
-        battleCry1Done = true;
+        if(battleCryText1.fontSize == 48){
+            tween2 = game.add.tween(battleCryText1).to( { alpha: 0, y: battleCryTextY3 }, 600, "Linear", true, 600);
+        }
     },
     
     Tween1_2completed: function(){
-        tween2_2 = game.add.tween(battleCryText2).to( { alpha: 0, y: battleCryTextY3 }, 600, "Linear", true, 600);
-        tween2_2.onComplete.add(charSelect.resetBattleCryVars2, this);
-        battleCry2Done = true;
+        if(battleCryText2.fontSize == 48){
+            tween2_2 = game.add.tween(battleCryText2).to( { alpha: 0, y: battleCryTextY3 }, 600, "Linear", true, 600);
+        }
     },
     
     //Used if two players select same character so that they can't have the costume

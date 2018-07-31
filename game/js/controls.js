@@ -69,7 +69,7 @@ var controlState = {
     create: function(){
 		//console.log("Press ESC to go to CharSelect");
 		//PLAYER 1 SELECT
-		layoutSelect = game.add.sprite(70, 40, "selectBox");
+		/*layoutSelect = game.add.sprite(70, 40, "selectBox");
 		
 		jumpSelect1 = game.add.sprite(40, 410, "selectBox2");
 		jumpSelect1.scale.setTo(.23, .14);
@@ -120,66 +120,66 @@ var controlState = {
 		
 		heavyAttackSelect2 = game.add.sprite(700, 635, "selectBox2");
 		heavyAttackSelect2.scale.setTo(.9, .14);
-		heavyAttackSelect2.alpha = 0;
+		heavyAttackSelect2.alpha = 0;*/
 		
 		
-       controls1 = game.add.sprite(105,60,"control1");
-	   controls1.scale.setTo(.75,.75);
+       controls1 = game.add.sprite(105,60,'gameStuff','Controls');//"control1");
+	   //controls1.scale.setTo(.75,.75);
 	   controls1.alpha = 0;
         
-	   controls2 = game.add.sprite(80,50,"control2");
+	   controls2 = game.add.sprite(80,50,'gameStuff','Controls');//"control2");
        controls2.scale.setTo(.75,.75);
        controls2.scale.setTo(.75,.75);
 	   
-	   controls1_2 = game.add.sprite(755,60,"control1");
-	   controls1_2.scale.setTo(.75,.75);
+	   controls1_2 = game.add.sprite(755,60,'gameStuff','Controls');//"control1");
+	   //controls1_2.scale.setTo(.75,.75);
 	   controls1_2.alpha = 0;
         
-	   controls2_2 = game.add.sprite(730,50,"control2");
+	   controls2_2 = game.add.sprite(730,50,'gameStuff','Controls');//"control2");
        controls2_2.scale.setTo(.75,.75);
 	   
-	   controller1 = game.add.sprite(105,30,"controller");
+	   controller1 = game.add.sprite(105,30,'gameStuff',"controller");
 	   controller1.scale.setTo(.75,.75);
 	   controller1.alpha = 0;
 	   
-	   controller2 = game.add.sprite(755,30,"controller");
+	   controller2 = game.add.sprite(755,30,'gameStuff',"controller");
 	   controller2.scale.setTo(.75,.75);
 	   controller2.alpha = 0;
 	   
 	   sprites = [controls1, controls2, controller1];
 	   sprites2 = [controls1_2, controls2_2, controller2];
-	   selectBoxes = [layoutSelect, jumpSelect1, leftSelect1, rightSelect1, guardSelect1, lightAttackSelect1, heavyAttackSelect1];
-	   selectBoxes2 = [layoutSelect2, jumpSelect2, leftSelect2, rightSelect2, guardSelect2, lightAttackSelect2, heavyAttackSelect2];
+	   //selectBoxes = [layoutSelect, jumpSelect1, leftSelect1, rightSelect1, guardSelect1, lightAttackSelect1, heavyAttackSelect1];
+	   //selectBoxes2 = [layoutSelect2, jumpSelect2, leftSelect2, rightSelect2, guardSelect2, lightAttackSelect2, heavyAttackSelect2];
 	   
-	   preset1_1 = ['W', 'A', 'S', 'D', 'E', 'Q', 'E   +   Q'];
-	   preset1_2 = ['W', 'A', 'S', 'D', 'E', 'R', 'E   +   R'];
+	   preset1_1 = ['W', 'A', 'D', 'S', 'E', 'Q', 'E   +   Q'];
+	   preset1_2 = ['W', 'A', 'D', 'S', 'E', 'R', 'E   +   R'];
 	   
-	   preset2_1 = ['O', 'K', 'L', 'COLON', 'I', 'P', 'I   +   P'];
-	   preset2_2 = ['O', 'K', 'L', 'COLON', 'I', 'U', 'I   +   U'];
+	   preset2_1 = ['O', 'K', 'COLON', 'L', 'I', 'P', 'I   +   P'];
+	   preset2_2 = ['O', 'K', 'COLON', 'L', 'I', 'U', 'I   +   U'];
 	   
        //Pad Control Images
-	   Abutton = game.add.sprite(155, 410-30,"A");
+	   Abutton = game.add.sprite(155, 410-30,'XboxControls',"A_Button");
 	   Abutton.scale.setTo(.08, .08);
 	   
-       joystick = game.add.sprite(145, 422, "JoystickL");
+       joystick = game.add.sprite(145, 422,'XboxControls', "JoystickL");
 	   joystick.scale.setTo(.09, .09);
 	   
-       joystick2 = game.add.sprite(170, 500-30, "JoystickR");
+       joystick2 = game.add.sprite(170, 500-30,'XboxControls', "JoystickR");
 	   joystick2.scale.setTo(.09, .09);
 	  
-       Ybutton = game.add.sprite(185, 550-30, "Y");
+       Ybutton = game.add.sprite(185, 550-30,'XboxControls', "Y_Button");
 	   Ybutton.scale.setTo(.08, .08);
 	   
-       Xbutton = game.add.sprite(300, 595-30, "X");
+       Xbutton = game.add.sprite(300, 595-30,'XboxControls', "X_Button");
 	   Xbutton.scale.setTo(.08, .08);
 	   
-       Bbutton = game.add.sprite(475, 640-30, "B");
+       Bbutton = game.add.sprite(475, 640-30,'XboxControls', "B_Button");
 	   Bbutton.scale.setTo(.08, .08);
        
-       BumperL = game.add.sprite(350, 690-25, "bumperL");
+       BumperL = game.add.sprite(350, 690-25,'XboxControls', "Left_Bumper");
        BumperL.scale.setTo(.3,.3);
        
-       BumperR = game.add.sprite(465, 690-25, "bumperR");
+       BumperR = game.add.sprite(465, 690-25,'XboxControls', "Right_Bumper");
        BumperR.scale.setTo(.3,.3);
         
        padButtons1 = [Abutton, joystick, joystick2, Ybutton, Xbutton, Bbutton, BumperL, BumperR];
@@ -188,28 +188,28 @@ var controlState = {
            padButtons1[i].alpha = 0;
        }    
         
-	   Abutton2 = game.add.sprite(835, 410-30,"A");
+	   Abutton2 = game.add.sprite(835, 410-30,'XboxControls',"A_Button");
 	   Abutton2.scale.setTo(.08, .08);
         
-	   joystick2_1 = game.add.sprite(825, 422, "JoystickL");
+	   joystick2_1 = game.add.sprite(825, 422,'XboxControls', "JoystickL");
 	   joystick2_1.scale.setTo(.09, .09);
         
-	   joystick2_2 = game.add.sprite(850, 500-30, "JoystickR");
+	   joystick2_2 = game.add.sprite(850, 500-30,'XboxControls', "JoystickR");
 	   joystick2_2.scale.setTo(.09, .09);
         
-	   Ybutton2 = game.add.sprite(865, 550-30, "Y");
+	   Ybutton2 = game.add.sprite(865, 550-30,'XboxControls', "Y_Button");
 	   Ybutton2.scale.setTo(.08, .08);
         
-	   Xbutton2 = game.add.sprite(980, 595-30, "X");
+	   Xbutton2 = game.add.sprite(980, 595-30,'XboxControls', "X_Button");
 	   Xbutton2.scale.setTo(.08, .08);
         
-	   Bbutton2 = game.add.sprite(1155, 640-30, "B");
+	   Bbutton2 = game.add.sprite(1155, 640-30,'XboxControls', "B_Button");
 	   Bbutton2.scale.setTo(.08, .08);
         
-       BumperL2 = game.add.sprite(1020, 690-25, "bumperL");
+       BumperL2 = game.add.sprite(1020, 690-25,'XboxControls', "Left_Bumper");
        BumperL2.scale.setTo(.3,.3);
         
-       BumperR2 = game.add.sprite(1140, 690-25, "bumperR");
+       BumperR2 = game.add.sprite(1140, 690-25,'XboxControls', "Right_Bumper");
        BumperR2.scale.setTo(.3,.3);
         
        padButtons2 = [Abutton2, joystick2_1, joystick2_2, Ybutton2, Xbutton2, Bbutton2, BumperL2, BumperR2];
@@ -301,9 +301,9 @@ var controlState = {
         P2Keys = [P2JumpButton, P2LeftButton, P2RightButton, P2GuardButton, P2LightButton, P2HeavyButton, P2SpecialButton];
     
         //Making Xbox Default for Sammy Demo
-        layoutSelect.alpha = 0;
+        /*layoutSelect.alpha = 0;
                 
-        layoutSelect2.alpha = 0;
+        layoutSelect2.alpha = 0;*/
         
         //Controllers
         var pad1;
@@ -314,7 +314,7 @@ var controlState = {
         ContinuingText = game.add.text(game.world.width/2,50,"PUSH ESC TO CONTINUE", {fontSize: '16px', fill: '#fff'});
         ContinuingText.anchor.setTo(.5,.5);
         
-        startButton = game.add.sprite(game.world.width/2-33,46,'Start_Button');
+        startButton = game.add.sprite(game.world.width/2-33,46,'XboxControls','Start_Button');
         startButton.anchor.setTo(.5,.5);
         startButton.scale.setTo(.07,.07);
         startButton.alpha = 0;
@@ -421,137 +421,6 @@ var controlState = {
                 P2Keys[i].alpha = 1;
             }
         }
-        //P1 keys
-        /*if(game.input.keyboard.justPressed(P1keyDown)){
-            if(P1index + 2 > selectBoxes.length){
-               selectBoxes[P1index].alpha = 0;
-			   P1index = 0;
-			   selectBoxes[P1index].alpha = 1;
-            }else{
-				selectBoxes[P1index].alpha = 0;
-                P1index++;
-				selectBoxes[P1index].alpha = 1;
-            }
-        }
-        
-        if(game.input.keyboard.justPressed(P1keyUp)){
-            if(P1index - 1 < 0){
-				selectBoxes[P1index].alpha = 0;
-                P1index = selectBoxes.length-1;
-				selectBoxes[P1index].alpha = 1;
-            }else{
-				selectBoxes[P1index].alpha = 0;
-                P1index--;
-				selectBoxes[P1index].alpha = 1;
-            }
-        }
-		
-		if(game.input.keyboard.justPressed(P1keyA)){
-			//P1Chose = true;
-			console.log("Im selected!");
-			if(sprites[0].alpha == 1){ //switch to 1 hand
-				sprites[0].alpha = 0;
-				sprites[1].alpha = 1;
-				sprites[2].alpha = 0;
-			
-				P1JumpButton.text = "W";
-				P1LeftButton.text = "A";
-				P1RightButton.text = "D";
-				P1GuardButton.text = "S";
-				P1LightButton.text = "E";
-				P1HeavyButton.text = "R";
-				
-			}else if(sprites[2].alpha == 1){ //switch to 2 hands
-				sprites[0].alpha = 1;
-				sprites[1].alpha = 0;
-				sprites[2].alpha = 0;
-				
-				P1JumpButton.text = "W";
-				P1LeftButton.text = "A";
-				P1RightButton.text = "D";
-				P1GuardButton.text = "S";
-				P1LightButton.text = "E";
-				P1HeavyButton.text = "Q";
-			}else if(sprites[1].alpha == 1){ //switch to controller
-				sprites[0].alpha = 0;
-				sprites[1].alpha = 0;
-				sprites[2].alpha = 1;
-				
-				P1JumpButton.text = "A";
-				P1LeftButton.text = "JOYSTICK L";
-				P1RightButton.text = "JOYSTICK R";
-				P1GuardButton.text = "Y";
-				P1LightButton.text = "X";
-				P1HeavyButton.text = "B";
-			}
-		}*/
-
-        
-        
-        //P2 keys
-        /*if(game.input.keyboard.justPressed(P2keyDown)){
-            if(P2index + 2 > selectBoxes2.length){
-               selectBoxes2[P2index].alpha = 0;
-			   P2index = 0;
-			   selectBoxes2[P2index].alpha = 1;
-            }else{
-				selectBoxes2[P2index].alpha = 0;
-                P2index++;
-				selectBoxes2[P2index].alpha = 1;
-            }
-        }
-        
-        if(game.input.keyboard.justPressed(P2keyUp)){
-            if(P2index - 1 < 0){
-				selectBoxes2[P2index].alpha = 0;
-                P2index = selectBoxes2.length-1;
-				selectBoxes2[P2index].alpha = 1;
-            }else{
-				selectBoxes2[P2index].alpha = 0;
-                P2index--;
-				selectBoxes2[P2index].alpha = 1;
-            }
-        }
-		
-		if(game.input.keyboard.justPressed(P2keyA)){
-			//P1Chose = true;
-			console.log("Im selected!");
-			if(sprites2[0].alpha == 1){ //switch to 1 hand
-				sprites2[0].alpha = 0;
-				sprites2[1].alpha = 1;
-				sprites2[2].alpha = 0;
-			
-				P2JumpButton.text = "O";
-				P2LeftButton.text = "K";
-				P2RightButton.text = ";";
-				P2GuardButton.text = "L";
-				P2LightButton.text = "I";
-				P2HeavyButton.text = "P";
-				
-			}else if(sprites2[2].alpha == 1){ //switch to 2 hands
-				sprites2[0].alpha = 1;
-				sprites2[1].alpha = 0;
-				sprites2[2].alpha = 0;
-				
-				P2JumpButton.text = "O";
-				P2LeftButton.text = "K";
-				P2RightButton.text = ";";
-				P2GuardButton.text = "L";
-				P2LightButton.text = "I";
-				P2HeavyButton.text = "U";
-			}else if(sprites2[1].alpha == 1){//switch to controller
-				sprites2[0].alpha = 0;
-				sprites2[1].alpha = 0;
-				sprites2[2].alpha = 1;
-				
-				P2JumpButton.text = "A";
-				P2LeftButton.text = "JOYSTICK L";
-				P2RightButton.text = "JOYSTICK R";
-				P2GuardButton.text = "Y";
-				P2LightButton.text = "X";
-				P2HeavyButton.text = "B";
-			}
-		}*/
         
         
 		if(game.input.keyboard.justPressed(ESCKey)){

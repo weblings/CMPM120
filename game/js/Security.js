@@ -1,5 +1,5 @@
-Security = function(game, key, x, y, playerNum,costumeIndex,french){
-    Phaser.Sprite.call(this, game, x, y, key, playerNum,costumeIndex,french);
+Security = function(game, key, frameName, x, y, playerNum,costumeIndex,french){
+    Phaser.Sprite.call(this, game, x, y, key, frameName, playerNum,costumeIndex,french);
     
     this.alpha = 0;//0.5;
     this.anchor.y = 1;
@@ -18,7 +18,7 @@ Security = function(game, key, x, y, playerNum,costumeIndex,french){
     //Animations
     
     this.specialEmitter = game.add.emitter(0, 0, 100);
-    this.specialEmitter.makeParticles('security_blood');
+    this.specialEmitter.makeParticles('charStuff','securityguard_blood');
     game.physics.enable(this.specialEmitter);
     this.specialEmitter.enableBody = true;
     this.specialEmitter.blendMode = 1;
@@ -112,13 +112,13 @@ Security = function(game, key, x, y, playerNum,costumeIndex,french){
 
     //particle
     this.emitter = game.add.emitter(0, 0, 100);
-    this.emitter.makeParticles('security_blood');
+    this.emitter.makeParticles('charStuff','securityguard_blood');
     game.physics.enable(this.emitter);
     this.emitter.enableBody = true;
     this.emitter.blendMode = 2;
     this.emitter.alpha = 0.8;
 
-    this.icecube = game.add.sprite(this.position.x, this.position.y, 'frozen_ice');
+    this.icecube = game.add.sprite(this.position.x, this.position.y,'gameStuff','frozen');//_ice');
 
 
     
@@ -159,21 +159,21 @@ Security = function(game, key, x, y, playerNum,costumeIndex,french){
     this.specialsThrown = 0;
     if(playerNum == 1){
         this.debugText = game.add.text(16,16,'', {fontSize: '32px', fill: '#000000'});
-        this.healthBar = game.add.image(20,this.healthBarHeight,'health_full');
-        this.specialEmpty = game.add.image(40,112,'special_empty');
-        this.specialBar = game.add.image(40,112,'special_full');
+        this.healthBar = game.add.image(20,this.healthBarHeight,'gameStuff','health_full');
+        this.specialEmpty = game.add.image(40,112,'gameStuff','special_empty');
+        this.specialBar = game.add.image(40,112,'gameStuff','special_full');
         this.specialBar.scale.setTo(0,1);
-        this.specialUsed = game.add.image(40,112,'special_used');
+        this.specialUsed = game.add.image(40,112,'gameStuff','special_used');
         this.specialUsed.alpha = 0;
     }else{ //playerNum == 2
         this.debugText = game.add.text(game.width - 100,16,'', {fontSize: '32px', fill: '#000000'});
-        this.healthBar = game.add.image(game.width-470,this.healthBarHeight,'health_full');
-        this.specialEmpty = game.add.image(game.width-40,112,'special_empty');
+        this.healthBar = game.add.image(game.width-470,this.healthBarHeight,'gameStuff','health_full');
+        this.specialEmpty = game.add.image(game.width-40,112,'gameStuff','special_empty');
         this.specialEmpty.anchor.setTo(1,0);
-        this.specialBar = game.add.image(game.width-40,112,'special_full');
+        this.specialBar = game.add.image(game.width-40,112,'gameStuff','special_full');
         this.specialBar.anchor.setTo(1,0);
         this.specialBar.scale.setTo(0,1);
-        this.specialUsed = game.add.image(game.width-40,112,'special_used');
+        this.specialUsed = game.add.image(game.width-40,112,'gameStuff','special_used');
         this.specialUsed.anchor.setTo(1,0);
         this.specialUsed.alpha = 0;        
     }
@@ -214,7 +214,7 @@ Security = function(game, key, x, y, playerNum,costumeIndex,french){
 
     //hitbox stuff
     this.fists = game.add.physicsGroup();
-    this.fist = fist = game.add.sprite(this.position.x,this.position.y,'fist');
+    this.fist = fist = game.add.sprite(this.position.x,this.position.y,'charStuff','fist');
     this.fist.scale.setTo(0.25,0.25);
     this.fist.anchor.x = 0.5;
     this.fist.anchor.y = 0.5;
@@ -230,7 +230,28 @@ Security = function(game, key, x, y, playerNum,costumeIndex,french){
     
     //Special
     this.specialstart = false;
-    this.possibleThrowingObjects = ['logo','rabbit_ID','guard_ID','scorp_ID','controller','A','B','X','Y','Start_Button','Joystick_Left','beret1','beret2','beret3','beret4','moustache1','moustache2','moustache3','moustache4','bg'];
+    this.possibleThrowingObjects = [
+                                    ['gameStuff','Logo'],
+                                    ['Menu','Rabbit_passport'],
+                                    ['Menu','SecurityGuard_passport'],
+                                    ['Menu','Scorpion_Passport'],
+                                    ['gameStuff','controller'],
+                                    ['XboxControls','A_Button'],
+                                    ['XboxControls','B_Button'],
+                                    ['XboxControls','X_Button'],
+                                    ['XboxControls','Y_Button'],
+                                    ['XboxControls','Start_Button'],
+                                    ['XboxControls','JoystickL'],
+                                    ['parisian','Green_Beret'],
+                                    ['parisian','Purple_Beret'],
+                                    ['parisian','Red_Beret'],
+                                    ['parisian','Yellow_Beret'],
+                                    ['parisian','Moustache1'],
+                                    ['parisian','Moustache2'],
+                                    ['parisian','Moustache3'],
+                                    ['parisian','Moustache4'],
+                                    ['gameStuff','bg']
+                                   ];
 	
 	
     //set timer
@@ -866,19 +887,19 @@ Security.prototype.projectile = function(){
     var bullet;
     if(!this.isFrench){
         if(choice == 0){
-            bullet = game.add.sprite(this.position.x,this.position.y-200,'water_bottle');//water_bottle'); //'player');
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'gameStuff','Water_Bottle');//water_bottle'); //'player');
             //bullet.frame = 2;
         }else if(choice == 1){
-            bullet = game.add.sprite(this.position.x,this.position.y-200,'pepsi');//water_bottle'); //'player');
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'gameStuff','Pepsi');//water_bottle'); //'player');
             //bullet.frame = 5;
         }
         bullet.scale.setTo(0.04,0.04);
     }else{
         if(choice == 0){
-            bullet = game.add.sprite(this.position.x,this.position.y-200,'croissant');//water_bottle'); //'player');
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'parisian','croissant');//water_bottle'); //'player');
             //bullet.frame = 2;
         }else if(choice == 1){
-            bullet = game.add.sprite(this.position.x,this.position.y-200,'eiffel');//water_bottle'); //'player');
+            bullet = game.add.sprite(this.position.x,this.position.y-200,'parisian','Eiffel_Tower');//water_bottle'); //'player');
             //bullet.frame = 5;
         }
         bullet.scale.setTo(0.1,0.1);
@@ -911,7 +932,7 @@ Security.prototype.specialProjectile = function(){
     //if(this.specialsThrown != 4){
         var choice = game.rnd.between(0,this.possibleThrowingObjects.length-1);
         //console.log("choice:"+choice);
-        var bullet = game.add.sprite(this.position.x,this.position.y-200,this.possibleThrowingObjects[choice]);
+        var bullet = game.add.sprite(this.position.x,this.position.y-200,this.possibleThrowingObjects[choice][0],this.possibleThrowingObjects[choice][1]);
         bullet.scale.setTo(.2,.2);
     /*}else{
         var bullet = game.add.sprite(this.position.x,this.position.y-200,'bg');
@@ -1007,24 +1028,24 @@ Security.prototype.takeDamage = function(damage,staggerLength){
         //AG: HealthBar handling
         if(this.healthBar.width == 450){ //If first time damaged
             this.healthBarScaleMaster = 1 - ((damage*def)/100);
-            console.log(this.healthBarScaleMaster);
+            //console.log(this.healthBarScaleMaster);
             this.healthBar.scale.x *= this.healthBarScaleMaster;
             if(this.playerNum == 2){
-                this.damageBar = game.add.image(game.width-470,this.healthBarHeight,"health_empty");
+                this.damageBar = game.add.image(game.width-470,this.healthBarHeight,'gameStuff',"health_empty");
                 this.damageBar.scale.x *= (damage*def)/100;
                 this.healthBar.x = this.damageBar.x + this.damageBar.width;
                 //Red from hit
-                var damaged = game.add.image(game.width-470,this.healthBarHeight,"health_damage");
+                var damaged = game.add.image(game.width-470,this.healthBarHeight,'gameStuff',"health_damage");
                 damaged.scale.x *= (damage*def)/100;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }else{ //playerNum == 1
                 var calcDamageX = this.healthBar.x + this.healthBar.width;
-                this.damageBar = game.add.image(calcDamageX,this.healthBarHeight,"health_empty");
+                this.damageBar = game.add.image(calcDamageX,this.healthBarHeight,'gameStuff',"health_empty");
                 this.damageBarScaledMaster = 0;
                 this.damageBar.scale.x *= (damage*def)/100;
                 this.damageBarScaledMaster += this.damageBar.scale.x;
                 //Red from hit
-                var damaged = game.add.image(calcDamageX,this.healthBarHeight,"health_damage");
+                var damaged = game.add.image(calcDamageX,this.healthBarHeight,'gameStuff',"health_damage");
                 damaged.scale.x *= (damage*def)/100;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }
@@ -1039,7 +1060,7 @@ Security.prototype.takeDamage = function(damage,staggerLength){
                 this.damageBar.scale.x *= 1 - this.healthBarScaleMaster;
                 this.healthBar.x = this.damageBar.x + this.damageBar.width;
                 //Red from hit
-                var damaged = game.add.image(oldDamageEnd,this.healthBarHeight,"health_damage");
+                var damaged = game.add.image(oldDamageEnd,this.healthBarHeight,'gameStuff',"health_damage");
                 damaged.scale.x *= newScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }else{ //playerNum == 1
@@ -1048,7 +1069,7 @@ Security.prototype.takeDamage = function(damage,staggerLength){
                 this.damageBar.scale.x = 1;
                 this.damageBar.scale.x *= 1 - this.healthBarScaleMaster;
                 //Red from hit
-                var damaged = game.add.image(calcDamageX,this.healthBarHeight,"health_damage");
+                var damaged = game.add.image(calcDamageX,this.healthBarHeight,'gameStuff',"health_damage");
                 damaged.scale.x *= newScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear",true, 800); 
             } 
@@ -1059,14 +1080,14 @@ Security.prototype.takeDamage = function(damage,staggerLength){
                 var oldDamageEnd = this.damageBar.x + this.damageBar.width;
                 this.damageBar.scale.x = 1;
                 //Red from hit
-                var damaged = game.add.image(oldDamageEnd,this.healthBarHeight,"health_damage");
+                var damaged = game.add.image(oldDamageEnd,this.healthBarHeight,'gameStuff',"health_damage");
                 damaged.scale.x *= lastScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear", true, 800);
             }else{ //playerNum == 1
                 this.damageBar.x = 20;
                 this.damageBar.scale.x = 1;
                 //Red from hit
-                var damaged = game.add.image(20,this.healthBarHeight,"health_damage");
+                var damaged = game.add.image(20,this.healthBarHeight,'gameStuff',"health_damage");
                 damaged.scale.x *= lastScaler;
                 var tween1 = game.add.tween(damaged).to( { alpha: 0 }, 800, "Linear",true, 800); 
             } 

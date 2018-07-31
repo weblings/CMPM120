@@ -1,0 +1,229 @@
+{
+  "frames": {
+    "Arrow": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 2636,
+        "y": 1335,
+        "w": 200,
+        "h": 173
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 173
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 173
+      }
+    },
+    "CharSelectBG": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 2636,
+        "y": 374,
+        "w": 1315,
+        "h": 946
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1315,
+        "h": 946
+      },
+      "sourceSize": {
+        "w": 1315,
+        "h": 946
+      }
+    },
+    "CharSelectBG_GC": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 2,
+        "y": 562,
+        "w": 1315,
+        "h": 946
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1315,
+        "h": 946
+      },
+      "sourceSize": {
+        "w": 1315,
+        "h": 946
+      }
+    },
+    "CharSelectBG_NB": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 1319,
+        "y": 562,
+        "w": 1315,
+        "h": 946
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1315,
+        "h": 946
+      },
+      "sourceSize": {
+        "w": 1315,
+        "h": 946
+      }
+    },
+    "Rabbit_passport": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 3206,
+        "y": 1867,
+        "w": 800,
+        "h": 543
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 800,
+        "h": 543
+      },
+      "sourceSize": {
+        "w": 800,
+        "h": 543
+      }
+    },
+    "Scorpion_Passport": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 3206,
+        "y": 1322,
+        "w": 800,
+        "h": 543
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 800,
+        "h": 543
+      },
+      "sourceSize": {
+        "w": 800,
+        "h": 543
+      }
+    },
+    "SecurityGuard_passport": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 1604,
+        "y": 17,
+        "w": 800,
+        "h": 543
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 800,
+        "h": 543
+      },
+      "sourceSize": {
+        "w": 800,
+        "h": 543
+      }
+    },
+    "flamelogo": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 2406,
+        "y": 117,
+        "w": 895,
+        "h": 255
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 895,
+        "h": 255
+      },
+      "sourceSize": {
+        "w": 937,
+        "h": 255
+      }
+    },
+    "background": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 2,
+        "y": 1510,
+        "w": 1600,
+        "h": 900
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1600,
+        "h": 900
+      },
+      "sourceSize": {
+        "w": 1600,
+        "h": 900
+      }
+    },
+    "clouds": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 1600,
+        "h": 558
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1600,
+        "h": 558
+      },
+      "sourceSize": {
+        "w": 1600,
+        "h": 900
+      }
+    },
+    "foreground": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 1604,
+        "y": 1510,
+        "w": 1600,
+        "h": 900
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1600,
+        "h": 900
+      },
+      "sourceSize": {
+        "w": 1600,
+        "h": 900
+      }
+    }
+  },
+  "meta": {
+    "app": "Phaser Editor",
+    "version": "1",
+    "image": "Menu.png"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "Atlases": [
+    {
+      "type": "atlas",
+      "key": "Menu",
+      "textureURL": "./assets/img/Menu.png",
+      "atlasURL": "./assets/img/Menu.json",
+      "format": "TEXTURE_ATLAS_JSON_HASH"
+    },
+    {
+      "type": "atlas",
+      "key": "XboxControls",
+      "textureURL": "./assets/img/XboxControls.png",
+      "atlasURL": "./assets/img/XboxControls.json",
+      "format": "TEXTURE_ATLAS_JSON_HASH"
+    },
+    {
+      "type": "atlas",
+      "key": "parisian",
+      "textureURL": "./assets/img/parisian.png",
+      "atlasURL": "./assets/img/parisian.json",
+      "format": "TEXTURE_ATLAS_JSON_HASH"
+    },
+    {
+      "type": "atlas",
+      "key": "gameStuff",
+      "textureURL": "./assets/img/gameStuff.png",
+      "atlasURL": "./assets/img/gameStuff.json",
+      "format": "TEXTURE_ATLAS_JSON_HASH"
+    },
+    {
+      "type": "atlas",
+      "key": "charStuff",
+      "textureURL": "./assets/img/charStuff.png",
+      "atlasURL": "./assets/img/charStuff.json",
+      "format": "TEXTURE_ATLAS_JSON_HASH"
+    }
+  ],
+  "meta": {
+    "generated": "1533001953799",
+    "app": "Phaser Editor",
+    "url": "http://phasereditor.boniatillo.com",
+    "version": "1.0",
+    "copyright": "Arian Fornaris (c) 2015,2016"
+  }
+}

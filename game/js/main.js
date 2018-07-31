@@ -68,7 +68,7 @@ var mainState = {
 		Player2SpawnY = 0;
 
 		//bg
-		var bg = game.add.sprite(0,0,'bg');
+		var bg = game.add.sprite(0,0,'gameStuff','bg');
 		bg.scale.setTo(0.8);
         
         //Music
@@ -80,9 +80,9 @@ var mainState = {
         index = game.rnd.between(0,fight_music_choices.length-1);
         if(index == this.ParisianIndex) this.Parisian = true;
         else if(index == this.MuricaIndex){
-            this.Murica1 = game.add.sprite(0-5,game.height/4,'murica');
+            this.Murica1 = game.add.sprite(0-5,game.height/4,'gameStuff','murica');
             this.Murica1.scale.setTo(.5,.5);
-            this.Murica2 = game.add.sprite(game.width+5,game.height/4,'murica');
+            this.Murica2 = game.add.sprite(game.width+5,game.height/4,'gameStuff','murica');
             this.Murica2.scale.setTo(-.5,.5);
         }else{
             this.Parisian = false;
@@ -100,20 +100,20 @@ var mainState = {
         
 		
         if(P1CharChosen == "SIMON"){
-	       player1 = new Simon(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1, P1CostumeIndex, this.Parisian);
+	       player1 = new Simon(game, 'charStuff', 'hitbox', Player1SpawnX, Player1SpawnY, 1, P1CostumeIndex, this.Parisian);
         }else if(P1CharChosen == "LITERALLY A SCORPION"){
-            player1 = new Scorpion(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1, P1CostumeIndex, this.Parisian);
+            player1 = new Scorpion(game, 'charStuff', 'hitbox', Player1SpawnX, Player1SpawnY, 1, P1CostumeIndex, this.Parisian);
         }else{
-            player1 = new Security(game, 'hitbox', Player1SpawnX, Player1SpawnY, 1, P1CostumeIndex, this.Parisian);
+            player1 = new Security(game, 'charStuff', 'hitbox', Player1SpawnX, Player1SpawnY, 1, P1CostumeIndex, this.Parisian);
         }
 	    game.add.existing(player1);
 	    
         if(P2CharChosen == "SIMON"){
-	       player2 = new Simon(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2, P2CostumeIndex, this.Parisian);
+	       player2 = new Simon(game, 'charStuff', 'hitbox', Player2SpawnX, Player2SpawnY, 2, P2CostumeIndex, this.Parisian);
         }else if(P2CharChosen == "LITERALLY A SCORPION"){
-            player2 = new Scorpion(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,  P2CostumeIndex, this.Parisian);
+            player2 = new Scorpion(game, 'charStuff', 'hitbox', Player2SpawnX, Player2SpawnY, 2,  P2CostumeIndex, this.Parisian);
         }else{
-            player2 = new Security(game, 'hitbox', Player2SpawnX, Player2SpawnY, 2,  P2CostumeIndex, this.Parisian);
+            player2 = new Security(game, 'charStuff', 'hitbox', Player2SpawnX, Player2SpawnY, 2,  P2CostumeIndex, this.Parisian);
         }
 	    game.add.existing(player2);
 
@@ -122,7 +122,7 @@ var mainState = {
 	    platforms = game.add.group();
 		platforms.enableBody = true;
 
-	    floor = game.add.tileSprite(0, game.world.height -20, 1280, 720,'bg');
+	    floor = game.add.tileSprite(0, game.world.height -20, 1280, 720,'gameStuff','bg');
         floor.alpha = 0;
 	    platforms.add(floor);
 
@@ -228,33 +228,33 @@ var mainState = {
         //Rounds won UI
         var roundUIHeight = 107;
         var roundScale = .9;
-        p2wins1 = game.add.sprite(913-5,102,'round_unresolved');
+        p2wins1 = game.add.sprite(913-5,102,'gameStuff','round_unresolved3');
         p2wins1.scale.setTo(-roundScale,roundScale);
         p2wins1.position.y = roundUIHeight;
-        p2wins2 = game.add.sprite(860-5,102,'round_unresolved');
+        p2wins2 = game.add.sprite(860-5,102,'gameStuff','round_unresolved3');
         p2wins2.scale.setTo(-roundScale,roundScale);
         p2wins2.position.y = roundUIHeight;
-        p1wins1 = game.add.sprite(367+5,102,'round_unresolved');
+        p1wins1 = game.add.sprite(367+5,102,'gameStuff','round_unresolved3');
         p1wins1.scale.setTo(roundScale,roundScale);
         p1wins1.position.y = roundUIHeight;
-        p1wins2 = game.add.sprite(420+5,102,'round_unresolved');
+        p1wins2 = game.add.sprite(420+5,102,'gameStuff','round_unresolved3');
         p1wins2.scale.setTo(roundScale,roundScale);
         p1wins2.position.y = roundUIHeight;
         
-        p2won1 = game.add.sprite(913-5,102,'round_won');
+        p2won1 = game.add.sprite(913-5,102,'gameStuff','round_resolved3');
         p2won1.scale.setTo(-roundScale,roundScale);
         if(p2win < 1) p2won1.alpha = 0;
         p2won1.position.y = roundUIHeight;
-        p2won2 = game.add.sprite(860-5,102,'round_won');
+        p2won2 = game.add.sprite(860-5,102,'gameStuff','round_resolved3');
         p2won2.scale.setTo(-roundScale,roundScale);
         p2won2.scale.setTo(roundScale,roundScale);
         p2won2.alpha = 0;
         p2won2.position.y = roundUIHeight;
-        p1won1 = game.add.sprite(367+5,102,'round_won');
+        p1won1 = game.add.sprite(367+5,102,'gameStuff','round_resolved3');
         p1won1.scale.setTo(roundScale,roundScale);
         p1won1.position.y = roundUIHeight;
         if(p1win < 1) p1won1.alpha = 0;
-        p1won2 = game.add.sprite(420+5,102,'round_won');
+        p1won2 = game.add.sprite(420+5,102,'gameStuff','round_resolved3');
         p1won2.scale.setTo(roundScale,roundScale);
         p1won2.alpha = 0;
         p1won2.position.y = roundUIHeight;
@@ -264,35 +264,35 @@ var mainState = {
         specialBorders = this.game.add.group();
         this.healthBorderHeight = 67;
         
-        healthBorder1 = game.add.sprite(game.width/2 - 395,this.healthBorderHeight,'health_border');
+        healthBorder1 = game.add.sprite(game.width/2 - 395,this.healthBorderHeight,'gameStuff','health_border');
         healthBorder1.anchor.setTo(.5,.5);
         healthBorder1.scale.setTo(-1.01,.998);
         healthBorders.add(healthBorder1);
         
-        healthBorder2 = game.add.sprite(game.width/2 + 395,this.healthBorderHeight,'health_border');
+        healthBorder2 = game.add.sprite(game.width/2 + 395,this.healthBorderHeight,'gameStuff','health_border');
         healthBorder2.anchor.setTo(.5,.5);
         healthBorder2.scale.setTo(1.01,.998);
         healthBorders.add(healthBorder2);
         
-        specialBorder1 = game.add.sprite(199,127,'special_border');
+        specialBorder1 = game.add.sprite(199,127,'gameStuff','special_border');
         specialBorder1.anchor.setTo(.5,.5);
         specialBorder1.scale.setTo(.99,1);
         specialBorders.add(specialBorder1);
         
-        specialBorder2 = game.add.sprite(game.world.width - 199,127,'special_border');
+        specialBorder2 = game.add.sprite(game.world.width - 199,127,'gameStuff','special_border');
         specialBorder2.anchor.setTo(.5,.5);
         specialBorder2.scale.setTo(-.99,1);
         specialBorders.add(specialBorder2);
         
         //AG: Pause
-        this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'pause_menu');
+        this.menu = game.add.sprite(game.world.width/2,game.world.height/2,'gameStuff','menu_bg_temp');//pause_menu');
         this.menu.anchor.setTo(0.5,0.5);
         this.menu.alpha = 0;
         this.menu.scale.setTo(.8,.8);
-		this.control1 = game.add.sprite(38, 110, "controls1_menu");
+		this.control1 = game.add.sprite(38, 110,'gameStuff',"Player1_Controls");//controls1_menu");
 		this.control1.scale.setTo(.5, .5);
 		this.control1.alpha = 0;
-		this.control2 = game.add.sprite(825, 110, "controls2_menu");
+		this.control2 = game.add.sprite(825, 110,'gameStuff','Player2_Controls');//"controls2_menu");
 		this.control2.scale.setTo(.5, .5);
 		this.control2.alpha = 0;
         

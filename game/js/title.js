@@ -42,9 +42,9 @@ titleState.prototype = {
 		/*bg_GC = game.add.sprite(0,-30,'CharBG_GC');
 		bg_GC.scale.setTo(1, .8);*/
 
-        bg = game.add.sprite(0, 0, 'sky');
-        this.clouds = game.add.tileSprite(0, 0, 1280, 720, 'clouds');
-        plane = game.add.sprite(0, 0, 'plane');
+        bg = game.add.sprite(0, 0, 'Menu','background');//sky');
+        this.clouds = game.add.tileSprite(0, 0, 1280, 720, 'Menu','clouds');
+        plane = game.add.sprite(0, 0, 'Menu','foreground');//plane');
 
         P1keyUp = Phaser.Keyboard.W;
         P1keyDown = Phaser.Keyboard.S;
@@ -131,36 +131,36 @@ titleState.prototype = {
         onCredits = false;
 
 
-        button1 = game.add.sprite(50, game.world.centerY-75+125, 'A');
+        button1 = game.add.sprite(50, game.world.centerY-75+125,'XboxControls','A_Button');
         button1.anchor.setTo(0.5, 0.5);
         button1.scale.setTo(0.1);
         button1.alpha = 0;
 
-        button2 = game.add.sprite(50, game.world.centerY+25+125, 'A');
+        button2 = game.add.sprite(50, game.world.centerY+25+125,'XboxControls','A_Button');
         button2.anchor.setTo(0.5, 0.5);
         button2.scale.setTo(0.1);
         button2.alpha = 0;
 
-        button3 = game.add.sprite(50, game.world.centerY+125+125, 'A');
+        button3 = game.add.sprite(50, game.world.centerY+125+125,'XboxControls','A_Button');
         button3.anchor.setTo(0.5, 0.5);
         button3.scale.setTo(0.1);
         button3.alpha = 0;
 
-        arrow1 = game.add.sprite(70, game.world.centerY-75+125, 'arrow');
+        arrow1 = game.add.sprite(70, game.world.centerY-75+125,'Menu','Arrow');
         arrow1.anchor.setTo(0.5, 0.5);
         arrow1.scale.setTo(0.15);
         arrow1.angle += 90;
         arrow1.tint = '#000'
         arrow1.alpha = 1;
 
-        arrow2 = game.add.sprite(70, game.world.centerY+25+125, 'arrow');
+        arrow2 = game.add.sprite(70, game.world.centerY+25+125,'Menu','Arrow');
         arrow2.anchor.setTo(0.5, 0.5);
         arrow2.scale.setTo(0.15);
         arrow2.angle += 90;
         arrow2.tint = '#000'
         arrow2.alpha = 0;
 
-        arrow3 = game.add.sprite(70, game.world.centerY+125+125, 'arrow');
+        arrow3 = game.add.sprite(70, game.world.centerY+125+125,'Menu','Arrow');
         arrow3.anchor.setTo(0.5, 0.5);
         arrow3.scale.setTo(0.15);
         arrow3.angle += 90;
@@ -178,7 +178,7 @@ titleState.prototype = {
         filter.speed.x = 0.5;
         hell.filters = null;
 
-        Logo = game.add.sprite(game.width/4,game.height/4,"flogo");
+        Logo = game.add.sprite(game.width/4,game.height/4,'Menu',"flamelogo");
         Logo.anchor.setTo(.5,.5);
         Logo.scale.setTo(.7,.7);  
         //Logo.tint = "#FFFFFF";

@@ -59,10 +59,10 @@ var charSelect = {
     create: function(){
         backgrounds = game.add.group();
 		
-		bg_GC = game.add.sprite(0,-30,'CharBG_GC');
+		bg_GC = game.add.sprite(0,-30,'Menu','CharSelectBG_GC');
 		bg_GC.scale.setTo(1, .8);
 		
-		bg_NB = game.add.sprite(0,-30,'CharBG_NB');
+		bg_NB = game.add.sprite(0,-30,'Menu','CharSelectBG_NB');
 		bg_NB.scale.setTo(1, .8);
 		bg_NB.alpha = 0;
 		
@@ -71,37 +71,37 @@ var charSelect = {
         //var logo = game.add.sprite(game.width/2-300,game.height/4-50,"logo");
         //logo.scale.setTo(.7,.7);
 		
-		upArrow = game.add.sprite(585,275,"arrow");
+		upArrow = game.add.sprite(585,275,'Menu',"Arrow");
 		upArrow.scale.setTo(.25, .25);
         
         upTween = game.add.tween(upArrow).to( { y: 250 }, 450, "Linear", true, 450);
         upTween.yoyo(true,200).loop();
                                                              
-		var downArrow = game.add.sprite(585,425,"arrow");
+		var downArrow = game.add.sprite(585,425,'Menu',"Arrow");
 		downArrow.scale.setTo(.25, -.25);
         
         downTween =  game.add.tween(downArrow).to( { y: 450 }, 450, "Linear", true, 450);
         downTween.yoyo(true,200).loop();
 
 		
-		var rabbitID = game.add.sprite(150,220,"rabbit_ID");
+		var rabbitID = game.add.sprite(150,220,'Menu',"Rabbit_passport");
 		rabbitID.scale.setTo(.5,.5);
 		rabbitID.alpha = 0;
-		var guardID = game.add.sprite(150,220,"guard_ID");
+		var guardID = game.add.sprite(150,220,'Menu',"SecurityGuard_passport");
 		guardID.scale.setTo(.5,.5);
 		guardID.alpha = 0;
 
-		var scorpID = game.add.sprite(150,220,"scorp_ID");
+		var scorpID = game.add.sprite(150,220,'Menu',"Scorpion_Passport");
 		scorpID.scale.setTo(.5,.5);
 
-		var rabbitID2 = game.add.sprite(670,220,"rabbit_ID");
+		var rabbitID2 = game.add.sprite(670,220,'Menu',"Rabbit_passport");
 		rabbitID2.scale.setTo(.5,.5);
 
 		rabbitID2.alpha = 0;
-		var guardID2 = game.add.sprite(670,220,"guard_ID");
+		var guardID2 = game.add.sprite(670,220,'Menu',"SecurityGuard_passport");
 		guardID2.scale.setTo(.5,.5);
 		guardID2.alpha = 0;
-		var scorpID2 = game.add.sprite(670,220,"scorp_ID");
+		var scorpID2 = game.add.sprite(670,220,'Menu',"Scorpion_Passport");
 		scorpID2.scale.setTo(.5,.5);
         
         characters = ["LITERALLY A SCORPION","SECURITY", "SIMON"];//["THE TEMP","LITERALLY A SCORPION","SECURITY"];
@@ -161,35 +161,35 @@ var charSelect = {
         timer = new setTime();
         
         //Xbox Input Images
-        p1AButton = game.add.sprite(game.width/5+175,(3 * game.height)/4-5,'A');
+        p1AButton = game.add.sprite(game.width/5+175,(3 * game.height)/4-5,'XboxControls','A_Button');
         p1AButton.scale.setTo(.1, .1);
         p1AButton.alpha = 0;
         
-        p1BButton = game.add.sprite(game.width/5+210,(3 * game.height)/4-5,'B');
+        p1BButton = game.add.sprite(game.width/5+210,(3 * game.height)/4-5,'XboxControls','B_Button');
         p1BButton.scale.setTo(.1, .1);
         p1BButton.alpha = 0;
         
-        p1BButton2 = game.add.sprite(game.width/5+210,((3 * game.height)/4-5)+75,'B');
+        p1BButton2 = game.add.sprite(game.width/5+210,((3 * game.height)/4-5)+75,'XboxControls','B_Button');
         p1BButton2.scale.setTo(.1, .1);
         p1BButton2.alpha = 0;
         
-        p2AButton = game.add.sprite(3 * game.width/5+175,(3 * game.height)/4-5,'A');
+        p2AButton = game.add.sprite(3 * game.width/5+175,(3 * game.height)/4-5,'XboxControls','A_Button');
         p2AButton.scale.setTo(.1, .1);
         p2AButton.alpha = 0;
         
-        p2BButton = game.add.sprite(3 * game.width/5+210,(3 * game.height)/4-5,'B');
+        p2BButton = game.add.sprite(3 * game.width/5+210,(3 * game.height)/4-5,'XboxControls','B_Button');
         p2BButton.scale.setTo(.1, .1);
         p2BButton.alpha = 0;
         
-        p2BButton2 = game.add.sprite(3 * game.width/5+210,((3 * game.height)/4-5)+75,'B');
+        p2BButton2 = game.add.sprite(3 * game.width/5+210,((3 * game.height)/4-5)+75,'XboxControls','B_Button');
         p2BButton2.scale.setTo(.1, .1);
         p2BButton2.alpha = 0;
         
-        JoyStickUp = game.add.sprite(610,425,'Joystick_Up');
+        JoyStickUp = game.add.sprite(610,425,'XboxControls','Joystick_Up');
         JoyStickUp.scale.setTo(.2,.2);
         JoyStickUp.anchor.setTo(.5,.5);
         JoyStickUp.alpha = 0;
-        JoyStickDown = game.add.sprite(610,275,'Joystick_Down');
+        JoyStickDown = game.add.sprite(610,275,'XboxControls','Joystick_Down');
         JoyStickDown.scale.setTo(.2,.2);
         JoyStickDown.anchor.setTo(.5,.5);
         JoyStickDown.alpha = 0;
@@ -202,6 +202,12 @@ var charSelect = {
         padControls1Shown = false;
         padControls2Shown = false;
         
+        //Menu text
+        P1MenuText = game.add.text(game.width/7,(1 * game.height)/4,"SELECT CHARACTER", {fontSize: '32px', fill: '#fff', align: 'center'});
+        P1MenuText.strokeThickness = 4;
+        P2MenuText = game.add.text(game.width/2 + game.width/20,(1 * game.height)/4,"SELECT CHARACTER", {fontSize: '32px', fill: '#fff', align: 'center'});
+        P2MenuText.strokeThickness = 4;
+
         battleCryText1X = 255;
         battleCryText2X = 775;
         battleCryTextY = 250;
@@ -211,15 +217,21 @@ var charSelect = {
         //		sprites = [scorpID, guardID, rabbitID];
         battleCries = ["*SNIP* *SNIP*","   TESTOTERONE!!!","*ICE RABBIT NOISES*"]
         
-        battleCryText1 = game.add.text(battleCryText1X,battleCryTextY,"", {fontSize: '32px', fill: '#000'});
-        battleCryText2 = game.add.text(battleCryText2X,battleCryTextY,"", {fontSize: '32px', fill: '#000'});
+        battleCryText1 = game.add.text(battleCryText1X,battleCryTextY,"", {fontSize: '32px', fill: '#ed6363', stroke:'#750808'});
+        battleCryText1.strokeThickness = 5;
+        battleCryText2 = game.add.text(battleCryText2X,battleCryTextY,"", {fontSize: '32px', fill: '#ed6363', stroke:'#750808'});
+        battleCryText2.strokeThickness = 5;
         
         battleCryText1.alpha = 0;
         battleCryText2.alpha = 0;
         
         battleCry1Done = false;
         battleCry2Done = false;
-		
+        
+        //Controls instructions for keyboard
+        P1KeyboardInstructions = game.add.text(game.width/5.5,(1 * game.height)/8,"W: Up / S: Down", {fontSize: '32px', fill: '#000', align: 'center'});
+        P2KeyboardInstructions = game.add.text(game.width/2 + game.width/12,(1 * game.height)/8,"O: Up / L: Down", {fontSize: '32px', fill: '#000', align: 'center'});
+
         //steve is a timer that keeps frame transition at bay for a bit
 		steveSet = false;
         
@@ -332,17 +344,20 @@ var charSelect = {
         
         if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected){
             padControl1 = true;
+            P1KeyboardInstructions.alpha = 0;
         }
         else{
             padControl1 = false;
-
+            P1KeyboardInstructions.alpha = 1;
         }
 
         if (game.input.gamepad.supported && game.input.gamepad.active && pad2.connected){
             padControl2 = true;
+            P2KeyboardInstructions.alpha = 0;
         }
         else{
             padControl2 = false;
+            P2KeyboardInstructions.alpha = 1;
         }
 
         if (padControl1){
@@ -411,6 +426,7 @@ var charSelect = {
                     costume[P1index][P1CostumeIndex].alpha = 1;
                     charSelect.battleCry(1);
                     selectSound.play();
+                    P1MenuText.text = "SELECT COSTUME";
                 }else{
                     P1InstructionText.text = "Deselect with B";
                     p1AButton.alpha = 0;
@@ -419,6 +435,9 @@ var charSelect = {
                     P1InstructionText2.alpha = 0;
                     P1CostumeChose = true;
                     selectSound.play();
+                    P1MenuText.text = "READY TO BOARD";
+                    P2MenuText.fill = "#fcce71";
+                    P2MenuText.stroke = '#c6890d';
                 }
             }
             
@@ -434,6 +453,7 @@ var charSelect = {
                     P1InstructionText2.alpha = 0;
                     costume[P1index][P1CostumeIndex].alpha = 0;
                     deselectSound.play();
+                    P1MenuText.text = "SELECT CHARACTER";
                 }else{ //Costume Handling
                     P1InstructionText.text = "Select with A";
                     p1AButton.alpha = 1;
@@ -444,6 +464,9 @@ var charSelect = {
                     P1CostumeChose = false;
                     costume[P1index][P1CostumeIndex].alpha = 1;
                     deselectSound.play();
+                    P1MenuText.text = "SELECT COSTUME";
+                    P2MenuText.fill = "#fff";
+                    P2MenuText.stroke = '#000';
                 }
                 
             }
@@ -502,11 +525,15 @@ var charSelect = {
                     costume[P1index][P1CostumeIndex].alpha = 1;
                     charSelect.battleCry(1);
                     selectSound.play();
+                    P1MenuText.text = "SELECT COSTUME";
                 }else{
                     P1InstructionText.text = "Deselect with R";
                     P1InstructionText2.alpha = 0;
                     P1CostumeChose = true;
                     selectSound.play();
+                    P1MenuText.text = "READY TO BOARD";
+                    P1MenuText.fill = "#fcce71";
+                    P1MenuText.stroke = '#c6890d';
                 }
             }
             
@@ -517,6 +544,7 @@ var charSelect = {
                     P1InstructionText2.alpha = 0;
                     costume[P1index][P1CostumeIndex].alpha = 0;
                     deselectSound.play();
+                    P1MenuText.text = "SELECT CHARACTER";
                 }else{ //Costume Handling
                     P1InstructionText.text = "Select with E";
                     P1InstructionText2.alpha = 1;
@@ -524,6 +552,9 @@ var charSelect = {
                     P1CostumeChose = false;
                     costume[P1index][P1CostumeIndex].alpha = 1;
                     deselectSound.play();
+                    P1MenuText.text = "SELECT COSTUME";
+                    P1MenuText.fill = "#fff";
+                    P1MenuText.stroke = '#000';
                 }
 
             }
@@ -596,6 +627,7 @@ var charSelect = {
                     costume_2[P2index][P2CostumeIndex].alpha = 1;
                     charSelect.battleCry(2);
                     selectSound.play();
+                    P2MenuText.text = "SELECT COSTUME";
                 }else{
                     P2InstructionText.text = "Deselect with B";
                     p2AButton.alpha = 0;
@@ -604,6 +636,9 @@ var charSelect = {
                     P2InstructionText2.alpha = 0;
                     P2CostumeChose = true;
                     selectSound.play();
+                    P2MenuText.text = "READY TO BOARD";
+                    P2MenuText.fill = "#fcce71";
+                    P2MenuText.stroke = '#c6890d';
                 }
             }
             
@@ -619,6 +654,7 @@ var charSelect = {
                     P2InstructionText2.alpha = 0;
                     costume_2[P2index][P2CostumeIndex].alpha = 0;
                     deselectSound.play();
+                    P2MenuText.text = "SELECT CHARACTER";
                 }else{ //Costume Handling
                     P2InstructionText.text = "Select with A";
                     p2AButton.alpha = 1;
@@ -629,6 +665,9 @@ var charSelect = {
                     P2CostumeChose = false;
                     costume_2[P2index][P2CostumeIndex].alpha = 1;
                     deselectSound.play();
+                    P2MenuText.text = "SELECT COSTUME";
+                    P2MenuText.fill = "#fff";
+                    P2MenuText.stroke = '#000';
                 }
             }
 
@@ -686,11 +725,15 @@ var charSelect = {
                     costume_2[P2index][P2CostumeIndex].alpha = 1;
                     charSelect.battleCry(2);
                     selectSound.play();
+                    P2MenuText.text = "SELECT COSTUME";
                 }else{
                     P2InstructionText.text = "Deselect with U";
                     P2InstructionText2.alpha = 0;
                     P2CostumeChose = true;
                     selectSound.play();
+                    P2MenuText.text = "READY TO BOARD";
+                    P2MenuText.fill = "#fcce71";
+                    P2MenuText.stroke = '#c6890d';
                 }
             }
             
@@ -701,6 +744,7 @@ var charSelect = {
                     P2InstructionText2.alpha = 0;
                     costume_2[P2index][P2CostumeIndex].alpha = 0;
                     deselectSound.play();
+                    P2MenuText.text = "SELECT CHARACTER";
                 }else{ //Costume Handling
                     P2InstructionText.text = "Select with I";
                     P2InstructionText2.alpha = 1;
@@ -708,6 +752,9 @@ var charSelect = {
                     P2CostumeChose = false;
                     costume_2[P2index][P2CostumeIndex].alpha = 1;
                     deselectSound.play();
+                    P2MenuText.text = "SELECT COSTUME";
+                    P2MenuText.fill = "#fff";
+                    P2MenuText.stroke = "#000";
                 }
             }
         }
@@ -761,14 +808,14 @@ var charSelect = {
             battleCryText1.text = battleCries[P1index];
             var room = 50;
             if(P1index == 1 || P1index == 2) room = 150; 
-            var tween1 = game.add.tween(battleCryText1).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText1X - room }, 200, "Linear", true, 400);
+            var tween1 = game.add.tween(battleCryText1).to( { alpha: 1, y:battleCryTextY2 -30, fontSize:'16px', x: battleCryText1X - room}, 200, "Linear", true, 400);
             tween1.onComplete.add(charSelect.Tween1completed, this);
             battleCry1Done = false;
         }else if(!battleCry2Done && inputNumber == 2 && battleCryText2.fontSize == 32){
             battleCryText2.text = battleCries[P2index];
             var room = 50;
             if(P2index == 1 || P2index == 2) room = 150;
-            var tween1_2 = game.add.tween(battleCryText2).to( { alpha: 1, y:battleCryTextY2 -10, fontSize:'16px', x: battleCryText2X - room }, 200, "Linear", true, 400);
+            var tween1_2 = game.add.tween(battleCryText2).to( { alpha: 1, y:battleCryTextY2 -30, fontSize:'16px', x: battleCryText2X - room}, 200, "Linear", true, 400);
             tween1_2.onComplete.add(charSelect.Tween1_2completed, this);
             battleCry2Done = false;
         }  

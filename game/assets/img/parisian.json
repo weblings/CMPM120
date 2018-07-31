@@ -1,0 +1,209 @@
+{
+  "frames": {
+    "Eiffel_Tower": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 2,
+        "y": 28,
+        "w": 500,
+        "h": 891
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 500,
+        "h": 891
+      },
+      "sourceSize": {
+        "w": 500,
+        "h": 891
+      }
+    },
+    "Green_Beret": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 504,
+        "y": 148,
+        "w": 500,
+        "h": 369
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 500,
+        "h": 369
+      },
+      "sourceSize": {
+        "w": 500,
+        "h": 369
+      }
+    },
+    "Moustache1": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 1508,
+        "y": 108,
+        "w": 400,
+        "h": 218
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 400,
+        "h": 218
+      },
+      "sourceSize": {
+        "w": 400,
+        "h": 218
+      }
+    },
+    "Moustache2": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 1508,
+        "y": 328,
+        "w": 400,
+        "h": 220
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 400,
+        "h": 220
+      },
+      "sourceSize": {
+        "w": 400,
+        "h": 220
+      }
+    },
+    "Moustache3": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 1006,
+        "y": 20,
+        "w": 400,
+        "h": 157
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 400,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 400,
+        "h": 157
+      }
+    },
+    "Moustache4": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 504,
+        "y": 2,
+        "w": 400,
+        "h": 144
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 400,
+        "h": 144
+      },
+      "sourceSize": {
+        "w": 400,
+        "h": 144
+      }
+    },
+    "Purple_Beret": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 1006,
+        "y": 550,
+        "w": 500,
+        "h": 369
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 500,
+        "h": 369
+      },
+      "sourceSize": {
+        "w": 500,
+        "h": 369
+      }
+    },
+    "Red_Beret": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 1508,
+        "y": 550,
+        "w": 500,
+        "h": 369
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 500,
+        "h": 369
+      },
+      "sourceSize": {
+        "w": 500,
+        "h": 369
+      }
+    },
+    "Yellow_Beret": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 1006,
+        "y": 179,
+        "w": 500,
+        "h": 369
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 500,
+        "h": 369
+      },
+      "sourceSize": {
+        "w": 500,
+        "h": 369
+      }
+    },
+    "croissant": {
+      "trimmed": true,
+      "rotated": false,
+      "frame": {
+        "x": 504,
+        "y": 519,
+        "w": 500,
+        "h": 400
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 500,
+        "h": 400
+      },
+      "sourceSize": {
+        "w": 500,
+        "h": 400
+      }
+    }
+  },
+  "meta": {
+    "app": "Phaser Editor",
+    "version": "1",
+    "image": "parisian.png"
+  }
+}
